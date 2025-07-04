@@ -58,20 +58,20 @@ These mechanisms together enable an optimizer that doesn't simply update—but _
 
 ### ✨ EmoNAVIとは
 
-EmoNAVI は “感情”でナビゲートする PyTorch 用の自律･軽量 Optimizer です。  
+EmoNAVI は “感情” でナビゲートする PyTorch 用  自律･軽量 Optimizer です。  
 スケジューラや外部判断に頼らず、loss のゆらぎを観察し、自己の感情スカラー `emo_scalar` に基づき行動を選択します。
 
-multi-EMA と状態注入により “学ばせる” のではなく “学びたい意欲を感じる”ように構成され、  
-そのふるまいは、私たちが「Ref的（Ref-like）」と呼ぶものです。
+multi-EMA と状態注視により “学ばせる” のではなく “学びたい意欲を感じる” ように構成され、  
+そのふるまいは「Ref的(Ref-like)」と呼ぶものです。
 
-> "Ref" は Refine と Reflex の両義を持ち、自己進化・自己観察・内省的強化学習を意味します。
+> "Ref" は Refine と Reflex の両義を持ち、自己進化・自己観察・内省的な強化学習を意味します。
 
-明示的な制御ではなく、「静かな観察」と「やわらかな援助」でモデルを導きます。
+明示的な制御ではなく「静かな観察」と「やわらかな援助」でモデルを導きます。
 
 💠 _lossの“意味”を掴み、optimizerを“自ら考える存在”にする。_  
-これは Optimizer に人格を宿す実験であり、**構造と哲学を持った最適化器**です。
+これは Optimizer に意思を宿す挑戦であり **構造と哲学を持った最適化器**です。
 
-学習プロセスに、観察と感受性を宿すOptimizer──それが **EmoNAVI** です。
+学習プロセスに観察と感受性を宿す Optimizer それが **EmoNAVI** です。
 
 ### 🔧 EmoNAVIの技術構造（コアメカニズム）
 
