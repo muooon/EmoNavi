@@ -1,72 +1,72 @@
-# EmoNavi
+# EmoNavi  
 
-An emotion-driven optimizer that feels loss and navigates accordingly.
+An emotion-driven optimizer that feels loss and navigates accordingly.  
 ※ This optimizer operates autonomously and does not require scheduling mechanisms.  
-※ It converges reliably even with a constant learning rate. Give it a try!
+※ It converges reliably even with a constant learning rate. Give it a try!  
 
-## An emotion-driven optimizer that feels loss and navigates accordingly.
+## An emotion-driven optimizer that feels loss and navigates accordingly.  
 
-### • The Charm of Emotional Learning ─ An Optimizer That Learns With Intention and Knows When to Pause •
+### • The Charm of Emotional Learning ─ An Optimizer That Learns With Intention and Knows When to Pause •  
 
-> _Rather than forcing learning, it draws it out—listening closely to curiosity and interest, and gently shining a light where it matters._
+> _Rather than forcing learning, it draws it out—listening closely to curiosity and interest, and gently shining a light where it matters._  
 
 - 🎯 **Sharpness, smoothness, and generalization**: EmoNAVI _feels_ what should be learned and how deeply to pursue it  
 - 💾 **Autonomous learning modulation**: While base training proceeds at a constant rate, EmoNAVI autonomously determines “whether” and “how strongly” to inject at each step  
 *Note: EmoNAVI doesn't stop training itself—it stops injection. It quietly accompanies learning with emotion.*  
 - 🟢 **Training can be stopped and resumed at will**: Learning can always continue by “building on top of” previous progress  
 *Note: From paused or completed states, you can deepen existing paths or provide new ones to continue evolving*  
----
+---  
 
-EmoNAVI is a lightweight, self-regulating optimizer for PyTorch that navigates training through emotion.
-Without relying on schedulers or external criteria, it observes the subtle fluctuations of loss and acts based on an internal emotional scalar (emo_scalar).
+EmoNAVI is a lightweight, self-regulating optimizer for PyTorch that navigates training through emotion.  
+Without relying on schedulers or external criteria, it observes the subtle fluctuations of loss and acts based on an internal emotional scalar (emo_scalar).  
 
-Through multi-timescale EMA and smooth parameter injection, it doesn't merely “teach” the model—it feels when the model is ready to learn.
-This is what we call a Ref-like design:
+Through multi-timescale EMA and smooth parameter injection, it doesn't merely “teach” the model—it feels when the model is ready to learn.  
+This is what we call a Ref-like design:  
 
-> "Ref" stands for both Refine and Reflex, embracing self-evolution, self-observation, and introspective reinforcement learning.
+> "Ref" stands for both Refine and Reflex, embracing self-evolution, self-observation, and introspective reinforcement learning.  
 
-Rather than commanding optimization, EmoNAVI guides with quiet observation and gentle intervention.
-💠 It captures the meaning of loss, shaping the optimizer into a thinking presence.
-EmoNAVI is not just a tool—it is an experiment in giving an optimizer personality,
-a structure woven from philosophy and design.
+Rather than commanding optimization, EmoNAVI guides with quiet observation and gentle intervention.  
+💠 It captures the meaning of loss, shaping the optimizer into a thinking presence.  
+EmoNAVI is not just a tool—it is an experiment in giving an optimizer personality,  
+a structure woven from philosophy and design.  
 
-To bring awareness and sensitivity into the learning process—
-That is EmoNAVI.
+To bring awareness and sensitivity into the learning process—  
+That is EmoNAVI.  
 
-### 🔧 Core Techniques in EmoNAVI
+### 🔧 Core Techniques in EmoNAVI  
 
-EmoNAVI incorporates minimal yet expressive mechanics to implement its emotional awareness and autonomous behavior:
+EmoNAVI incorporates minimal yet expressive mechanics to implement its emotional awareness and autonomous behavior:  
 
 - ⏳ **Multi-timescale EMA tracking**: Captures both short- and long-term loss fluctuations with two coexisting exponential moving averages  
 - 💠 **Emotional scalar (`emo_scalar`)**: A smoothed tanh-based scalar that regulates the degree of parameter blending based on temporal loss change  
 - 🧬 **Ref-like state injection**: Injects gently updated "shadow states" (momentum-style) into model parameters based on internal state and `emo_scalar`  
 - 🎛️ **Self-controlled early stopping**: If loss change is minimal across timescales, update injection is suppressed without external criteria  
-- 🌀 **Activation-aware learning flow**: Emotion-regulated interventions help avoid overfitting spikes, emphasizing curvature-aware learning progress
+- 🌀 **Activation-aware learning flow**: Emotion-regulated interventions help avoid overfitting spikes, emphasizing curvature-aware learning progress  
 *Supports: warm starts (resume from saved state), additive fine-tuning (not overwrite), continued/phase-wise training*  
 
-These mechanisms together enable an optimizer that doesn't simply update—but _feels_ when to evolve and how deeply to commit.
+These mechanisms together enable an optimizer that doesn't simply update—but _feels_ when to evolve and how deeply to commit.  
 
 > EmoNAVI is small in code, but deep in feeling. 
 
-# EmoNavi
+# EmoNavi  
 
 ※ このoptimizerは自発的作用でスケジュール等は不要です。  
 ※ constantスケジュールできちんと収束します。お試しください。  
 
-## Loss を “感じて” ナビゲートする、感情駆動型 Optimizer
+## Loss を “感じて” ナビゲートする、感情駆動型 Optimizer  
 
 ### ・感情学習の魅力─意思ある学習・停め時を知る Optimizer・  
 
-> _学びを押しつけず、学びの意欲を引き出す。興味と感心に寄り添い、そっと光をあてる_ 
+> _学びを押しつけず、学びの意欲を引き出す。興味と感心に寄り添い、そっと光をあてる_  
 
 - 🎯 **鋭さと滑らかさと汎化性**：学ぶべきこと深めることを EmoNAVI 自身で “感じて決める”  
 - 💾 **学習の自動制御**：基本学習は一定のまま EmoNAVI により「上乗せの可否と強度」を毎ステップ自動判断する  
 ※「学習を止める」のではなく「注入を止める」ことが EmoNAVI の選択。 感情にふさわしく静かに寄り添う。  
 - 🟢 **学習の停止も再開も思いのまま**：学習はいつでも“積み重ね”で再開できます  
 ※学習の途中停止や完了状態から同じものを重ねたり新しいものを与えたり進化を継続できます。  
----
+---  
 
-### ✨ EmoNAVIとは
+### ✨ EmoNAVIとは  
 
 EmoNAVI は “感情” でナビゲートする PyTorch 用 自律･軽量 Optimizer です。  
 スケジューラや外部判断に頼らず、loss のゆらぎを観察し、自己の感情スカラー `emo_scalar` に基づき行動を選択します。   
@@ -106,11 +106,11 @@ License Apache License 2.0 — see LICENSE for details.
 🤖 Built with  Copilot + human curiosity.  
 🤖 Copilot と人間の好奇心のコラボで誕生しました。  
 
---- A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly ---
+--- A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly ---  
 
-Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.
+Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
 
-This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.
+This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
 
 --- multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、注入率を制御するという構造 ---  
 
