@@ -89,8 +89,8 @@ Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定
 ![Ref-AdamW-mini-ScheduleFree01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test01.png?raw=true)
 ![Ref-AdamW-mini-ScheduleFree01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test02.png?raw=true)
 
-License Apache License 2.0 — see LICENSE for details.</b>
-ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。</b>
+License Apache License 2.0 — see LICENSE for details.</br>
+ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。</br>
 
-🤖 Built with  Copilot + human curiosity.</b>
-🤖 Copilot と人間の好奇心のコラボで誕生しました。</b>
+🤖 Built with  Copilot + human curiosity.</br>
+🤖 Copilot と人間の好奇心のコラボで誕生しました。</br>
