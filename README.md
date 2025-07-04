@@ -50,8 +50,8 @@ These mechanisms together enable an optimizer that doesn't simply update—but _
 
 # EmoNavi
 
-※ このoptimizerは自発的作用でスケジュール等は不要です。 
-※ constantスケジュールできちんと収束します。お試しください。 
+※ このoptimizerは自発的作用でスケジュール等は不要です。  
+※ constantスケジュールできちんと収束します。お試しください。  
 
 ## Loss を “感じて” ナビゲートする、感情駆動型 Optimizer
 
