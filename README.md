@@ -1,6 +1,8 @@
 # EmoNavi
 
 An emotion-driven optimizer that feels loss and navigates accordingly.
+※ This optimizer operates autonomously and does not require scheduling mechanisms.  
+※ It converges reliably even with a constant learning rate. Give it a try!
 
 ## An emotion-driven optimizer that feels loss and navigates accordingly.
 
@@ -45,6 +47,9 @@ These mechanisms together enable an optimizer that doesn't simply update—but _
 > EmoNAVI is small in code, but deep in feeling.
 
 # EmoNavi
+
+※ このoptimizerは自発的作用でスケジュール等は不要です。
+※ constantスケジュールできちんと収束します。お試しください。
 
 ## Loss を “感じて” ナビゲートする、感情駆動型 Optimizer
 
@@ -94,3 +99,15 @@ License Apache License 2.0 — see LICENSE for details.</br>
 
 🤖 Built with  Copilot + human curiosity.</br>
 🤖 Copilot と人間の好奇心のコラボで誕生しました。</br>
+
+--- A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly ---
+
+Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.
+
+This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.
+
+--- multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、注入率を制御するという構造 ---
+
+世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功した。
+
+そしてこれこそがパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果である。
