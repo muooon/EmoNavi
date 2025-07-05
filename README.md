@@ -1,6 +1,7 @@
 [Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(ENG).txt)  
 [EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(JPN).txt)  
 
+This repository proposes a concept optimizer that regulates learning through emotional calibration based on loss dynamics.  
 
 # EmoNavi  
 
