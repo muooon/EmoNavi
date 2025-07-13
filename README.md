@@ -24,14 +24,14 @@
 [EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(JPN).txt)
 
 (解説) 詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
-[huggingface](https://huggingface.co/muooon/EmoNAVI)
-[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(ENG).md)
-[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md)
-[Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt)
+[huggingface](https://huggingface.co/muooon/EmoNAVI) 
+[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(ENG).md) 
+[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md) 
+[Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt) 
 
-| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
-| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
-| (This is untested and is merely a possibility.)
+|☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
+|☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
+|☆| (This is untested and is merely a possibility.)
  
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
