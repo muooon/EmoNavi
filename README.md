@@ -32,6 +32,9 @@
 |☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
 |☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
 |☆| (This is untested and is merely a possibility.)
+
+|★| 疑似DDPシミュレーションを試したい方 → 
+[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
  
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
