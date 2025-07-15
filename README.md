@@ -10,8 +10,8 @@
 ###### **It’s an “Emotional Optimizer” that navigates learning through feeling.**  
 ###### A result of transformative emotional learning: the reinvention of the neural spike.  
 ---
-    **自動収束･自己制御･自律型 オプティマイザです**  
-	**Auto-convergence, self-control, autonomous optimizer**  
+**自動収束･自己制御･自律型 オプティマイザです**  
+**Auto-convergence, self-control, autonomous optimizer**  
 ---
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
 > ｢挑戦も留まることも冒険も休息も自ら選びそれをすべて経験として記憶する｣  
