@@ -1,4 +1,4 @@
-# EmoNAVI･FACT  
+# EmoNAVI･FACT･LYNX/CLAN  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -9,10 +9,16 @@
 ###### This is not just another optimizer —  
 ###### **It’s an “Emotional Optimizer” that navigates learning through feeling.**  
 ###### A result of transformative emotional learning: the reinvention of the neural spike.  
+
 ---
-**自動収束･自己制御･自律型 オプティマイザです**  
-**Auto-convergence, self-control, autonomous optimizer**  
+#### 自動収束･自己制御･自律型 オプティマイザです  
+#### EmoNAVI を中心に、EmoFACT、EmoLYNX、もあります  
+#### 以下で共通部の"感情機構"等について説明します  
+#### Auto-convergence, self-control, autonomous optimizer  
+#### It primarily features EmoNAVI, along with EmoFACT and EmoLYNX.  
+#### The common "Emotion Mechanism" and other aspects will be explained below.
 ---
+
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
 > ｢挑戦も留まることも冒険も休息も自ら選びそれをすべて経験として記憶する｣  
 > ｢でも過去の記憶は引きずらない、いつも始めるときは"新しいわたし"だから｣  
@@ -38,9 +44,20 @@
 |★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
 [DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
 
-|★| EmoFACT 公開(250716) NAVIに比べ、約１GB節約(SDXL) 感情機構は同じです  
+|★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
 |★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
- 
+
+|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
+|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
+
+|★| EmoCLAN 公開(250720) Navi、Fact、Lynx、役割分担の統合 感情機構は同じです  
+    (Lynx：序盤と過学習傾向時、Navi：中盤と健全時、Fact：終盤と発散傾向時、を担当します)  
+|★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
+    (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
+
+|★| すぐに試したい方は"optimizer"フォルダを開いて使い方を確認してください  
+|★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
+
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
@@ -174,15 +191,21 @@ However, it includes an alternative mechanism:
 
 ---
 ##### 外部スケジューラを併用してもOK  
-EmoNAVIは通常のPyTorch Optimizerと同様に設計されているため：  
-- torch.optim.lr_schedulerを使った外部スケジューラとも併用可能  
-- ただしEmoNAVI内部には学習率自動変動のロジックは含まれていない  
+EmoNAVIは外部の学習率スケジューラと併用可能ですが、  
+それに依存せず、自律的に収束する設計となっています。  
+損失の挙動に基づく感情スカラーとshadow補正により、  
+どのような学習率でもモデル自身が最適な更新を判断します。  
+つまり、スケジューラがなくても収束可能で、あっても邪魔にならない、  
+それがEmoNAVIの自律性です。  
 結果：どんなスケジューラーを指定してもしっかり収束します  
 
 ##### Using external schedulers is supported  
-Because EmoNAVI is implemented as a standard PyTorch Optimizer:  
-- It can be used alongside external learning rate schedulers (e.g., torch.optim.lr_scheduler)  
-- EmoNAVI itself does not include any built-in logic for modifying learning rate over time  
+EmoNAVI is compatible with external learning rate schedulers,  
+but does not rely on them for convergence.  
+Its core mechanism—emotion-driven shadow blending and scalar feedback—  
+allows it to adapt and stabilize regardless of the learning rate schedule provided.  
+In other words, EmoNAVI doesn't need a scheduler to converge,  
+but it can gracefully coexist with one if desired.  
 Result: Training converges reliably with or without an external scheduler.  
 
 
@@ -254,6 +277,16 @@ Try it—see how it learns with you.
 ![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test02.png?raw=true)
 
 ---
+
+Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
+これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
+汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
+この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
+The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
+Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
+It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
+In its development, we deeply appreciate the insights of those who came before us—and continue to explore new possibilities beyond them. 
+
 
 ### License Apache License 2.0 — see LICENSE for details.  
 ### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。  

@@ -1,0 +1,49 @@
+Kohya-sd-script での使用法
+
+これら Emoシリーズ を Kohya-sd-script で簡単につかうには、
+このフォルダをこのまま Kohya-sd-script の "sd-script" フォルダに配置してください
+
+sd-script/optimizer
+
+この配置にした場合、
+
+--optimizer_type=optimizer.emonavi.EmoNavi
+--optimizer_type=optimizer.emofact.EmoFact
+--optimizer_type=optimizer.emolynx.EmoLynx
+--optimizer_type=optimizer.emoclan.EmoClan
+
+このように指定するだけで各Optimizerを利用できます(いずれかひとつを指定してください)
+---
+Kohya-sd-script の柔軟な構成により、これらをすぐ試せます
+Kohya-sd-script の開発者と協力者の皆さまに深く感謝します
+Kohya-sd-script: https://github.com/kohya-ss/sd-scripts
+
+Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
+これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
+汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
+この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。 
+
+
+Usage with Kohya-sd-script
+
+To easily use these Emo series with Kohya-sd-script,
+simply place this folder as-is into the "sd-scripts" folder within your Kohya-sd-script installation:
+
+sd-scripts/optimizer
+
+With this setup,
+
+--optimizer_type=optimizer.emonavi.EmoNavi
+--optimizer_type=optimizer.emofact.EmoFact
+--optimizer_type=optimizer.emolynx.EmoLynx
+--optimizer_type=optimizer.emoclan.EmoClan
+
+You can utilize each optimizer by simply specifying one of the above.
+
+Thanks to the flexible configuration of Kohya-sd-script, you can try these out right away. We extend our deepest gratitude to the developers and contributors of Kohya-sd-script:
+Kohya-sd-script: https://github.com/kohya-ss/sd-scripts
+
+The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
+Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
+It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
+In its development, we deeply appreciate the insights of those who came before us—and continue to explore new possibilities beyond them.  
