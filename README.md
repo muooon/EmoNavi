@@ -1,4 +1,4 @@
-# EmoNAVI  
+# EmoNAVI･FACT  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -10,7 +10,9 @@
 ###### **It’s an “Emotional Optimizer” that navigates learning through feeling.**  
 ###### A result of transformative emotional learning: the reinvention of the neural spike.  
 ---
-
+    **自動収束･自己制御･自律型 オプティマイザです**  
+	**Auto-convergence, self-control, autonomous optimizer**  
+---
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
 > ｢挑戦も留まることも冒険も休息も自ら選びそれをすべて経験として記憶する｣  
 > ｢でも過去の記憶は引きずらない、いつも始めるときは"新しいわたし"だから｣  
@@ -31,10 +33,13 @@
 
 |☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
 |☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
-|☆| (This is untested and is merely a possibility.)
+|☆| (This is untested and is merely a possibility.)  
 
-|★| 疑似DDPシミュレーションを試したい方 → 
+|★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
 [DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
+
+|★| EmoFACT 公開(250716) NAVIに比べ、約１GB節約(SDXL) 感情機構は同じです  
+|★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
  
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
