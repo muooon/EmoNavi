@@ -186,15 +186,21 @@ However, it includes an alternative mechanism:
 
 ---
 ##### 外部スケジューラを併用してもOK  
-EmoNAVIは通常のPyTorch Optimizerと同様に設計されているため：  
-- torch.optim.lr_schedulerを使った外部スケジューラとも併用可能  
-- ただしEmoNAVI内部には学習率自動変動のロジックは含まれていない  
+EmoNAVIは外部の学習率スケジューラと併用可能ですが、  
+それに依存せず、自律的に収束する設計となっています。  
+損失の挙動に基づく感情スカラーとshadow補正により、  
+どのような学習率でもモデル自身が最適な更新を判断します。  
+つまり、スケジューラがなくても収束可能で、あっても邪魔にならない、  
+それがEmoNAVIの自律性です。  
 結果：どんなスケジューラーを指定してもしっかり収束します  
 
 ##### Using external schedulers is supported  
-Because EmoNAVI is implemented as a standard PyTorch Optimizer:  
-- It can be used alongside external learning rate schedulers (e.g., torch.optim.lr_scheduler)  
-- EmoNAVI itself does not include any built-in logic for modifying learning rate over time  
+EmoNAVI is compatible with external learning rate schedulers,  
+but does not rely on them for convergence.  
+Its core mechanism—emotion-driven shadow blending and scalar feedback—  
+allows it to adapt and stabilize regardless of the learning rate schedule provided.  
+In other words, EmoNAVI doesn't need a scheduler to converge,  
+but it can gracefully coexist with one if desired.  
 Result: Training converges reliably with or without an external scheduler.  
 
 
@@ -267,13 +273,14 @@ Try it—see how it learns with you.
 
 ---
 
-fact は、Adafactor を参考にしました  
-Lynx は、Lion と Tiger を参考にしました  
-Emoシリーズはこれまでの様々なOptimizerの成果に学び完成しました  
-すべての開発者の皆さまに感謝します  
-Fact was inspired by Adafactor.  
-Lynx was inspired by Lion and Tiger.  
-The Emo series was completed by learning from the achievements of various optimizers developed to date. We are grateful to all developers.  
+Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
+これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
+汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
+この開発においては先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
+The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
+Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
+It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
+In its development, we deeply appreciate the insights of those who came before us—and continue to explore new possibilities beyond them. 
 
 
 ### License Apache License 2.0 — see LICENSE for details.  
