@@ -110,3 +110,8 @@ class EmoFact(Optimizer):
                 self.should_stop = True
 
         return loss
+
+"""
+Fact is inspired by Adafactor,  
+and its VRAM-friendly design is something everyone loves.
+"""
