@@ -1,0 +1,46 @@
+Kohya-sd-script での使用法
+
+これら Emoシリーズ を Kohya-sd-script で簡単につかうには、
+このフォルダをこのまま Kohya-sd-script の "sd-script" フォルダに配置してください
+
+sd-script/optimizer
+
+この配置にした場合、
+
+--optimizer_type=optimizer.emonavi.EmoNavi
+--optimizer_type=optimizer.emofact.EmoFact
+--optimizer_type=optimizer.emolynx.EmoLynx
+
+このように指定するだけで各Optimizerを利用できます(いずれかひとつを指定してください)
+---
+Kohya-sd-script の柔軟な構成により、これらをすぐ試せます
+Kohya-sd-script の開発者と協力者の皆さまに深く感謝します
+Kohya-sd-script: https://github.com/kohya-ss/sd-scripts
+
+fact は、Adafactor を参考にしました
+Lynx は、Lion と Tiger を参考にしました
+Emoシリーズはこれまでの様々なOptimizerの成果に学び完成しました
+すべての開発者の皆さまに感謝します
+
+
+Usage with Kohya-sd-script
+
+To easily use these Emo series with Kohya-sd-script,
+simply place this folder as-is into the "sd-scripts" folder within your Kohya-sd-script installation:
+
+sd-scripts/optimizer
+
+With this setup,
+
+--optimizer_type=optimizer.emonavi.EmoNavi
+--optimizer_type=optimizer.emofact.EmoFact
+--optimizer_type=optimizer.emolynx.EmoLynx
+
+You can utilize each optimizer by simply specifying one of the above.
+
+Thanks to the flexible configuration of Kohya-sd-script, you can try these out right away. We extend our deepest gratitude to the developers and contributors of Kohya-sd-script:
+Kohya-sd-script: https://github.com/kohya-ss/sd-scripts
+
+Fact was inspired by Adafactor.
+Lynx was inspired by Lion and Tiger.
+The Emo series was completed by learning from the achievements of various optimizers developed to date. We are grateful to all developers.

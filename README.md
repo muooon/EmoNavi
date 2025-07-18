@@ -1,4 +1,4 @@
-# EmoNAVI･FACT  
+# EmoNAVI･FACT･LYNX  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -12,7 +12,11 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
+#### EmoNAVI を中心に、EmoFACT、EmoLYNX、もあります  
+#### 以下で共通部の"感情機構"等について説明します  
 #### Auto-convergence, self-control, autonomous optimizer  
+#### It primarily features EmoNAVI, along with EmoFACT and EmoLYNX.  
+#### The common "Emotion Mechanism" and other aspects will be explained below.
 ---
 
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
@@ -42,7 +46,13 @@
 
 |★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
 |★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
- 
+
+|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
+|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
+
+|★| すぐに試したい方は"optimizer"フォルダを開いて使い方を確認してください  
+|★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
+
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
@@ -256,6 +266,15 @@ Try it—see how it learns with you.
 ![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test02.png?raw=true)
 
 ---
+
+fact は、Adafactor を参考にしました  
+Lynx は、Lion と Tiger を参考にしました  
+Emoシリーズはこれまでの様々なOptimizerの成果に学び完成しました  
+すべての開発者の皆さまに感謝します  
+Fact was inspired by Adafactor.  
+Lynx was inspired by Lion and Tiger.  
+The Emo series was completed by learning from the achievements of various optimizers developed to date. We are grateful to all developers.  
+
 
 ### License Apache License 2.0 — see LICENSE for details.  
 ### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。  
