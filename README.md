@@ -1,4 +1,4 @@
-# EmoNAVI･FACT･LYNX  
+# EmoNAVI･FACT･LYNX/CLAN  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---

@@ -10,7 +10,7 @@ sd-script/optimizer
 --optimizer_type=optimizer.emonavi.EmoNavi
 --optimizer_type=optimizer.emofact.EmoFact
 --optimizer_type=optimizer.emolynx.EmoLynx
---optimizer_type=optimizer.emolynx.EmoClan
+--optimizer_type=optimizer.emoclan.EmoClan
 
 このように指定するだけで各Optimizerを利用できます(いずれかひとつを指定してください)
 ---
@@ -36,7 +36,7 @@ With this setup,
 --optimizer_type=optimizer.emonavi.EmoNavi
 --optimizer_type=optimizer.emofact.EmoFact
 --optimizer_type=optimizer.emolynx.EmoLynx
---optimizer_type=optimizer.emolynx.EmoClan
+--optimizer_type=optimizer.emoclan.EmoClan
 
 You can utilize each optimizer by simply specifying one of the above.
 
