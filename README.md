@@ -50,6 +50,11 @@
 |★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
 |★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
 
+|★| EmoCLAN 公開(250720) Navi、Fact、Lynx、役割分担の統合 感情機構は同じです  
+    (Lynx：序盤と過学習傾向時、Navi：中盤と健全時、Fact：終盤と発散傾向時、を担当します)  
+|★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
+    (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
+
 |★| すぐに試したい方は"optimizer"フォルダを開いて使い方を確認してください  
 |★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
 
@@ -276,7 +281,7 @@ Try it—see how it learns with you.
 Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
 これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
 汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
-この開発においては先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
+この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
 The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
 Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
 It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
