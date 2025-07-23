@@ -27,3 +27,33 @@ If you find that your training isn't progressing beyond a certain point, try an 
 Conclusion
 
 We hope this explanation helps you acquire valuable know-how for setting up your training, not just for the EmoNavi series. We believe it will be beneficial to all of you. Thank you for reading to the end.
+
+postscript
+
+I'd like to explain the learning rate in an easy-to-understand way, so you can truly grasp its concept.
+
+You can think of the learning rate like reading speed.
+Imagine this: a high learning rate is like skim reading (or speed reading), while a low learning rate is like perusing (or close reading).
+
+The scheduler manages this, much like a learning schedule.
+EmoNAVI has a "shadow" function that encourages the model to review and reflect on its own learning progress.
+With EmoNAVI, you have a choice: you can allow external guidance to determine the learning path and let the model's autonomy supplement it, or you can rely solely on its autonomy.
+
+Here are some other analogies:
+High learning rate: Like shooting a photo from a distance, giving you an overview where details are fuzzy.
+Low learning rate: Like shooting up close, capturing accurate details.
+Think of autofocus as being handled by the scheduler and the "shadow" function.
+From another perspective:
+
+When aiming for detailed expressions, you can also consider increasing the amount of training data or increasing the number of iterations.
+As the number of iterations increases, detailed features are gradually accumulated.
+
+However, color representation largely depends on the performance of the VAE (Variational Autoencoder).
+To accurately reflect colors, the only options are to improve the VAE's performance itself or to use teacher data that correctly reflects colors.
+
+Furthermore, the "shadow" function also acts like an autofocus system.
+It's a mechanism that allows the model to review and reflect on its own learning, essentially learning from its own experience.
+This means it captures one feature, learns from it, then identifies another, and the process repeats.
+Consequently, its "focus" (or understanding) continuously evolves and adapts.
+
+That concludes the additional explanation. Thank you for reading to the end!
