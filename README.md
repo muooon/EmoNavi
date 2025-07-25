@@ -60,6 +60,8 @@
 
 |★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
 |★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW.  
+[Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
