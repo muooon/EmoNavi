@@ -58,6 +58,8 @@
 |★| すぐに試したい方は"optimizer"フォルダを開いて使い方を確認してください  
 |★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
 
+|★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
+|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW.  
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
