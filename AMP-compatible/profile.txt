@@ -20,9 +20,9 @@ emolynx：三女／Lion･Tiger参考　The youngest daughter, referencing Lion 
 
 emoclan：統合／三姉妹に役割分担をさせた統合型　An integrated model where roles are assigned to the three sisters.
 
-三姉妹の従妹 ／ Cousins of the Three Sisters
-emozeal：長女／emofact参考／双子の姉　The elder twin sister, referencing emofact.
-emoneco：次女／emolynx参考／双子の妹　The younger twin sister, referencing emolynx.
+従妹の双子 ／ Cousins of the Three Sisters
+emozeal：双子の姉／emofact参考　The elder twin sister, referencing emofact.
+emoneco：双子の妹／emolynx参考　The younger twin sister, referencing emolynx.
 
 emoclanという統合から三姉妹の従妹へ発展します
 emozeal と emoneco はそれぞれ場面に応じて更新方法を選択します
