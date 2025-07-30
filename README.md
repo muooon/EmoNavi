@@ -55,7 +55,7 @@
 |★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
     (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
 
-|★| すぐに試したい方は"KohySDScript.zip"を解凍し使い方を確認してください  
+|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
 |★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
 
 |★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
