@@ -1,4 +1,4 @@
-# EmoNAVI･FACT･LYNX/CLAN  
+# EmoNAVI / Emo-Family  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -12,10 +12,10 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
-#### EmoNAVI を中心に、EmoFACT、EmoLYNX、もあります  
+#### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
 #### 以下で共通部の"感情機構"等について説明します  
 #### Auto-convergence, self-control, autonomous optimizer  
-#### It primarily features EmoNAVI, along with EmoFACT and EmoLYNX.  
+#### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
 #### The common "Emotion Mechanism" and other aspects will be explained below.
 ---
 
@@ -55,12 +55,23 @@
 |★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
     (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
 
-|★| すぐに試したい方は"optimizer"フォルダを開いて使い方を確認してください  
-|★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
+|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
+|★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
 
 |★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
-|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW.  
-[Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+
+|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
+|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+
+|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
+|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
+
+|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
+|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
+
+|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
+|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
 
 ---
 この EmoNAVI について以下でわかりやすく紹介します  
@@ -276,9 +287,9 @@ Try it—see how it learns with you.
 
 ---
 ##### Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定  
-![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/emonavi-test00.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test01.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test02.png?raw=true)
+![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)
+![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)
+![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)
 
 ---
 
@@ -297,6 +308,14 @@ In its development, we deeply appreciate the insights of those who came before u
 
 ##### 🤖 Built with  Copilot + human curiosity.  
 ##### 🤖 Copilot と人間の好奇心のコラボで誕生しました。  
+
+### 引用について / About citations
+
+---
+このオプテイマイザについて引用をなさる場合は、以下の２つをご紹介ください  
+When citing this optimizer, please refer to the following two sources:  
+https://github.com/muooon/EmoNavi  
+https://huggingface.co/muooon/EmoNAVI  
 
 ---
 
