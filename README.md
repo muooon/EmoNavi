@@ -12,10 +12,10 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
-#### EmoNAVI を中心に、EmoFACT、EmoLYNX、もあります  
+#### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
 #### 以下で共通部の"感情機構"等について説明します  
 #### Auto-convergence, self-control, autonomous optimizer  
-#### It primarily features EmoNAVI, along with EmoFACT and EmoLYNX.  
+#### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
 #### The common "Emotion Mechanism" and other aspects will be explained below.
 ---
 
@@ -67,7 +67,7 @@
 |★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
 |★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
 
-|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします。
+|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
 |★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
 
 |★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
@@ -308,6 +308,14 @@ In its development, we deeply appreciate the insights of those who came before u
 
 ##### 🤖 Built with  Copilot + human curiosity.  
 ##### 🤖 Copilot と人間の好奇心のコラボで誕生しました。  
+
+### 引用について / About citations
+
+---
+このオプテイマイザについて引用をなさる場合は、以下の２つをご紹介ください  
+When citing this optimizer, please refer to the following two sources:  
+https://github.com/muooon/EmoNavi  
+https://huggingface.co/muooon/EmoNAVI  
 
 ---
 
