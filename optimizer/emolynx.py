@@ -3,6 +3,10 @@ from torch.optim import Optimizer
 import math
 from typing import Tuple, Callable, Union
 
+"""
+AMP対応完了(202507) p.data -> p 修正済み
+"""
+
 # Helper function (Lynx)
 def exists(val):
     return val is not None
@@ -18,8 +22,8 @@ class EmoLynx(Optimizer):
         
         # lynxに応じてウェイト減衰のため保存
         self._init_lr = lr
-        self.decoupled_wd = decoupled_weight_decay
         self.should_stop = False # 停止フラグの初期化
+        self.decoupled_wd = decoupled_weight_decay
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -33,7 +37,7 @@ class EmoLynx(Optimizer):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
-    # Shadow混合比率(> 0.6：70〜90%、 < 0.6：10%、 > 0.3：30%、 平時：0%)
+    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
     def _decide_ratio(self, scalar):
         if scalar > 0.6:
             return 0.7 + 0.2 * scalar
@@ -74,13 +78,13 @@ class EmoLynx(Optimizer):
                 # shadow_param：必要時のみ更新(スパイク部分に現在値を5%ずつ追従させる動的履歴)
                 if ratio > 0:
                     if 'shadow' not in state:
-                        state['shadow'] = p.data.clone()
+                        state['shadow'] = p.clone()
                     else:
-                        p.data.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
-                        state['shadow'].lerp_(p.data, 0.05) 
-                        # lynx更新前 p.data で shadow 更新(現在値を5%ずつ追従)
-                        # p.data.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
-                        # EmoNavi: p.data = p.data * (1-ratio) + shadow * ratio
+                        p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
+                        state['shadow'].lerp_(p, 0.05) 
+                        # lynx更新前 p で shadow 更新(現在値を5%ずつ追従)
+                        # p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
+                        # EmoNavi: p = p * (1-ratio) + shadow * ratio
 
                 # --- Start Lynx Gradient Update Logic ---
                 
@@ -89,16 +93,16 @@ class EmoLynx(Optimizer):
                     state['exp_avg'] = torch.zeros_like(p)
                 exp_avg = state['exp_avg']
 
-                # Stepweight decay (from lynx): p.data = p.data * (1 - lr * wd)
+                # Stepweight decay (from lynx): p = p * (1 - lr * wd)
                 # decoupled_wd 考慮 _wd_actual 使用(EmoNaviのwdは最後に適用)
-                p.data.mul_(1. - lr * _wd_actual)
+                p.mul_(1. - lr * _wd_actual)
 
                 # 勾配ブレンド
                 # m_t = beta1 * exp_avg_prev + (1 - beta1) * grad
                 blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
                 
-                # p: p.data = p.data - lr * sign(blended_grad)
-                p.data.add_(blended_grad.sign_(), alpha = -lr)
+                # p: p = p - lr * sign(blended_grad)
+                p.add_(blended_grad.sign_(), alpha = -lr)
 
                 # exp_avg = beta2 * exp_avg + (1 - beta2) * grad
                 exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
@@ -109,7 +113,7 @@ class EmoLynx(Optimizer):
                 # この部分は p.state ではなく self.state にアクセスする
                 hist = self.state.setdefault('scalar_hist', [])
                 hist.append(scalar)
-                if len(hist) > 32:
+                if len(hist) >= 33:
                     hist.pop(0)
 
         # Early Stop判断(静けさの合図) - This part is outside the inner loop
@@ -118,12 +122,13 @@ class EmoLynx(Optimizer):
             avg_abs = sum(abs(s) for s in buf) / len(buf)
             std = sum((s - sum(buf)/len(buf))**2 for s in buf) / len(buf)
             if avg_abs < 0.05 and std < 0.005:
-                self.should_stop = True # 💡 外部からこれを見て判断可
+                self.should_stop = True # 外部からこれを見て判断可
 
         return loss
 
 """
-Lynx was developed with inspiration from Lion and Tiger, 
-which we deeply respect for their lightweight and intelligent design.  
-Lynx also integrates EmoNAVI to enhance its capabilities.
+ https://github.com/muooon/EmoNavi
+ Lynx was developed with inspiration from Lion and Tiger, 
+ which we deeply respect for their lightweight and intelligent design.  
+ Lynx also integrates EmoNAVI to enhance its capabilities.
 """

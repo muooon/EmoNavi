@@ -2,12 +2,23 @@ import torch
 from torch.optim import Optimizer
 import math
 
-class EmoFact(Optimizer):
+"""
+AMP対応完了(202507) p.data -> p 修正済み
+"""
+
+# Soft Sign 関数
+def softsign(x): 
+    return x / (1 + x.abs())
+    
+class EmoZeal(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
                  eps=1e-8, weight_decay=0.01):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
+        self.alpha_prev = getattr(self, 'alpha_prev', 1.0)
+        self._init_lr = lr 
+        self.should_stop = False # 停止フラグの初期化
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -21,7 +32,7 @@ class EmoFact(Optimizer):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
-    # Shadow混合比率(> 0.6：70〜90%、 < 0.6：10%、 > 0.3：30%、 平時：0%)
+    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
     def _decide_ratio(self, scalar):
         if scalar > 0.6:
             return 0.7 + 0.2 * scalar
@@ -42,7 +53,7 @@ class EmoFact(Optimizer):
                 if p.grad is None:
                     continue
 
-                grad = p.grad.data
+                grad = p.grad
                 state = self.state[p]
 
                 # 感情EMA更新・スカラー生成 (既存ロジックを維持)
@@ -53,12 +64,12 @@ class EmoFact(Optimizer):
                 # shadow_param：必要時のみ更新 (既存ロジックを維持)
                 if ratio > 0:
                     if 'shadow' not in state:
-                        state['shadow'] = p.data.clone()
+                        state['shadow'] = p.clone()
                     else:
-                        p.data.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
-                        state['shadow'].lerp_(p.data, 0.05)
+                        p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
+                        state['shadow'].lerp_(p, 0.05)
                 
-                # --- 新しい勾配補正ロジック ---
+                # --- 勾配補正ロジック ---
                 # 行列の形状が2次元以上の場合、分散情報ベースのAB近似を使用
                 if grad.dim() >= 2:
                     # 行と列の2乗平均を計算 (分散の軽量な近似)
@@ -69,22 +80,41 @@ class EmoFact(Optimizer):
                     # AB行列として見立てたものを直接生成し更新項を計算する
                     # A = sqrt(r_sq), B = sqrt(c_sq) とすることでAB行列の近似を再現
                     # これをEMAで平滑化する
-                    beta1, beta2 = group['betas']
+                    beta1, beta2 = group['betas'] 
+                    eps = group['eps'] 
+                    lr = group['lr']   
+                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
+                    blended_grad = grad.mul(1 - beta1).add_(exp_avg, alpha=beta1)
+                    grad_norm = torch.norm(grad, dtype=torch.float32)
+                    # scalar < -0.3 の場合のみ SoftSign、それ以外 Cautious (終盤や発散傾向をSSに)
+                    # p - lr * softsign(blended_grad) (from softsign)
+                    # p - lr * direction * mask (from Cautious)
+                    # safe_norm 極値のブレンド勾配に対するスケーリング
+                    if 0.3 < scalar <= 0.5:
+                        safe_norm = grad_norm + eps
+                        modified_grad = softsign(blended_grad) * safe_norm
+                        p.add_(-lr * modified_grad) 
+                    elif scalar < -0.3:
+                        direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
+                        mask = (direction == grad.sign())  # 過去の勾配と方向が一致する部分のみ更新
+                        p.add_(direction * mask, alpha = -lr)  # Cautious 更新
+                    else:
+                        p.add_(softsign(blended_grad), alpha = -lr)  # Soft Sign 処理
                     
                     state.setdefault('exp_avg_r', torch.zeros_like(r_sq)).mul_(beta1).add_(torch.sqrt(r_sq), alpha=1 - beta1)
                     state.setdefault('exp_avg_c', torch.zeros_like(c_sq)).mul_(beta1).add_(torch.sqrt(c_sq), alpha=1 - beta1)
                     
                     # 再構築した近似勾配の平方根の積で正規化
                     # これにより2次モーメントのような役割を果たす
-                    denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']).add_(group['eps'])
+                    denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']) + eps
                     
                     # 最終的な更新項を計算
                     update_term = grad / denom
 
                 # 1次元(ベクトル)の勾配補正(decoupled weight decay 構造に近い)
                 else:
-                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p.data))
-                    exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p.data))
+                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
+                    exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p))
                     beta1, beta2 = group['betas']
                     exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
                     exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
@@ -92,13 +122,13 @@ class EmoFact(Optimizer):
                     update_term = exp_avg / denom
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
-                p.data.add_(p.data, alpha=-group['weight_decay'] * group['lr'])
-                p.data.add_(update_term, alpha=-group['lr'])
+                p.add_(p, alpha=-group['weight_decay'] * group['lr'])
+                p.add_(update_term, alpha=-group['lr'])
 
                 # --- Early Stop ロジック (既存ロジックを維持) ---
                 hist = self.state.setdefault('scalar_hist', [])
                 hist.append(scalar)
-                if len(hist) > 32:
+                if len(hist) >= 33:
                     hist.pop(0)
 
         # Early Stop判断
@@ -112,6 +142,7 @@ class EmoFact(Optimizer):
         return loss
 
 """
-Fact is inspired by Adafactor,  
-and its VRAM-friendly design is something everyone loves.
+ https://github.com/muooon/EmoNavi
+ Zeal is inspired by Adafactor, and EmoFact,  
+ and its VRAM-friendly design is something everyone loves.
 """

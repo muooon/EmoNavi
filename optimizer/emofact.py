@@ -2,12 +2,18 @@ import torch
 from torch.optim import Optimizer
 import math
 
+"""
+AMP対応完了(202507) p.data -> p 修正済み
+"""
+
 class EmoFact(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
                  eps=1e-8, weight_decay=0.01):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
+        self._init_lr = lr 
+        self.should_stop = False # 停止フラグの初期化
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -21,7 +27,7 @@ class EmoFact(Optimizer):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
-    # Shadow混合比率(> 0.6：70〜90%、 < 0.6：10%、 > 0.3：30%、 平時：0%)
+    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
     def _decide_ratio(self, scalar):
         if scalar > 0.6:
             return 0.7 + 0.2 * scalar
@@ -42,7 +48,7 @@ class EmoFact(Optimizer):
                 if p.grad is None:
                     continue
 
-                grad = p.grad.data
+                grad = p.grad
                 state = self.state[p]
 
                 # 感情EMA更新・スカラー生成 (既存ロジックを維持)
@@ -53,12 +59,12 @@ class EmoFact(Optimizer):
                 # shadow_param：必要時のみ更新 (既存ロジックを維持)
                 if ratio > 0:
                     if 'shadow' not in state:
-                        state['shadow'] = p.data.clone()
+                        state['shadow'] = p.clone()
                     else:
-                        p.data.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
-                        state['shadow'].lerp_(p.data, 0.05)
+                        p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
+                        state['shadow'].lerp_(p, 0.05)
                 
-                # --- 新しい勾配補正ロジック ---
+                # --- 勾配補正ロジック ---
                 # 行列の形状が2次元以上の場合、分散情報ベースのAB近似を使用
                 if grad.dim() >= 2:
                     # 行と列の2乗平均を計算 (分散の軽量な近似)
@@ -83,8 +89,8 @@ class EmoFact(Optimizer):
 
                 # 1次元(ベクトル)の勾配補正(decoupled weight decay 構造に近い)
                 else:
-                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p.data))
-                    exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p.data))
+                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
+                    exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p))
                     beta1, beta2 = group['betas']
                     exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
                     exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
@@ -92,13 +98,13 @@ class EmoFact(Optimizer):
                     update_term = exp_avg / denom
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
-                p.data.add_(p.data, alpha=-group['weight_decay'] * group['lr'])
-                p.data.add_(update_term, alpha=-group['lr'])
+                p.add_(p, alpha=-group['weight_decay'] * group['lr'])
+                p.add_(update_term, alpha=-group['lr'])
 
                 # --- Early Stop ロジック (既存ロジックを維持) ---
                 hist = self.state.setdefault('scalar_hist', [])
                 hist.append(scalar)
-                if len(hist) > 32:
+                if len(hist) >= 33:
                     hist.pop(0)
 
         # Early Stop判断
@@ -112,6 +118,7 @@ class EmoFact(Optimizer):
         return loss
 
 """
-Fact is inspired by Adafactor,  
-and its VRAM-friendly design is something everyone loves.
+ https://github.com/muooon/EmoNavi
+ Fact is inspired by Adafactor,  
+ and its VRAM-friendly design is something everyone loves.
 """
