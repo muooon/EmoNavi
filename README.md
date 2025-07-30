@@ -1,4 +1,4 @@
-# EmoNAVI･FACT･LYNX/CLAN  
+# EmoNAVI / Emo-Family  
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -59,8 +59,19 @@
 |★| If you want to try it out right away, please open the "optimizer" folder and check the usage instructions.  
 
 |★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
-|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW.  
-[Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+
+|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
+|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+
+|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
+|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
+
+|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします。
+|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
+
+|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
+|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
 
 ---
 この EmoNAVI について以下でわかりやすく紹介します  

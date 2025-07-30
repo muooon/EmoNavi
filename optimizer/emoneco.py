@@ -10,20 +10,23 @@ AMP対応完了(202507) p.data -> p 修正済み
 # Helper function (Lynx)
 def exists(val):
     return val is not None
+# Soft Sign 関数
+def softsign(x):
+    return x / (1 + x.abs())
 
-class EmoLynx(Optimizer):
+class EmoNeco(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, betas=(0.9, 0.99), 
-    # lynx用ベータ･互換性の追加(lynx用beta1･beta2)
+    # neco用ベータ･互換性の追加(neco用beta1･beta2)
                  eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False): 
 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
         
-        # lynxに応じてウェイト減衰のため保存
+        # ウェイト減衰のため保存
         self._init_lr = lr
-        self.should_stop = False # 停止フラグの初期化
         self.decoupled_wd = decoupled_weight_decay
+        self.should_stop = False # 停止フラグの初期化
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -57,7 +60,7 @@ class EmoLynx(Optimizer):
         loss_val = loss.item() if loss is not None else 0.0
 
         for group in self.param_groups:
-            # リンクス共通パラメータ抽出
+            # 共通パラメータ抽出
             lr, wd, beta1, beta2 = group['lr'], group['weight_decay'], *group['betas']
             
             # ウェイト減衰の処理を分離 (from lynx)
@@ -82,13 +85,13 @@ class EmoLynx(Optimizer):
                     else:
                         p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
                         state['shadow'].lerp_(p, 0.05) 
-                        # lynx更新前 p で shadow 更新(現在値を5%ずつ追従)
+                        # 更新前 p で shadow 更新(現在値を5%ずつ追従)
                         # p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio) 
                         # EmoNavi: p = p * (1-ratio) + shadow * ratio
 
-                # --- Start Lynx Gradient Update Logic ---
+                # --- Start Neco Gradient Update Logic ---
                 
-                # lynx初期化(exp_avg_sq)
+                # neco初期化(exp_avg_sq)
                 if 'exp_avg' not in state:
                     state['exp_avg'] = torch.zeros_like(p)
                 exp_avg = state['exp_avg']
@@ -100,14 +103,27 @@ class EmoLynx(Optimizer):
                 # 勾配ブレンド
                 # m_t = beta1 * exp_avg_prev + (1 - beta1) * grad
                 blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
-                
-                # p: p = p - lr * sign(blended_grad)
-                p.add_(blended_grad.sign_(), alpha = -lr)
+                grad_norm = torch.norm(grad, dtype=torch.float32) # 勾配ノルムの計算
+
+                # scalar < -0.3 の場合のみ SoftSign、それ以外 Cautious (終盤や発散傾向をSSに)
+                # p - lr * softsign(blended_grad) (from softsign)
+                # p - lr * direction * mask (from Cautious)
+                # safe_norm 極値のブレンド勾配に対するスケーリング
+                if 0.3 < scalar <= 0.5:
+                    safe_norm = grad_norm + eps
+                    modified_grad = softsign(blended_grad) * safe_norm
+                    p.add_(-lr * modified_grad) 
+                elif scalar < -0.3:
+                    p.add_(softsign(blended_grad), alpha = -lr)  # Soft Sign 処理
+                else:
+                    direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
+                    mask = (direction == grad.sign())  # 過去の勾配と方向が一致している部分のみ更新
+                    p.add_(direction * mask, alpha = -lr)  # Cautious 更新
 
                 # exp_avg = beta2 * exp_avg + (1 - beta2) * grad
                 exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
 
-                # --- End Lynx Gradient Update Logic ---
+                # --- End Neco Gradient Update Logic ---
 
                 # Early Stop用 scalar記録(バッファ共通で管理/最大32件保持/動静評価)
                 # この部分は p.state ではなく self.state にアクセスする
@@ -116,7 +132,7 @@ class EmoLynx(Optimizer):
                 if len(hist) >= 33:
                     hist.pop(0)
 
-        # Early Stop判断(静けさの合図) - This part is outside the inner loop
+        # Early Stop判断(静けさの合図) This part is outside the inner loop
         if len(self.state['scalar_hist']) >= 32:
             buf = self.state['scalar_hist']
             avg_abs = sum(abs(s) for s in buf) / len(buf)
@@ -128,7 +144,7 @@ class EmoLynx(Optimizer):
 
 """
  https://github.com/muooon/EmoNavi
- Lynx was developed with inspiration from Lion and Tiger, 
+ Neco was developed with inspiration from Lion, Tiger, Cautious, softsign, and Lynx 
  which we deeply respect for their lightweight and intelligent design.  
- Lynx also integrates EmoNAVI to enhance its capabilities.
+ Neco also integrates EmoNAVI to enhance its capabilities.
 """

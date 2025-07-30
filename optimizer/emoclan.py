@@ -3,6 +3,10 @@ from torch.optim import Optimizer
 import math
 from typing import Callable, Union, Dict, Any, Tuple
 
+"""
+AMP対応完了(202507) p.data -> p 修正済み
+"""
+
 # Helper function
 def exists(val):
     return val is not None
@@ -76,8 +80,8 @@ class EmoClan(Optimizer):
         wd_actual: float
     ):
         """EmoLynx のコアな勾配更新ロジック"""
-        # Stepweight decay: p.data = p.data * (1 - lr * wd)
-        p.data.mul_(1. - lr * wd_actual)
+        # Stepweight decay: p = p * (1 - lr * wd)
+        p.mul_(1. - lr * wd_actual)
 
         # Lynx 固有の EMA 状態は param_state に保持
         if 'exp_avg_lynx' not in param_state:
@@ -88,7 +92,7 @@ class EmoClan(Optimizer):
         blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
         
         # 符号ベースの更新
-        p.data.add_(blended_grad.sign_(), alpha = -lr)
+        p.add_(blended_grad.sign_(), alpha = -lr)
 
         # exp_avg 更新
         exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
@@ -106,18 +110,18 @@ class EmoClan(Optimizer):
         """EmoNavi のコアな勾配更新ロジック"""
         beta1, beta2 = betas
 
-        exp_avg = param_state.setdefault('exp_avg_navi', torch.zeros_like(p.data))
-        exp_avg_sq = param_state.setdefault('exp_avg_sq_navi', torch.zeros_like(p.data))
+        exp_avg = param_state.setdefault('exp_avg_navi', torch.zeros_like(p))
+        exp_avg_sq = param_state.setdefault('exp_avg_sq_navi', torch.zeros_like(p.to(torch.float32)))
 
         exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
-        exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
+        exp_avg_sq.mul_(beta2).addcmul_(grad.to(torch.float32), grad.to(torch.float32), value=1 - beta2)
         denom = exp_avg_sq.sqrt().add_(eps)
 
         # Weight decay (標準的手法)
         if weight_decay:
-            p.data.add_(p.data, alpha=-weight_decay * lr) 
+            p.mul_(1 - lr * weight_decay) 
 
-        p.data.addcdiv_(exp_avg, denom, value=-lr)
+        p.addcdiv_(exp_avg, denom, value=-lr)
 
     def _fact_update(
         self, 
@@ -134,28 +138,31 @@ class EmoClan(Optimizer):
 
         if grad.dim() >= 2:
             # 行と列の2乗平均を計算 (分散の軽量な近似)
-            r_sq = torch.mean(grad * grad, dim=tuple(range(1, grad.dim())), keepdim=True).add_(eps)
-            c_sq = torch.mean(grad * grad, dim=0, keepdim=True).add_(eps)
+            # gradをfloat32にキャストして計算することで数値安定性を高める
+            r_sq = torch.mean(grad.to(torch.float32) * grad.to(torch.float32), dim=tuple(range(1, grad.dim())), keepdim=True).add_(eps)
+            c_sq = torch.mean(grad.to(torch.float32) * grad.to(torch.float32), dim=0, keepdim=True).add_(eps)
 
             param_state.setdefault('exp_avg_r_fact', torch.zeros_like(r_sq)).mul_(beta1).add_(torch.sqrt(r_sq), alpha=1 - beta1)
             param_state.setdefault('exp_avg_c_fact', torch.zeros_like(c_sq)).mul_(beta1).add_(torch.sqrt(c_sq), alpha=1 - beta1)
             
             # 再構築した近似勾配の平方根の積で正規化
             denom = torch.sqrt(param_state['exp_avg_r_fact'] * param_state['exp_avg_c_fact']).add_(eps)
-            update_term = grad / denom
+            update_term = grad / denom # grad は元の型（float16またはfloat32）
 
         else: # 1次元(ベクトル)の勾配補正
-            exp_avg = param_state.setdefault('exp_avg_fact', torch.zeros_like(p.data))
-            exp_avg_sq = param_state.setdefault('exp_avg_sq_fact', torch.zeros_like(p.data))
+            exp_avg = param_state.setdefault('exp_avg_fact', torch.zeros_like(p))
+            exp_avg_sq = param_state.setdefault('exp_avg_sq_fact', torch.zeros_like(p.to(torch.float32)))
             
             exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
-            exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2) # beta2 をここでは使用
+            exp_avg_sq.mul_(beta2).addcmul_(grad.to(torch.float32), grad.to(torch.float32), value=1 - beta2)
             denom = exp_avg_sq.sqrt().add_(eps)
             update_term = exp_avg / denom
 
         # 最終的なパラメータ更新 (decoupled weight decayも適用)
-        p.data.add_(p.data, alpha=-weight_decay * lr) 
-        p.data.add_(update_term, alpha=-lr)
+        # decoupled_weight_decay は __init__ でグループにdefaultsとして渡されているが、
+        # ここではfactorロジック自体がweight_decayを受け取る形式
+        p.mul_(1 - weight_decay * lr) 
+        p.add_(update_term, alpha=-lr)
 
 
     @torch.no_grad()
@@ -177,7 +184,7 @@ class EmoClan(Optimizer):
         
         # global_scalar_hist に現在の感情スカラーを追加
         global_scalar_hist.append(current_global_scalar)
-        if len(global_scalar_hist) > 32:
+        if len(global_scalar_hist) >= 33:
             global_scalar_hist.pop(0)
 
 
@@ -199,7 +206,7 @@ class EmoClan(Optimizer):
                 if p.grad is None:
                     continue
 
-                grad = p.grad.data
+                grad = p.grad
                 param_state = self.state[p] # 各パラメータごとの状態
 
                 # --- 各パラメータごとの感情機構の更新と Shadow 処理 ---
@@ -213,12 +220,12 @@ class EmoClan(Optimizer):
 
                 if ratio > 0:
                     if 'shadow' not in param_state:
-                        param_state['shadow'] = p.data.clone()
+                        param_state['shadow'] = p.clone()
                     else:
                         # Shadow を現在値にブレンド
-                        p.data.mul_(1 - ratio).add_(param_state['shadow'], alpha=ratio)
+                        p.mul_(1 - ratio).add_(param_state['shadow'], alpha=ratio)
                     # Shadow を現在値に追従させる
-                    param_state['shadow'].lerp_(p.data, 0.05)
+                    param_state['shadow'].lerp_(p, 0.05)
 
                 # --- 最適化器の選択と勾配更新 ---
                 # 現在のglobal_scalar_histに記録された全体としての感情スカラーに基づいてフェーズを判断
@@ -244,9 +251,9 @@ class EmoClan(Optimizer):
         return loss
 
 """
-Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
-この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。 
-The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
-Rather than being their successors,  
-In its development, we deeply appreciate the insights of those who came before us—and continue to explore new possibilities beyond them.  
+ Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
+ この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。 
+ The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
+ Rather than being their successors,  
+ In its development, we deeply appreciate the insights of those who came before us—and continue to explore new possibilities beyond them.  
 """

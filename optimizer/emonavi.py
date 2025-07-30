@@ -2,23 +2,32 @@ import torch
 from torch.optim import Optimizer
 import math
 
+"""
+AMP対応完了(202507) p.data -> p 修正済み
+"""
+
 class EmoNavi(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
                  eps=1e-8, weight_decay=0.01):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
+        self._init_lr = lr 
+        self.should_stop = False # 停止フラグの初期化
+
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
         ema = state.setdefault('ema', {})
         ema['short'] = 0.3 * loss_val + 0.7 * ema.get('short', loss_val)
         ema['long']  = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
         return ema
+
     # 感情スカラー値生成(EMA差分、滑らかな非線形スカラー、tanh 5 * diff で鋭敏さ強調)
     def _compute_scalar(self, ema):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
-    # Shadow混合比率(> 0.6：70〜90%、 < 0.6：10%、 > 0.3：30%、 平時：0%)
+
+    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
     def _decide_ratio(self, scalar):
         if scalar > 0.6:
             return 0.7 + 0.2 * scalar
@@ -27,6 +36,7 @@ class EmoNavi(Optimizer):
         elif abs(scalar) > 0.3:
             return 0.3
         return 0.0
+
     # 損失取得(損失値 loss_val を数値化、感情判定に使用、存在しないパラメータ(更新不要)はスキップ)
     @torch.no_grad()
     def step(self, closure=None):
@@ -38,7 +48,7 @@ class EmoNavi(Optimizer):
                 if p.grad is None:
                     continue
 
-                grad = p.grad.data
+                grad = p.grad
                 state = self.state[p]
 
                 # EMA更新・スカラー生成(EMA差分からスカラーを生成しスパイク比率を決定)
@@ -49,10 +59,10 @@ class EmoNavi(Optimizer):
                 # shadow_param：必要時のみ更新(スパイク部分に現在値を5%ずつ追従させる動的履歴)
                 if ratio > 0:
                     if 'shadow' not in state:
-                        state['shadow'] = p.data.clone()
+                        state['shadow'] = p.clone()
                     else:
-                        p.data.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
-                        state['shadow'].lerp_(p.data, 0.05)
+                        p.mul_(1 - ratio).add_(state['shadow'], alpha=ratio)
+                        state['shadow'].lerp_(p, 0.05)
                 
                 # スカラー生成：短期と長期EMAの差分から信号を得る(高ぶりの強さ)
                 # 混合比率：スカラーが閾値を超える場合にのみ計算される(信頼できる感情信号かどうかの選別)
@@ -60,8 +70,8 @@ class EmoNavi(Optimizer):
                 # → 信頼できる強い差分のときのみ感情機構が発動する(暗黙の信頼度判定)                
                 
                 # 1次・2次モーメントを使った勾配補正(decoupled weight decay 構造に近い)
-                exp_avg = state.setdefault('exp_avg', torch.zeros_like(p.data))
-                exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p.data))
+                exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
+                exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p))
                 beta1, beta2 = group['betas']
                 exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
                 exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
@@ -69,14 +79,14 @@ class EmoNavi(Optimizer):
 
                 step_size = group['lr']
                 if group['weight_decay']:
-                    p.data.add_(p.data, alpha=-group['weight_decay'] * step_size)
-                p.data.addcdiv_(exp_avg, denom, value=-step_size)
+                    p.add_(p, alpha=-group['weight_decay'] * step_size)
+                p.addcdiv_(exp_avg, denom, value=-step_size)
 
         # 感情機構の発火が収まり"十分に安定"していることを外部伝達できる(自動停止ロジックではない)
                 # Early Stop用 scalar 記録(バッファ共通で管理/最大32件保持/動静評価)
                 hist = self.state.setdefault('scalar_hist', [])
                 hist.append(scalar)
-                if len(hist) > 32:
+                if len(hist) >= 33:
                     hist.pop(0)
 
         # Early Stop判断(静けさの合図)
@@ -91,6 +101,8 @@ class EmoNavi(Optimizer):
 
         return loss
 
-#    https://github.com/muooon/EmoNavi
-#    An emotion-driven optimizer that feels loss and navigates accordingly.
-#    Don't think. Feel. Don't stop. Keep running. Believe in what's beyond.
+"""
+ https://github.com/muooon/EmoNavi
+ An emotion-driven optimizer that feels loss and navigates accordingly.
+ Don't think. Feel. Don't stop. Keep running. Believe in what's beyond.
+"""

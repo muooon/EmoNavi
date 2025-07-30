@@ -6,12 +6,17 @@ import math
 AMP対応完了(202507) p.data -> p 修正済み
 """
 
-class EmoFact(Optimizer):
+# Soft Sign 関数
+def softsign(x): 
+    return x / (1 + x.abs())
+    
+class EmoZeal(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
                  eps=1e-8, weight_decay=0.01):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
+        self.alpha_prev = getattr(self, 'alpha_prev', 1.0)
         self._init_lr = lr 
         self.should_stop = False # 停止フラグの初期化
 
@@ -75,14 +80,33 @@ class EmoFact(Optimizer):
                     # AB行列として見立てたものを直接生成し更新項を計算する
                     # A = sqrt(r_sq), B = sqrt(c_sq) とすることでAB行列の近似を再現
                     # これをEMAで平滑化する
-                    beta1, beta2 = group['betas']
+                    beta1, beta2 = group['betas'] 
+                    eps = group['eps'] 
+                    lr = group['lr']   
+                    exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
+                    blended_grad = grad.mul(1 - beta1).add_(exp_avg, alpha=beta1)
+                    grad_norm = torch.norm(grad, dtype=torch.float32)
+                    # scalar < -0.3 の場合のみ SoftSign、それ以外 Cautious (終盤や発散傾向をSSに)
+                    # p - lr * softsign(blended_grad) (from softsign)
+                    # p - lr * direction * mask (from Cautious)
+                    # safe_norm 極値のブレンド勾配に対するスケーリング
+                    if 0.3 < scalar <= 0.5:
+                        safe_norm = grad_norm + eps
+                        modified_grad = softsign(blended_grad) * safe_norm
+                        p.add_(-lr * modified_grad) 
+                    elif scalar < -0.3:
+                        direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
+                        mask = (direction == grad.sign())  # 過去の勾配と方向が一致する部分のみ更新
+                        p.add_(direction * mask, alpha = -lr)  # Cautious 更新
+                    else:
+                        p.add_(softsign(blended_grad), alpha = -lr)  # Soft Sign 処理
                     
                     state.setdefault('exp_avg_r', torch.zeros_like(r_sq)).mul_(beta1).add_(torch.sqrt(r_sq), alpha=1 - beta1)
                     state.setdefault('exp_avg_c', torch.zeros_like(c_sq)).mul_(beta1).add_(torch.sqrt(c_sq), alpha=1 - beta1)
                     
                     # 再構築した近似勾配の平方根の積で正規化
                     # これにより2次モーメントのような役割を果たす
-                    denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']).add_(group['eps'])
+                    denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']) + eps
                     
                     # 最終的な更新項を計算
                     update_term = grad / denom
@@ -119,6 +143,6 @@ class EmoFact(Optimizer):
 
 """
  https://github.com/muooon/EmoNavi
- Fact is inspired by Adafactor,  
+ Zeal is inspired by Adafactor, and EmoFact,  
  and its VRAM-friendly design is something everyone loves.
 """
