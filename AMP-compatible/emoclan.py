@@ -5,6 +5,8 @@ from typing import Callable, Union, Dict, Any, Tuple
 
 """
 AMP対応完了(202507) p.data -> p 修正済み
+memo : "optimizer = EmoClan(model.parameters(), lr=1e-3, use_shadow=False)"
+optimizer 指定の際に False にすることで shadow をオフにできる
 """
 
 # Helper function
@@ -12,13 +14,15 @@ def exists(val):
     return val is not None
 
 class EmoClan(Optimizer):
+    # クラス定義＆初期化 - 🔸Shadow True(有効)/False(無効) 切替え
     def __init__(self, params: Union[list, torch.nn.Module], 
                  lr: float = 1e-3, 
                  betas: Tuple[float, float] = (0.9, 0.999), 
                  eps: float = 1e-8, 
                  weight_decay: float = 0.01,
                  lynx_betas: Tuple[float, float] = (0.9, 0.99), # Lynx 固有の beta
-                 decoupled_weight_decay: bool = False
+                 decoupled_weight_decay: bool = False,
+                 use_shadow: bool = True
                 ):
         
         if not 0.0 <= lr:
@@ -42,6 +46,7 @@ class EmoClan(Optimizer):
         
         self._init_lr = lr # decoupled weight decay のために保存 (Lynx用)
         self.should_stop = False # 全体の停止フラグ
+        self.use_shadow = use_shadow # EmoClanインスタンス自身がuse_shadowを保持
 
     # --- 感情機構 (Emotion Mechanism) ---
     def _update_ema(self, param_state: Dict[str, Any], loss_val: float) -> Dict[str, float]:
@@ -213,19 +218,21 @@ class EmoClan(Optimizer):
                 # 各パラメータの state['ema'] は、それぞれの loss_val (全体で共通) を元に更新される
                 # ただし、現状の loss_val はクロージャから受け取った単一の値なので、
                 # 各パラメータ固有の「感情」を定義するより、全体としての感情が使われることになる。
-                param_ema = self._update_ema(param_state, loss_val) 
-                param_scalar = self._compute_scalar(param_ema) # 各パラメータ固有のスカラー
+                # use_shadow が True の場合にのみ Shadow 関連の処理を実行
+                if self.use_shadow:  
+                    param_ema = self._update_ema(param_state, loss_val) 
+                    param_scalar = self._compute_scalar(param_ema) # 各パラメータ固有のスカラー
 
-                ratio = self._decide_ratio(param_scalar) # 各パラメータ固有の ratio
+                    ratio = self._decide_ratio(param_scalar) # 各パラメータ固有の ratio
 
-                if ratio > 0:
-                    if 'shadow' not in param_state:
-                        param_state['shadow'] = p.clone()
-                    else:
-                        # Shadow を現在値にブレンド
-                        p.mul_(1 - ratio).add_(param_state['shadow'], alpha=ratio)
-                    # Shadow を現在値に追従させる
-                    param_state['shadow'].lerp_(p, 0.05)
+                    if ratio > 0:
+                        if 'shadow' not in param_state:
+                            param_state['shadow'] = p.clone()
+                        else:
+                            # Shadow を現在値にブレンド
+                            p.mul_(1 - ratio).add_(param_state['shadow'], alpha=ratio)
+                        # Shadow を現在値に追従させる
+                        param_state['shadow'].lerp_(p, 0.05)
 
                 # --- 最適化器の選択と勾配更新 ---
                 # 現在のglobal_scalar_histに記録された全体としての感情スカラーに基づいてフェーズを判断
