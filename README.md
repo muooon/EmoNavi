@@ -287,9 +287,9 @@ Try it—see how it learns with you.
 
 ---
 ##### Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定  
-![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/emonavi-test00.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test01.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/emonavi-test02.png?raw=true)
+![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)
+![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)
+![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)
 
 ---
 
