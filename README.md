@@ -12,11 +12,31 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
-#### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
-#### 以下で共通部の"感情機構"等について説明します  
+##### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります   
 #### Auto-convergence, self-control, autonomous optimizer  
-#### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
-#### The common "Emotion Mechanism" and other aspects will be explained below.
+###### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
+
+---
+
+### EmoNAVI の主な特徴 / Main Features of EmoNAVI  
+
+---
+
+過学習や発散を抑制、自己修復的機能をもちます  
+学習率やスケジューラも自律調整、モデル自身で判断します  
+学習の 再開、追加、積層、等で"同期不要"、誰でも簡単です  
+ (過学習や発散の抑制以外の機能は shadow:False 時は無効です)  
+Self-repairing, with no over-learning or divergence  
+Autonomously adjusts learning rate and scheduler, so models make their own decisions  
+Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
+ (functions other than over-learning and divergence control are disabled when shadow:False)  
+
+EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
+調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待します  
+EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
+We expect it to overcome the challenges we currently face,  
+while also addressing challenges in new areas such as multimodal learning with complex coordination  
+
 ---
 
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
@@ -37,51 +57,60 @@
 [Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md) 
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt) 
 
-|☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
-|☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
-|☆| (This is untested and is merely a possibility.)  
+---
+#### 更新履歴 / History
+---
 
-|★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
-[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
+|★| clan、zeal、neco、は、shadow機能の on/off 切替えをできるようにしました  
+|★| clan, zeal, and neco are now able to switch the shadow function on and off.  
 
-|★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
-|★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
+|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
+|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
 
-|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
-|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
+|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
+|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
+
+|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
+|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
+
+|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
+|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+
+|★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
+|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+
+|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
+|★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
 
 |★| EmoCLAN 公開(250720) Navi、Fact、Lynx、役割分担の統合 感情機構は同じです  
     (Lynx：序盤と過学習傾向時、Navi：中盤と健全時、Fact：終盤と発散傾向時、を担当します)  
 |★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
     (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
 
-|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
-|★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
+|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
+|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
 
-|★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
-|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+|★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
+|★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
 
-|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
-|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+|★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
+[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
 
-|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
-|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
-
-|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
-|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
-
-|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
-|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
+|☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
+|☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
+|☆| (This is untested and is merely a possibility.)  
 
 ---
+---
+
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
 
 ---
 ### EmoNAVIとは？ / What is EmoNAVI?  
-EmoNAVIは、学習の進行状況を｢短期／長期EMA｣として感じ取り、その差分に"感情的なスカラー"を持たせて最適化の挙動を調整する革新的オプティマイザです。  
+EmoNAVIは、学習の進行状況を｢短期／長期EMA｣として感じ取り、その差分に"感情的なスカラー"を持たせて最適化の挙動を調整する革新的オプティマイザです  
 - ｢今、何か大きく変化しているか？｣｢落ち着いているか？｣を自動で読み取り、  
-- パラメータの"混合"や"適正化"を、差分の強さに応じて繊細に制御します。  
+- パラメータの"混合"や"適正化"を、差分の強さに応じて繊細に制御します  
 
 EmoNAVI is an innovative optimizer that senses the course of training using both **short-term and long-term EMA (Exponential Moving Averages)**.  
 From the difference between them, it derives a **smooth emotional scalar**, which guides how and when to adjust optimization behaviors.  
@@ -101,11 +130,11 @@ It automatically detects:
 
 
 この一連の処理により、大きな意味ある変化には寛容に追従し、  
-揺らぎだけなら静かにやり過ごす──そんな"感情の重心"が保たれます。  
+揺らぎだけなら静かにやり過ごす──そんな"感情の重心"が保たれます  
 
 - 感情スカラー(＝lossの揺れ)が閾値を超えたときだけ ratio > 0 で発火  
-- 現在のパラメータ p.data に対して、shadow(保存された過去)を混合反映  
-- 同時に shadow も5％だけ現在に近づく(ゆっくりと"自分を更新")  
+- 現在のパラメータ p に対して、shadow(保存された過去)を混合反映  
+- 同時に shadow も 5％だけ現在に近づく(ゆっくりと"自分を更新")  
 
 | Function | Description |
 |---------|-------------|
@@ -116,7 +145,7 @@ It automatically detects:
 
 This sequence of operations maintains an emotional center of gravity—gracefully accommodating meaningful changes while calmly allowing minor fluctuations to pass  
 - The emotional scalar (linked to loss fluctuations) triggers only when its value surpasses a threshold  
-- The parameter `p.data` blends with the stored `shadow` state — revisiting a more stable memory  
+- The parameter `p` blends with the stored `shadow` state — revisiting a more stable memory  
 - Simultaneously, the `shadow` itself slowly moves 5% toward the current parameter — gently updating over time  
 
 ---
@@ -131,7 +160,7 @@ This sequence of operations maintains an emotional center of gravity—gracefull
 
 ３、LoRAが"場面の空気"を見ながら学ぶようになる  
 - shadowは発火条件が感情スカラー依存 ➤ 学習が｢自信のある場面｣では混合されず → LoRAが自由に動ける ➤ 迷いがある場面では影響される → LoRAが"踏みとどまる"  
-- 結果：LoRAがただ勾配を受けるのではなく、"意味に対して賢く反応"するようになります。  
+- 結果：LoRAがただ勾配を受けるのではなく、"意味に対して賢く反応"するようになります  
 
 #### What does this mean when creating a LoRA?  
 １、It becomes less likely to miss the “structural sweet spot.”  
@@ -182,8 +211,8 @@ Conceptually and experientially, this results in a change comparable to a full f
 ---
 ### EmoNAVIに｢明示的なスケジューラー｣は存在しない  
 EmoNAVIには lr_scheduler.StepLR や CosineAnnealingLR といった、  
-明示的な学習率スケジューラーは定義されていません。  
-ですが──それに代わる、**｢感情変化ベースで制御される内部的な学習進行調整｣**が組み込まれています。  
+明示的な学習率スケジューラーは定義されていません  
+ですが──それに代わる、**｢感情変化ベースで制御される内部的な学習進行調整｣**が組み込まれています  
 
 ### EmoNAVI has no “explicit scheduler”  
 EmoNAVI does not define any explicit learning rate scheduler, such as lr_scheduler.StepLR or CosineAnnealingLR.  
@@ -207,11 +236,11 @@ However, it includes an alternative mechanism:
 ---
 ##### 外部スケジューラを併用してもOK  
 EmoNAVIは外部の学習率スケジューラと併用可能ですが、  
-それに依存せず、自律的に収束する設計となっています。  
+それに依存せず、自律的に収束する設計となっています  
 損失の挙動に基づく感情スカラーとshadow補正により、  
-どのような学習率でもモデル自身が最適な更新を判断します。  
+どのような学習率でもモデル自身が最適な更新を判断します  
 つまり、スケジューラがなくても収束可能で、あっても邪魔にならない、  
-それがEmoNAVIの自律性です。  
+それがEmoNAVIの自律性です  
 結果：どんなスケジューラーを指定してもしっかり収束します  
 
 ##### Using external schedulers is supported  
@@ -276,7 +305,7 @@ designed not to eliminate overfitting or divergence entirely, but to reduce thei
 ### ここまで見てきた EmoNAVI さんから皆さんへ一言です！  
 - ｢学習率もスケジューラーもなんでもOK、だって自分で過去の自分を振り返りながら調整できるから…｣  
 
-つまりこういう"自律"した存在です。ぜひどなたもお試しください。  
+つまりこういう"自律"した存在です、ぜひどなたもお試しください  
 
 ### A closing message from EmoNAVI:  
 - “Any learning rate. Any scheduler. Anything is fine—  
@@ -293,10 +322,10 @@ Try it—see how it learns with you.
 
 ---
 
-Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
-これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
-汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
-この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
+Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました  
+これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています  
+汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています  
+この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します  
 The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
 Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
 It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
@@ -304,10 +333,12 @@ In its development, we deeply appreciate the insights of those who came before u
 
 
 ### License Apache License 2.0 — see LICENSE for details.  
-### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。  
+### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください  
 
 ##### 🤖 Built with  Copilot + human curiosity.  
-##### 🤖 Copilot と人間の好奇心のコラボで誕生しました。  
+##### 🤖 Copilot と人間の好奇心のコラボで誕生しました  
+
+---
 
 ### 引用について / About citations
 
@@ -319,15 +350,21 @@ https://huggingface.co/muooon/EmoNAVI
 
 ---
 
---- A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly ---  
+A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
+
+---
 
 Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
 
 This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
 
---- multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造 ---  
+---
 
-世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功した。  
+multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造  
 
-そしてこれこそがパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果である。 
+---  
+
+世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功しました  
+
+これこそはパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果でしょう  
 
