@@ -4,6 +4,8 @@ import math
 
 """
 AMP対応完了(202507) p.data -> p 修正済み
+memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=False)"
+optimizer 指定の際に False にすることで shadow をオフにできる
 """
 
 # Soft Sign 関数
@@ -11,14 +13,17 @@ def softsign(x):
     return x / (1 + x.abs())
     
 class EmoZeal(Optimizer):
-    # クラス定義＆初期化
+    # クラス定義＆初期化 - 🔸Shadow True(有効)/False(無効) 切替え
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
-                 eps=1e-8, weight_decay=0.01):
+                 eps=1e-8, weight_decay=0.01, use_shadow: bool = True): 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
+
         super().__init__(params, defaults)
+
         self.alpha_prev = getattr(self, 'alpha_prev', 1.0)
         self._init_lr = lr 
         self.should_stop = False # 停止フラグの初期化
+        self.use_shadow = use_shadow # 🔸shadowの使用フラグを保存
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -34,6 +39,9 @@ class EmoZeal(Optimizer):
 
     # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
     def _decide_ratio(self, scalar):
+        # 🔸use_shadow が False の場合は常に比率を 0 にする
+        if not self.use_shadow:
+            return 0.0
         if scalar > 0.6:
             return 0.7 + 0.2 * scalar
         elif scalar < -0.6:
@@ -59,10 +67,11 @@ class EmoZeal(Optimizer):
                 # 感情EMA更新・スカラー生成 (既存ロジックを維持)
                 ema = self._update_ema(state, loss_val)
                 scalar = self._compute_scalar(ema)
-                ratio = self._decide_ratio(scalar)
+                ratio = self._decide_ratio(scalar) # 🔸use_shadow に応じて ratio が 0 になる
 
                 # shadow_param：必要時のみ更新 (既存ロジックを維持)
-                if ratio > 0:
+                # 🔸self.use_shadow が True で、かつ ratio > 0 の場合のみ shadow を更新
+                if self.use_shadow and ratio > 0: 
                     if 'shadow' not in state:
                         state['shadow'] = p.clone()
                     else:
