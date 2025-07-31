@@ -12,17 +12,19 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
-#### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
-#### 以下で共通部の"感情機構"等について説明します  
+##### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
+##### 以下で共通部の"感情機構"等について説明します  
 #### Auto-convergence, self-control, autonomous optimizer  
-#### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
-#### The common "Emotion Mechanism" and other aspects will be explained below.
+###### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
+###### The common "Emotion Mechanism" and other aspects will be explained below.
 
 ---
 
-EmoNAVI の主な特徴と仕組み  
+### EmoNAVI の主な特徴と仕組み  
 Main Features and Mechanism of EmoNAVI  
-  
+
+---
+
 EmoNAVI はモデルの学習状況を ｢感情｣ として捉え自律的制御する **｢感情機構｣** です  
 EmoNAVI is an **emotional mechanism** that autonomously controls the learning status of the model as an “emotion”.  
 
@@ -55,9 +57,6 @@ EmoNAVI is an **emotional mechanism** that autonomously controls the learning st
 
 EmoNAVI の可能性  
 EmoNAVI Possibilities  
-
-EmoNAVI は以下の可能性を提示します  
-EmoNAVI offers the following possibilities  
 
     簡単な学習再開：  
         既存オプティマイザは"過去の学習状態を保存･復元する"必要があります、  
@@ -102,6 +101,10 @@ while also addressing challenges in new areas such as multimodal learning with c
 [Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md) 
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt) 
 
+---
+#### 出来事 History
+---
+
 |☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
 |☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
 |☆| (This is untested and is merely a possibility.)  
@@ -139,6 +142,8 @@ while also addressing challenges in new areas such as multimodal learning with c
 |★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
 
 ---
+---
+
 この EmoNAVI について以下でわかりやすく紹介します  
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
 
