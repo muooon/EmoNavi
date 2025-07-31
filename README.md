@@ -17,6 +17,71 @@
 #### Auto-convergence, self-control, autonomous optimizer  
 #### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
 #### The common "Emotion Mechanism" and other aspects will be explained below.
+
+---
+
+EmoNAVI の主な特徴と仕組み  
+Main Features and Mechanism of EmoNAVI  
+  
+EmoNAVI はモデルの学習状況を ｢感情｣ として捉え自律的制御する **｢感情機構｣** です  
+EmoNAVI is an **emotional mechanism** that autonomously controls the learning status of the model as an “emotion”.  
+
+    短期･長期EMA (指数移動平均)：  
+        モデルの損失(Loss)を、短期EMA(瞬間的変化＝緊張)と、長期EMA(平均的履歴＝安静)の、2つで常時監視します  
+        この2つの差分から学習の揺れや不安定さを表す**｢感情スカラー｣**で動的に生成します  
+    Short-term and long-term EMAs (exponential moving averages)  
+        The model loss is constantly monitored by the short-term EMA (instantaneous change = tension) and the long-term EMA (average history = rest)  
+        The difference between the two is used to dynamically generate an **“emotion scalar ”** that represents learning oscillations and instability.  
+
+    shadow (シャドウ) 機能：  
+        学習開始時のパラメータを｢過去の穏やかな状態の記憶｣として保存します  
+        感情スカラーで特定の閾値を超える時、この shadow は、現在のパラメータに部分的にブレンドされます、  
+        これにより"学習が暴走したりノイズに過剰反応したりするのを防ぎ"学習の安定性を高めます、  
+        shadow自体も、現在のパラメータに少しずつ追従して更新されるため  
+        ｢進化する記憶｣ として機能し、常に適切な安定点を提供します  
+    The shadow function  
+        stores the parameters at the start of learning as a "memory of past calm states"  
+        When the emotion scalar exceeds a certain threshold, this shadow is partially blended with the current parameters,  
+        This "prevents learning from running out of control or overreacting to noise".  
+        shadow itself is also gradually updated to follow the current parameters, thus acting as an “evolving memory”  
+        and always providing an appropriate stability point.  
+
+    ｢過去値不要｣な自己制御性(自律と自動)：  
+        過去の学習率や勾配の情報を保持する必要はありません "｢今｣の損失状況だけ" を見て学習を更新します  
+        これにより"学習の途中終了からの再開"や"収束後の再学習"はスムーズに行えるという大きな利点を得られます  
+    Self-regulation (autonomous and automatic) with "no need for past values"  
+        No need to keep information on past learning rates or gradients, learning is updated based on "current" losses only  
+        This has the great advantage that "resuming learning from the end" and "relearning after convergence" can be done smoothly.  
+
+EmoNAVI の可能性  
+EmoNAVI Possibilities  
+
+EmoNAVI は以下の可能性を提示します  
+EmoNAVI offers the following possibilities  
+
+    簡単な学習再開：  
+        既存オプティマイザは"過去の学習状態を保存･復元する"必要があります、  
+        EmoNAVI は不要です"柔軟な学習フローを構築"できます  
+    Easy learning resumption:  
+        Existing optimizers need to "save and restore past learning states",  
+        EmoNAVI does not need to "build flexible learning flows"  
+    学習の安定性：  
+        "感情機能"と"Shadow機能"は学習中の急激な変化や不安定な更新を抑制し安定した学習経路を維持します  
+    Learning stability:  
+        "Emotion" and "Shadow" functions suppress rapid changes and unstable updates during learning and maintain stable learning paths.  
+    柔軟な転移学習：  
+        LoRA(差分学習)との組み合わせで、異なる特性を持つモデル間での知識の衝突を防ぎ、  
+        既存の知識を壊さずに転移学習を実現する可能性を秘めています  
+    Flexible transfer learning: 
+        in combination with LoRA (difference learning), prevents knowledge collision between models with different characteristics and  
+        has the potential to achieve transfer learning without destroying existing knowledge.  
+
+EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
+現在直面する課題を克服しつつ、調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待します  
+EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
+We expect it to overcome the challenges we currently face,  
+while also addressing challenges in new areas such as multimodal learning with complex coordination  
+
 ---
 
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
@@ -79,9 +144,9 @@ Here’s a clear and simple introduction to what EmoNAVI is and how it works:
 
 ---
 ### EmoNAVIとは？ / What is EmoNAVI?  
-EmoNAVIは、学習の進行状況を｢短期／長期EMA｣として感じ取り、その差分に"感情的なスカラー"を持たせて最適化の挙動を調整する革新的オプティマイザです。  
+EmoNAVIは、学習の進行状況を｢短期／長期EMA｣として感じ取り、その差分に"感情的なスカラー"を持たせて最適化の挙動を調整する革新的オプティマイザです  
 - ｢今、何か大きく変化しているか？｣｢落ち着いているか？｣を自動で読み取り、  
-- パラメータの"混合"や"適正化"を、差分の強さに応じて繊細に制御します。  
+- パラメータの"混合"や"適正化"を、差分の強さに応じて繊細に制御します  
 
 EmoNAVI is an innovative optimizer that senses the course of training using both **short-term and long-term EMA (Exponential Moving Averages)**.  
 From the difference between them, it derives a **smooth emotional scalar**, which guides how and when to adjust optimization behaviors.  
@@ -101,11 +166,11 @@ It automatically detects:
 
 
 この一連の処理により、大きな意味ある変化には寛容に追従し、  
-揺らぎだけなら静かにやり過ごす──そんな"感情の重心"が保たれます。  
+揺らぎだけなら静かにやり過ごす──そんな"感情の重心"が保たれます  
 
 - 感情スカラー(＝lossの揺れ)が閾値を超えたときだけ ratio > 0 で発火  
-- 現在のパラメータ p.data に対して、shadow(保存された過去)を混合反映  
-- 同時に shadow も5％だけ現在に近づく(ゆっくりと"自分を更新")  
+- 現在のパラメータ p に対して、shadow(保存された過去)を混合反映  
+- 同時に shadow も 5％だけ現在に近づく(ゆっくりと"自分を更新")  
 
 | Function | Description |
 |---------|-------------|
@@ -116,7 +181,7 @@ It automatically detects:
 
 This sequence of operations maintains an emotional center of gravity—gracefully accommodating meaningful changes while calmly allowing minor fluctuations to pass  
 - The emotional scalar (linked to loss fluctuations) triggers only when its value surpasses a threshold  
-- The parameter `p.data` blends with the stored `shadow` state — revisiting a more stable memory  
+- The parameter `p` blends with the stored `shadow` state — revisiting a more stable memory  
 - Simultaneously, the `shadow` itself slowly moves 5% toward the current parameter — gently updating over time  
 
 ---
@@ -131,7 +196,7 @@ This sequence of operations maintains an emotional center of gravity—gracefull
 
 ３、LoRAが"場面の空気"を見ながら学ぶようになる  
 - shadowは発火条件が感情スカラー依存 ➤ 学習が｢自信のある場面｣では混合されず → LoRAが自由に動ける ➤ 迷いがある場面では影響される → LoRAが"踏みとどまる"  
-- 結果：LoRAがただ勾配を受けるのではなく、"意味に対して賢く反応"するようになります。  
+- 結果：LoRAがただ勾配を受けるのではなく、"意味に対して賢く反応"するようになります  
 
 #### What does this mean when creating a LoRA?  
 １、It becomes less likely to miss the “structural sweet spot.”  
@@ -182,8 +247,8 @@ Conceptually and experientially, this results in a change comparable to a full f
 ---
 ### EmoNAVIに｢明示的なスケジューラー｣は存在しない  
 EmoNAVIには lr_scheduler.StepLR や CosineAnnealingLR といった、  
-明示的な学習率スケジューラーは定義されていません。  
-ですが──それに代わる、**｢感情変化ベースで制御される内部的な学習進行調整｣**が組み込まれています。  
+明示的な学習率スケジューラーは定義されていません  
+ですが──それに代わる、**｢感情変化ベースで制御される内部的な学習進行調整｣**が組み込まれています  
 
 ### EmoNAVI has no “explicit scheduler”  
 EmoNAVI does not define any explicit learning rate scheduler, such as lr_scheduler.StepLR or CosineAnnealingLR.  
@@ -207,11 +272,11 @@ However, it includes an alternative mechanism:
 ---
 ##### 外部スケジューラを併用してもOK  
 EmoNAVIは外部の学習率スケジューラと併用可能ですが、  
-それに依存せず、自律的に収束する設計となっています。  
+それに依存せず、自律的に収束する設計となっています  
 損失の挙動に基づく感情スカラーとshadow補正により、  
-どのような学習率でもモデル自身が最適な更新を判断します。  
+どのような学習率でもモデル自身が最適な更新を判断します  
 つまり、スケジューラがなくても収束可能で、あっても邪魔にならない、  
-それがEmoNAVIの自律性です。  
+それがEmoNAVIの自律性です  
 結果：どんなスケジューラーを指定してもしっかり収束します  
 
 ##### Using external schedulers is supported  
@@ -276,7 +341,7 @@ designed not to eliminate overfitting or divergence entirely, but to reduce thei
 ### ここまで見てきた EmoNAVI さんから皆さんへ一言です！  
 - ｢学習率もスケジューラーもなんでもOK、だって自分で過去の自分を振り返りながら調整できるから…｣  
 
-つまりこういう"自律"した存在です。ぜひどなたもお試しください。  
+つまりこういう"自律"した存在です、ぜひどなたもお試しください  
 
 ### A closing message from EmoNAVI:  
 - “Any learning rate. Any scheduler. Anything is fine—  
@@ -293,10 +358,10 @@ Try it—see how it learns with you.
 
 ---
 
-Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました。  
-これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています。  
-汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています。  
-この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します。  
+Emoシリーズは、Adam、Adafactor、Lion、Tiger、等から多くを学びました  
+これらの後継ではなく独自の思想や設計による"感情機構"というアプローチにより構築されています  
+汎用性・自律性・適応性を重視し新たな最適化や効率化や簡易化を追求しています  
+この開発において先人たちの知見に深く感謝しつつ今後も新しい可能性を探究します  
 The Emo series has learned much from Adam, Adafactor, Lion, and Tiger.  
 Rather than being their successors, it is built upon a unique philosophy and design approach centered on "emotional mechanisms".  
 It prioritizes generality, autonomy, and adaptability in pursuit of new paths for optimization, efficiency, and simplicity.  
@@ -304,10 +369,12 @@ In its development, we deeply appreciate the insights of those who came before u
 
 
 ### License Apache License 2.0 — see LICENSE for details.  
-### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください。  
+### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください  
 
 ##### 🤖 Built with  Copilot + human curiosity.  
-##### 🤖 Copilot と人間の好奇心のコラボで誕生しました。  
+##### 🤖 Copilot と人間の好奇心のコラボで誕生しました  
+
+---
 
 ### 引用について / About citations
 
@@ -319,15 +386,21 @@ https://huggingface.co/muooon/EmoNAVI
 
 ---
 
---- A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly ---  
+A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
+
+---
 
 Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
 
 This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
 
---- multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造 ---  
+---
 
-世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功した。  
+multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造  
 
-そしてこれこそがパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果である。 
+---  
+
+世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功しました  
+
+これこそはパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果でしょう  
 
