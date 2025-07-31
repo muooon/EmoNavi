@@ -27,14 +27,12 @@ Main Features and Mechanism of EmoNAVI
 
 EmoNAVI はモデルの学習状況を ｢感情｣ として捉え自律的制御する **｢感情機構｣** です  
 EmoNAVI is an **emotional mechanism** that autonomously controls the learning status of the model as an “emotion”.  
-
-    短期･長期EMA (指数移動平均)：  
+>    短期･長期EMA (指数移動平均)：  
         モデルの損失(Loss)を、短期EMA(瞬間的変化＝緊張)と、長期EMA(平均的履歴＝安静)の、2つで常時監視します  
         この2つの差分から学習の揺れや不安定さを表す**｢感情スカラー｣**で動的に生成します  
     Short-term and long-term EMAs (exponential moving averages)  
         The model loss is constantly monitored by the short-term EMA (instantaneous change = tension) and the long-term EMA (average history = rest)  
         The difference between the two is used to dynamically generate an **“emotion scalar ”** that represents learning oscillations and instability.  
-
     shadow (シャドウ) 機能：  
         学習開始時のパラメータを｢過去の穏やかな状態の記憶｣として保存します  
         感情スカラーで特定の閾値を超える時、この shadow は、現在のパラメータに部分的にブレンドされます、  
@@ -47,7 +45,6 @@ EmoNAVI is an **emotional mechanism** that autonomously controls the learning st
         This "prevents learning from running out of control or overreacting to noise".  
         shadow itself is also gradually updated to follow the current parameters, thus acting as an “evolving memory”  
         and always providing an appropriate stability point.  
-
     ｢過去値不要｣な自己制御性(自律と自動)：  
         過去の学習率や勾配の情報を保持する必要はありません "｢今｣の損失状況だけ" を見て学習を更新します  
         これにより"学習の途中終了からの再開"や"収束後の再学習"はスムーズに行えるという大きな利点を得られます  
@@ -57,8 +54,7 @@ EmoNAVI is an **emotional mechanism** that autonomously controls the learning st
 
 EmoNAVI の可能性  
 EmoNAVI Possibilities  
-
-    簡単な学習再開：  
+>    簡単な学習再開：  
         既存オプティマイザは"過去の学習状態を保存･復元する"必要があります、  
         EmoNAVI は不要です"柔軟な学習フローを構築"できます  
     Easy learning resumption:  
