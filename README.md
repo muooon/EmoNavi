@@ -25,10 +25,13 @@
 過学習や発散を抑制、自己修復的機能をもちます  
 学習率やスケジューラも自律調整、モデル自身で判断します  
 学習の 再開、追加、積層、等で"同期不要"、誰でも簡単です  
- (過学習や発散の抑制以外の機能は shadow:False 時は無効です)  
+
 Self-repairing, with no over-learning or divergence  
 Autonomously adjusts learning rate and scheduler, so models make their own decisions  
 Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
+
+emoclan、zeal、neco、のみ注意です / are only notes  
+ (過学習や発散の抑制以外の機能は shadow:False 時は無効です)  
  (functions other than over-learning and divergence control are disabled when shadow:False)  
 
 EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
