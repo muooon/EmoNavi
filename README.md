@@ -12,67 +12,27 @@
 
 ---
 #### 自動収束･自己制御･自律型 オプティマイザです  
-##### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります  
-##### 以下で共通部の"感情機構"等について説明します  
+##### EmoNAVI を中心に、EmoFACT、EmoLYNX、EmoClan、EmoZeal、EmoNeco、もあります   
 #### Auto-convergence, self-control, autonomous optimizer  
 ###### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
-###### The common "Emotion Mechanism" and other aspects will be explained below.
 
 ---
 
-### EmoNAVI の主な特徴と仕組み  
-Main Features and Mechanism of EmoNAVI  
+### EmoNAVI の主な特徴 / Main Features of EmoNAVI  
 
 ---
 
-EmoNAVI はモデルの学習状況を ｢感情｣ として捉え自律的制御する **｢感情機構｣** です  
-EmoNAVI is an **emotional mechanism** that autonomously controls the learning status of the model as an “emotion”.  
->    短期･長期EMA (指数移動平均)：  
-        モデルの損失(Loss)を、短期EMA(瞬間的変化＝緊張)と、長期EMA(平均的履歴＝安静)の、2つで常時監視します  
-        この2つの差分から学習の揺れや不安定さを表す**｢感情スカラー｣**で動的に生成します  
-    Short-term and long-term EMAs (exponential moving averages)  
-        The model loss is constantly monitored by the short-term EMA (instantaneous change = tension) and the long-term EMA (average history = rest)  
-        The difference between the two is used to dynamically generate an **“emotion scalar ”** that represents learning oscillations and instability.  
-    shadow (シャドウ) 機能：  
-        学習開始時のパラメータを｢過去の穏やかな状態の記憶｣として保存します  
-        感情スカラーで特定の閾値を超える時、この shadow は、現在のパラメータに部分的にブレンドされます、  
-        これにより"学習が暴走したりノイズに過剰反応したりするのを防ぎ"学習の安定性を高めます、  
-        shadow自体も、現在のパラメータに少しずつ追従して更新されるため  
-        ｢進化する記憶｣ として機能し、常に適切な安定点を提供します  
-    The shadow function  
-        stores the parameters at the start of learning as a "memory of past calm states"  
-        When the emotion scalar exceeds a certain threshold, this shadow is partially blended with the current parameters,  
-        This "prevents learning from running out of control or overreacting to noise".  
-        shadow itself is also gradually updated to follow the current parameters, thus acting as an “evolving memory”  
-        and always providing an appropriate stability point.  
-    ｢過去値不要｣な自己制御性(自律と自動)：  
-        過去の学習率や勾配の情報を保持する必要はありません "｢今｣の損失状況だけ" を見て学習を更新します  
-        これにより"学習の途中終了からの再開"や"収束後の再学習"はスムーズに行えるという大きな利点を得られます  
-    Self-regulation (autonomous and automatic) with "no need for past values"  
-        No need to keep information on past learning rates or gradients, learning is updated based on "current" losses only  
-        This has the great advantage that "resuming learning from the end" and "relearning after convergence" can be done smoothly.  
-
-EmoNAVI の可能性  
-EmoNAVI Possibilities  
->    簡単な学習再開：  
-        既存オプティマイザは"過去の学習状態を保存･復元する"必要があります、  
-        EmoNAVI は不要です"柔軟な学習フローを構築"できます  
-    Easy learning resumption:  
-        Existing optimizers need to "save and restore past learning states",  
-        EmoNAVI does not need to "build flexible learning flows"  
-    学習の安定性：  
-        "感情機能"と"Shadow機能"は学習中の急激な変化や不安定な更新を抑制し安定した学習経路を維持します  
-    Learning stability:  
-        "Emotion" and "Shadow" functions suppress rapid changes and unstable updates during learning and maintain stable learning paths.  
-    柔軟な転移学習：  
-        LoRA(差分学習)との組み合わせで、異なる特性を持つモデル間での知識の衝突を防ぎ、  
-        既存の知識を壊さずに転移学習を実現する可能性を秘めています  
-    Flexible transfer learning: 
-        in combination with LoRA (difference learning), prevents knowledge collision between models with different characteristics and  
-        has the potential to achieve transfer learning without destroying existing knowledge.  
+過学習や発散を抑制、自己修復的機能をもちます  
+学習率やスケジューラも自律調整、モデル自身で判断します  
+学習の 再開、追加、積層、等で"同期不要"、誰でも簡単です  
+ (過学習や発散の抑制以外の機能は shadow:False 時は無効です)  
+Self-repairing, with no over-learning or divergence  
+Autonomously adjusts learning rate and scheduler, so models make their own decisions  
+Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
+ (functions other than over-learning and divergence control are disabled when shadow:False)  
 
 EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
-現在直面する課題を克服しつつ、調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待します  
+調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待します  
 EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
 We expect it to overcome the challenges we currently face,  
 while also addressing challenges in new areas such as multimodal learning with complex coordination  
@@ -98,44 +58,47 @@ while also addressing challenges in new areas such as multimodal learning with c
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt) 
 
 ---
-#### 出来事 History
+#### 更新履歴 / History
 ---
 
-|☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
-|☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
-|☆| (This is untested and is merely a possibility.)  
+|★| clan、zeal、neco、は、shadow機能の on/off 切替えをできるようにしました  
+|★| clan, zeal, and neco are now able to switch the shadow function on and off.  
 
-|★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
-[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
+|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
+|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
 
-|★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
-|★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
+|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
+|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
 
-|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
-|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
+|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
+|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
+
+|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
+|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+
+|★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
+|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+
+|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
+|★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
 
 |★| EmoCLAN 公開(250720) Navi、Fact、Lynx、役割分担の統合 感情機構は同じです  
     (Lynx：序盤と過学習傾向時、Navi：中盤と健全時、Fact：終盤と発散傾向時、を担当します)  
 |★| EmoCLAN Open (250720) Navi, Fact, Lynx, role integration Emotional mechanism is the same  
     (Lynx: in charge of the early stage and overlearning tendency, Navi: in charge of the middle stage and soundness, Fact: in charge of the end stage and divergence tendency)  
 
-|★| すぐに試したい方は"KohyaSDScript.zip"を解凍し使い方を確認してください  
-|★| If you want to try it out right away, please open the "KohySDScript.zip" and check the usage instructions.  
+|★| EmoLYNX 公開(250718) 探索範囲を広く持ちます 感情機構は同じです  
+|★| EmoLYNX Released (250718): It offers a wide exploration range, while its Emotion Mechanism remains the same.  
 
-|★| レポート公開(250725) emonavi / AdamW の比較で性能等を示しました  
-|★| Report released (250725) Performance, etc. demonstrated in comparison with emonavi / AdamW. [Report](https://huggingface.co/muooon/EmoNAVI/tree/main/report)  
+|★| EmoFACT 公開(250716) NAVIに比べ約１GB節約(SDXL) 感情機構は同じです  
+|★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
 
-|★| emonavi、及び Emoファミリー により、マルチモーダル型のモデルに対し、的確かつ効率的な学習を実施できる可能性があると考えています(実行環境を保持していないので予測です)  
-|★| We believe that emonavi and the Emo family have the potential to enable accurate and efficient learning for multimodal models. This is a prediction, as we do not have the execution environment.  
+|★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
+[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
 
-|★| AMP対応版を公開しました (250728) これで安心してfp16や混合精度を実施できると思います  
-|★| AMP-compatible version released (250728) This should allow you to implement fp16 and mixed precision with confidence.  
-
-|★| AMP対応版と同時に、emozeal、emoneco、を公開しました (250728) clanのように場面に相応しい選択をします  
-|★| At the same time as the AMP-compatible version, we also released emozeal and emoneco. We make choices appropriate to the situation, just like a clan.  
-
-|★| 大変光栄なことに Pytorch-optimizer 3.7.0 へ登録されたとのこと (250728) 関係者の皆さまに深く感謝します  
-|★| We are very honored to have been registered in Pytorch-optimizer 3.7.0. We would like to express our deepest gratitude to everyone involved.  
+|☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
+|☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
+|☆| (This is untested and is merely a possibility.)  
 
 ---
 ---
