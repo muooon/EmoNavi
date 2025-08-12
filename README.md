@@ -1,4 +1,10 @@
-# EmoNAVI / Emo-Family  
+# EmoNAVI / Emo-Family (1stGen)  
+
+#### こちらは第１世代です、Emo系は"第２世代へ移行"しました  
+#### This is the 1st generation. “moved on to the 2nd generation.”  
+#### emosens(第２世代)はこちらです / "emosens" (2nd generation) is here.  
+https://github.com/muooon/EmoSens  
+
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
@@ -63,6 +69,10 @@ while also addressing challenges in new areas such as multimodal learning with c
 ---
 #### 更新履歴 / History
 ---
+
+|★| 第２世代を公開(250801)しました。 emonavi は、新しい世代へ進化し軽量化を果たします  
+|★| The 2nd gen was release(250801) emonavi has evolved into a new generation and become more lightweight.  
+|★| https://github.com/muooon/EmoSens  
 
 |★| clan、zeal、neco、は、shadow機能の on/off 切替えをできるようにしました  
 |★| clan, zeal, and neco are now able to switch the shadow function on and off.  
