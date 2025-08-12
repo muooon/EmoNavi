@@ -4,7 +4,7 @@
 #### This is the 1st generation. “moved on to the 2nd generation.”  
 #### emosens(第２世代)はこちらです / "emosens" (2nd generation) is here.  
 https://github.com/muooon/EmoSens  
-  
+
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
