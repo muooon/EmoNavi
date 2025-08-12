@@ -1,0 +1,30 @@
+# Notepad++ の自動保存フォルダ
+nppBackup/
+*.log
+*.bak
+
+# Python関連
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.bak
+
+# 機密情報
+.env
+*.env
+settings_local.py
+
+# IDE・エディタ
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OSごとの不要ファイル
+.DS_Store
+Thumbs.db
+
+# その他一時ファイル
+*~
+*.tmp
