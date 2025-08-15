@@ -70,6 +70,9 @@ while also addressing challenges in new areas such as multimodal learning with c
 #### 更新履歴 / History
 ---
 
+|★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v2.0 (250815) 更新、shadow-system の精密化(更新)  
+|★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v2.0 (250815), refinement of shadow-system (update)  
+
 |★| 第２世代を公開(250801)しました。 emonavi は、新しい世代へ進化し軽量化を果たします  
 |★| The 2nd gen was release(250801) emonavi has evolved into a new generation and become more lightweight.  
 |★| https://github.com/muooon/EmoSens  

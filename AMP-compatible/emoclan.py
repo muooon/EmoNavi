@@ -4,9 +4,11 @@ import math
 from typing import Callable, Union, Dict, Any, Tuple
 
 """
+EmoClan v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
-memo : "optimizer = EmoClan(model.parameters(), lr=1e-3, use_shadow=False)"
-optimizer 指定の際に False にすることで shadow をオフにできる
+memo : "optimizer = EmoClan(model.parameters(), lr=1e-3, use_shadow=True)"
+optimizer 指定の際に True にすることで shadow をオンにできる
+emosens shadow-effect v1.0 反映 shadow-system、scalar-switch 修正
 """
 
 # Helper function
@@ -14,7 +16,7 @@ def exists(val):
     return val is not None
 
 class EmoClan(Optimizer):
-    # クラス定義＆初期化 - 🔸Shadow True(有効)/False(無効) 切替え
+    # クラス定義＆初期化 🔸Shadow True(有効)/False(無効) 切替え
     def __init__(self, params: Union[list, torch.nn.Module], 
                  lr: float = 1e-3, 
                  betas: Tuple[float, float] = (0.9, 0.999), 
@@ -22,7 +24,7 @@ class EmoClan(Optimizer):
                  weight_decay: float = 0.01,
                  lynx_betas: Tuple[float, float] = (0.9, 0.99), # Lynx 固有の beta
                  decoupled_weight_decay: bool = False,
-                 use_shadow: bool = True
+                 use_shadow: bool = False
                 ):
         
         if not 0.0 <= lr:
@@ -54,22 +56,28 @@ class EmoClan(Optimizer):
         # param_state は各パラメータの state['ema'] を保持する
         ema = param_state.setdefault('ema', {'short': loss_val, 'long': loss_val})
         ema['short'] = 0.3 * loss_val + 0.7 * ema['short']
-        ema['long']  = 0.01 * loss_val + 0.99 * ema['long']
+        ema['long'] = 0.01 * loss_val + 0.99 * ema['long']
         return ema
 
+    """EMA の差分から感情スカラー値を生成"""
     def _compute_scalar(self, ema: Dict[str, float]) -> float:
-        """EMA の差分から感情スカラー値を生成"""
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
+    """感情スカラーに基づいて Shadow の混合比率を決定"""
+    # Shadow混合比率(> abs 0.6：60〜100%、 > abs 0.1：10〜60%、 平時：0%) emosens反映
+    # 旧：Shadow混合比率(> 0.6：80〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
+    # 説明：scalar>+0.6 は "return 0.7(開始値) + 0.2(変化幅) * scalar" = 0.82～0.9 ← 誤
+    # 修正1：scalar>±0.6 を "return 開始値 + (abs(scalar) - 0.6(範囲)) / 範囲量 * 変化幅"
+    # 修正2：scalar>±0.1 を "return 開始値 + (abs(scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
+    # タスク等に応じた調整のため３段階で適用しておく(上記を参考に調整してください／現状はshadow-effect反映)
     def _decide_ratio(self, scalar: float) -> float:
-        """感情スカラーに基づいて Shadow の混合比率を決定"""
-        if scalar > 0.6:
-            return 0.7 + 0.2 * scalar # 0.7～0.9
-        elif scalar < -0.6:
-            return 0.1
-        elif abs(scalar) > 0.3: # >0.3 かつ <=0.6 の場合
-            return 0.3
+        if not self.use_shadow:
+            return 0.0 # 🔸use_shadow が False の場合は常に比率を 0 にする
+        if abs(scalar) > 0.6:
+            return 0.6 + (abs(scalar) - 0.6) / 0.4 * 0.4 # 元 return 0.7 + 0.2 * scalar
+        elif abs(scalar) > 0.1:
+            return 0.1 + (abs(scalar) - 0.1) / 0.5 * 0.5 # 元 return 0.3
         return 0.0
 
     # --- 各最適化器のコアな勾配更新ロジック (プライベートメソッドとして統合) ---
@@ -236,14 +244,14 @@ class EmoClan(Optimizer):
 
                 # --- 最適化器の選択と勾配更新 ---
                 # 現在のglobal_scalar_histに記録された全体としての感情スカラーに基づいてフェーズを判断
-                # global_scalar が [-0.3, 0.3] の範囲にある場合は Navi
-                # global_scalar > 0.3 の場合は Lynx
-                # global_scalar < -0.3 の場合は Fact
-                if current_global_scalar > 0.3: # 序盤・過学習傾向時
+                # global_scalar > abs 0.6 の範囲は Lynx
+                # global_scalar > abs 0.3 の範囲は Fact
+                # global_scalar < abs 0.3 の範囲は Navi
+                if abs(current_global_scalar) > 0.6: # 序盤・過学習・発散時
                     self._lynx_update(p, grad, param_state, lr, lynx_beta1, lynx_beta2, _wd_actual_lynx)
-                elif current_global_scalar < -0.3: # 終盤・発散傾向時
+                elif abs(current_global_scalar) > 0.3: # 終盤・過学習・発散傾向時
                     self._fact_update(p, grad, param_state, lr, navi_fact_betas, eps, wd)
-                else: # -0.3 <= current_global_scalar <= 0.3 の中盤
+                else: # -0.3 <= current_global_scalar <= 0.3 の中盤･平時(安定期)
                     self._navi_update(p, grad, param_state, lr, navi_fact_betas, eps, wd)
 
         # Early Stop判断
