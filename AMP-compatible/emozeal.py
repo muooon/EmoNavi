@@ -3,9 +3,11 @@ from torch.optim import Optimizer
 import math
 
 """
+EmoZeal v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
-memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=False)"
-optimizer 指定の際に False にすることで shadow をオフにできる
+memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=True)"
+optimizer 指定の際に True にすることで shadow をオンにできる
+emosens shadow-effect v1.0 反映 shadow-system、scalar-switch 修正
 """
 
 # Soft Sign 関数
@@ -13,9 +15,9 @@ def softsign(x):
     return x / (1 + x.abs())
     
 class EmoZeal(Optimizer):
-    # クラス定義＆初期化 - 🔸Shadow True(有効)/False(無効) 切替え
+    # クラス定義＆初期化 🔸Shadow True(有効)/False(無効) 切替え
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
-                 eps=1e-8, weight_decay=0.01, use_shadow: bool = True): 
+                 eps=1e-8, weight_decay=0.01, use_shadow: bool = False): 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
 
         super().__init__(params, defaults)
@@ -37,17 +39,19 @@ class EmoZeal(Optimizer):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
-    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
+    # Shadow混合比率(> abs 0.6：60〜100%、 > abs 0.1：10〜60%、 平時：0%) emosens反映
+    # 旧：Shadow混合比率(> 0.6：80〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
+    # 説明：scalar>+0.6 は "return 0.7(開始値) + 0.2(変化幅) * scalar" = 0.82～0.9 ← 誤
+    # 修正1：scalar>±0.6 を "return 開始値 + (abs(scalar) - 0.6(範囲)) / 範囲量 * 変化幅"
+    # 修正2：scalar>±0.1 を "return 開始値 + (abs(scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
+    # タスク等に応じた調整のため３段階で適用しておく(上記を参考に調整してください／現状はshadow-effect反映)
     def _decide_ratio(self, scalar):
-        # 🔸use_shadow が False の場合は常に比率を 0 にする
         if not self.use_shadow:
-            return 0.0
-        if scalar > 0.6:
-            return 0.7 + 0.2 * scalar
-        elif scalar < -0.6:
-            return 0.1
-        elif abs(scalar) > 0.3:
-            return 0.3
+            return 0.0 # 🔸use_shadow が False の場合は常に比率を 0 にする
+        if abs(scalar) > 0.6:
+            return 0.6 + (abs(scalar) - 0.6) / 0.4 * 0.4 # 元 return 0.7 + 0.2 * scalar
+        elif abs(scalar) > 0.1:
+            return 0.1 + (abs(scalar) - 0.1) / 0.5 * 0.5 # 元 return 0.3
         return 0.0
 
     # 損失取得(損失値 loss_val を数値化、感情判定に使用、存在しないパラメータ(更新不要)はスキップ)
@@ -95,20 +99,20 @@ class EmoZeal(Optimizer):
                     exp_avg = state.setdefault('exp_avg', torch.zeros_like(p))
                     blended_grad = grad.mul(1 - beta1).add_(exp_avg, alpha=beta1)
                     grad_norm = torch.norm(grad, dtype=torch.float32)
-                    # scalar < -0.3 の場合のみ SoftSign、それ以外 Cautious (終盤や発散傾向をSSに)
+                    # > abs 0.6 Cautious (過適合や崩壊傾向を慎重に)
+                    # > abs 0.1 SoftSign+NormEPS (揺れを滑らかに)
+                    # 削除：それ以外 SoftSign (ゆっくり滑らかに)
                     # p - lr * softsign(blended_grad) (from softsign)
                     # p - lr * direction * mask (from Cautious)
                     # safe_norm 極値のブレンド勾配に対するスケーリング
-                    if 0.3 < scalar <= 0.5:
-                        safe_norm = grad_norm + eps
-                        modified_grad = softsign(blended_grad) * safe_norm
-                        p.add_(-lr * modified_grad) 
-                    elif scalar < -0.3:
+                    if abs(scalar) > 0.6:
                         direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
                         mask = (direction == grad.sign())  # 過去の勾配と方向が一致する部分のみ更新
                         p.add_(direction * mask, alpha = -lr)  # Cautious 更新
-                    else:
-                        p.add_(softsign(blended_grad), alpha = -lr)  # Soft Sign 処理
+                    elif abs(scalar) > 0.1:
+                        safe_norm = grad_norm + eps
+                        modified_grad = softsign(blended_grad) * safe_norm
+                        p.add_(-lr * modified_grad) 
                     
                     state.setdefault('exp_avg_r', torch.zeros_like(r_sq)).mul_(beta1).add_(torch.sqrt(r_sq), alpha=1 - beta1)
                     state.setdefault('exp_avg_c', torch.zeros_like(c_sq)).mul_(beta1).add_(torch.sqrt(c_sq), alpha=1 - beta1)

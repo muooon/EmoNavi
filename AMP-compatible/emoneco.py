@@ -4,9 +4,11 @@ import math
 from typing import Tuple, Callable, Union
 
 """
+EmoNeco v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
-memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=False)"
-optimizer 指定の際に False にすることで shadow をオフにできる
+memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=True)"
+optimizer 指定の際に True にすることで shadow をオンにできる
+emosens shadow-effect v1.0 反映 shadow-system、scalar-switch 修正
 """
 
 # Helper function (Lynx)
@@ -17,10 +19,10 @@ def softsign(x):
     return x / (1 + x.abs())
 
 class EmoNeco(Optimizer):
-    # クラス定義＆初期化 -  🔸Shadow True(有効)/False(無効) 切替え
+    # クラス定義＆初期化 🔸Shadow True(有効)/False(無効) 切替え
     def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, betas=(0.9, 0.99), 
     # neco用ベータ･互換性の追加(neco用beta1･beta2)
-                 eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False, use_shadow: bool = True): 
+                 eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False, use_shadow: bool = False): 
 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
@@ -35,7 +37,7 @@ class EmoNeco(Optimizer):
     def _update_ema(self, state, loss_val):
         ema = state.setdefault('ema', {})
         ema['short'] = 0.3 * loss_val + 0.7 * ema.get('short', loss_val)
-        ema['long']  = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
+        ema['long'] = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
         return ema
 
     # 感情スカラー値生成(EMA差分、滑らかな非線形スカラー、tanh 5 * diff で鋭敏さ強調)
@@ -43,17 +45,19 @@ class EmoNeco(Optimizer):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff)
 
-    # Shadow混合比率(> 0.6：70〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
+    # Shadow混合比率(> abs 0.6：60〜100%、 > abs 0.1：10〜60%、 平時：0%) emosens反映
+    # 旧：Shadow混合比率(> 0.6：80〜90%、 < -0.6：10%、 abs> 0.3：30%、 平時：0%)
+    # 説明：scalar>+0.6 は "return 0.7(開始値) + 0.2(変化幅) * scalar" = 0.82～0.9 ← 誤
+    # 修正1：scalar>±0.6 を "return 開始値 + (abs(scalar) - 0.6(範囲)) / 範囲量 * 変化幅"
+    # 修正2：scalar>±0.1 を "return 開始値 + (abs(scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
+    # タスク等に応じた調整のため３段階で適用しておく(上記を参考に調整してください／現状はshadow-effect反映)
     def _decide_ratio(self, scalar):
-        # 🔸use_shadow が False の場合は常に比率を 0 にする
         if not self.use_shadow:
-            return 0.0
-        if scalar > 0.6:
-            return 0.7 + 0.2 * scalar
-        elif scalar < -0.6:
-            return 0.1
-        elif abs(scalar) > 0.3:
-            return 0.3
+            return 0.0 # 🔸use_shadow が False の場合は常に比率を 0 にする
+        if abs(scalar) > 0.6:
+            return 0.6 + (abs(scalar) - 0.6) / 0.4 * 0.4 # 元 return 0.7 + 0.2 * scalar
+        elif abs(scalar) > 0.1:
+            return 0.1 + (abs(scalar) - 0.1) / 0.5 * 0.5 # 元 return 0.3
         return 0.0
 
     # 損失取得(損失値 loss_val を数値化、感情判定に使用、存在しないパラメータ(更新不要)はスキップ)
@@ -112,16 +116,16 @@ class EmoNeco(Optimizer):
                 blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
                 grad_norm = torch.norm(grad, dtype=torch.float32) # 勾配ノルムの計算
 
-                # scalar < -0.3 の場合のみ SoftSign、それ以外 Cautious (終盤や発散傾向をSSに)
+                # 削除：-0.2 < scalar <= -0.5 : SoftSign (ゆっくり滑らかに)
+                #  0.2 < abs(scalar) <=  0.5 : SoftSign+norm (揺れを滑らかに)
+                # それ以外 Cautious (平時や過適合や崩壊傾向を慎重に)
                 # p - lr * softsign(blended_grad) (from softsign)
                 # p - lr * direction * mask (from Cautious)
                 # safe_norm 極値のブレンド勾配に対するスケーリング
-                if 0.3 < scalar <= 0.5:
+                if 0.2 < abs(scalar) <= 0.5:
                     safe_norm = grad_norm + eps
                     modified_grad = softsign(blended_grad) * safe_norm
                     p.add_(-lr * modified_grad) 
-                elif scalar < -0.3:
-                    p.add_(softsign(blended_grad), alpha = -lr)  # Soft Sign 処理
                 else:
                     direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
                     mask = (direction == grad.sign())  # 過去の勾配と方向が一致している部分のみ更新
