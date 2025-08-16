@@ -5,6 +5,11 @@
 #### emosens(第２世代)はこちらです / "emosens" (2nd generation) is here.  
 https://github.com/muooon/EmoSens  
 
+emonavi挙動まとめ(日本語のみ)  
+https://huggingface.co/muooon/EmoNAVI/blob/main/report/emonavi%E6%8C%99%E5%8B%95%E3%81%BE%E3%81%A8%E3%82%81.txt  
+
+---
+
 ### あなたの望む最適化 EmoNAVI が叶えます  
 #### The optimization you seek — EmoNAVI makes it possible  
 ---
