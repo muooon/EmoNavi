@@ -4,9 +4,10 @@ import math
 from typing import Tuple, Callable, Union
 
 """
-EmoLynx v2.0 (250815) shadow-system v2.0
+EmoLynx v3.0 (250825) shadow-system v2.0 -effect NoN -moment v1.0
 AMP対応完了(202507) p.data -> p 修正済み
 emosens shadow-effect v1.0 反映 shadow-system 修正
+optimizer 指定の際に True / False で shadow を切替できる(現在 False)
 """
 
 # Helper function (Lynx)
@@ -14,18 +15,16 @@ def exists(val):
     return val is not None
 
 class EmoLynx(Optimizer):
-    # クラス定義＆初期化
+    # クラス定義＆初期化 lynx用ベータ･互換性の追加(lynx用beta1･beta2)
     def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, betas=(0.9, 0.99), 
-    # lynx用ベータ･互換性の追加(lynx用beta1･beta2)
-                 eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False): 
-
+                 eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False, use_shadow: bool = False): 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
-        
         # lynxに応じてウェイト減衰のため保存
         self._init_lr = lr
         self.should_stop = False # 停止フラグの初期化
         self.decoupled_wd = decoupled_weight_decay
+        self.use_shadow = use_shadow # 🔸shadowの使用フラグを保存
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -46,6 +45,8 @@ class EmoLynx(Optimizer):
     # 修正2：scalar>±0.1 を "return 開始値 + (abs(scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
     # タスク等に応じた調整のため３段階で適用しておく(上記を参考に調整してください／現状はshadow-effect反映)
     def _decide_ratio(self, scalar):
+        if not self.use_shadow:
+            return 0.0 # 🔸use_shadow が False の場合は常に比率を 0 にする
         if abs(scalar) > 0.6:
             return 0.6 + (abs(scalar) - 0.6) / 0.4 * 0.4 # 元 return 0.7 + 0.2 * scalar
         elif abs(scalar) > 0.1:
@@ -81,7 +82,7 @@ class EmoLynx(Optimizer):
                 ratio = self._decide_ratio(scalar)
 
                 # shadow_param：必要時のみ更新(スパイク部分に現在値を5%ずつ追従させる動的履歴)
-                if ratio > 0:
+                if self.use_shadow and ratio > 0:
                     if 'shadow' not in state:
                         state['shadow'] = p.clone()
                     else:
@@ -107,7 +108,7 @@ class EmoLynx(Optimizer):
                 blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
                 
                 # p: p = p - lr * sign(blended_grad)
-                p.add_(blended_grad.sign_(), alpha = -lr)
+                p.add_(blended_grad.sign_(), alpha = -lr * (1 - abs(scalar)))
 
                 # exp_avg = beta2 * exp_avg + (1 - beta2) * grad
                 exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
@@ -133,7 +134,7 @@ class EmoLynx(Optimizer):
 
 """
  https://github.com/muooon/EmoNavi
- Lynx was developed with inspiration from Lion and Tiger, 
+ Lynx was developed with inspiration from Lion, Tiger, and emocats, 
  which we deeply respect for their lightweight and intelligent design.  
  Lynx also integrates EmoNAVI to enhance its capabilities.
 """
