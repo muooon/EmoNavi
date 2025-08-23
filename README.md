@@ -1,12 +1,9 @@
 # EmoNAVI / Emo-Family (1stGen)  
 
-#### こちらは第１世代です、Emo系は"第２世代"もあります  
-#### This is the 1st generation. “the 2nd generation” There is  
-#### emosens(第２世代)はこちらです / "emosens" (2nd generation) is here.  
-https://github.com/muooon/EmoSens  
-
-emonavi挙動まとめ(日本語のみ)  
-https://huggingface.co/muooon/EmoNAVI/blob/main/report/emonavi%E6%8C%99%E5%8B%95%E3%81%BE%E3%81%A8%E3%82%81.txt  
+基本的な軽量化を果たしました(v3.0) shadow-system / effect をつかわずに、  
+shadow効果に近いものを"感情moment"で効率よく適用できるように進化しました  
+Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
+it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
 ---
 
@@ -41,12 +38,8 @@ Self-repairing, with no over-learning or divergence
 Autonomously adjusts learning rate and scheduler, so models make their own decisions  
 Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
 
-emoclan、zeal、neco、のみ注意です / are only notes  
- (過学習や発散の抑制以外の機能は shadow:False 時は無効です)  
- (functions other than over-learning and divergence control are disabled when shadow:False)  
-
 EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
-調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待します  
+調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待できます  
 EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
 We expect it to overcome the challenges we currently face,  
 while also addressing challenges in new areas such as multimodal learning with complex coordination  
@@ -75,15 +68,17 @@ while also addressing challenges in new areas such as multimodal learning with c
 #### 更新履歴 / History
 ---
 
-|★| 第２世代にて解明した高次momentで、v3.0 へ更新(250822) "shadow=False" です(Navi、Fact、Lynx)
-|★| Updated to v3.0 with higher moment approximation clarified by the 2nd generation (250822) "shadow=False" (Navi、Fact、Lynx)
+|★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v3.0 (250825) emosens(第２世代)で解明した"高次moment"(近似)のフィードバックを適用(更新) 全て "shadow=False" です  
+|★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v3.0 (250825), Incorporates (updates) feedback on “higher moments” (approximations) clarified by emosens (2nd generation). All are “shadow=False”  
 
 |★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v2.0 (250815) 更新、shadow-system の精密化(更新)  
 |★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v2.0 (250815), refinement of shadow-system (update)  
 
+emonavi挙動まとめ(日本語のみ) (shadowに関して)  
+https://huggingface.co/muooon/EmoNAVI/blob/main/report/emonavi%E6%8C%99%E5%8B%95%E3%81%BE%E3%81%A8%E3%82%81.txt  
+
 |★| 第２世代を公開(250801)しました。 emonavi は、新しい世代へ進化し軽量化を果たします  
 |★| The 2nd gen was release(250801) emonavi has evolved into a new generation and become more lightweight.  
-|★| https://github.com/muooon/EmoSens  
 
 |★| clan、zeal、neco、は、shadow機能の on/off 切替えをできるようにしました  
 |★| clan, zeal, and neco are now able to switch the shadow function on and off.  
@@ -204,7 +199,7 @@ This sequence of operations maintains an emotional center of gravity—gracefull
 ---
 ### Shadow補正付きのEmoNAVIを用いて、**conv層も含めたフルレイヤーLoRA** を学習すると、LoRAは元モデル全体にどのような変化(構造的／表現的)をもたらす可能性があるのか？  
 
-前提条件：フルLoRA(c3liar/convあり) Rank16alpha8、  
+前提条件：フルLoRA(C3Lier/convあり) Rank16alpha8、  
 - フルLoRA＋shadow補正なら、**conv層における特徴検出の"微調整"** が安全に行える  
 - conv層やearly encoderも巻き込むと → "視覚的な導入文"そのものが変わる  
 - Layerごとの勾配が荒れたとき、shadowが常に"納得した過去"に戻す(少しだけ)  
