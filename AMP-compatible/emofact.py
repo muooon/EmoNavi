@@ -3,19 +3,21 @@ from torch.optim import Optimizer
 import math
 
 """
-EmoFact v2.0 (250815) shadow-system v2.0
+EmoFact v3.0 (250825) shadow-system v2.0 -effect NoN -moment v1.0
 AMP対応完了(202507) p.data -> p 修正済み
 emosens shadow-effect v1.0 反映 shadow-system 修正
+optimizer 指定の際に True / False で shadow を切替できる(現在 False)
 """
 
 class EmoFact(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
-                 eps=1e-8, weight_decay=0.01):
+                 eps=1e-8, weight_decay=0.01, use_shadow: bool = False):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
         self._init_lr = lr 
         self.should_stop = False # 停止フラグの初期化
+        self.use_shadow = use_shadow # 🔸shadowの使用フラグを保存
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -36,6 +38,8 @@ class EmoFact(Optimizer):
     # 修正2：scalar>±0.1 を "return 開始値 + (abs(scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
     # タスク等に応じた調整のため３段階で適用しておく(上記を参考に調整してください／現状はshadow-effect反映)
     def _decide_ratio(self, scalar):
+        if not self.use_shadow:
+            return 0.0 # 🔸use_shadow が False の場合は常に比率を 0 にする
         if abs(scalar) > 0.6:
             return 0.6 + (abs(scalar) - 0.6) / 0.4 * 0.4 # 元 return 0.7 + 0.2 * scalar
         elif abs(scalar) > 0.1:
@@ -61,8 +65,8 @@ class EmoFact(Optimizer):
                 scalar = self._compute_scalar(ema)
                 ratio = self._decide_ratio(scalar)
 
-                # shadow_param：必要時のみ更新 (既存ロジックを維持)
-                if ratio > 0:
+                # shadow_param：必要時のみ更新 (スパイク部分に現在値を5%ずつ追従させる動的履歴)
+                if self.use_shadow and ratio > 0:
                     if 'shadow' not in state:
                         state['shadow'] = p.clone()
                     else:
@@ -104,7 +108,7 @@ class EmoFact(Optimizer):
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
                 p.add_(p, alpha=-group['weight_decay'] * group['lr'])
-                p.add_(update_term, alpha=-group['lr'])
+                p.add_(update_term, alpha=-group['lr'] * (1 - abs(scalar)))
 
                 # --- Early Stop ロジック (既存ロジックを維持) ---
                 hist = self.state.setdefault('scalar_hist', [])
@@ -124,6 +128,6 @@ class EmoFact(Optimizer):
 
 """
  https://github.com/muooon/EmoNavi
- Fact is inspired by Adafactor,  
+ Fact is inspired by Adafactor, and emoairy, 
  and its VRAM-friendly design is something everyone loves.
 """

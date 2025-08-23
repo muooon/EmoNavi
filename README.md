@@ -1,7 +1,7 @@
 # EmoNAVI / Emo-Family (1stGen)  
 
-#### こちらは第１世代です、Emo系は"第２世代へ移行"しました  
-#### This is the 1st generation. “moved on to the 2nd generation.”  
+#### こちらは第１世代です、Emo系は"第２世代"もあります  
+#### This is the 1st generation. “the 2nd generation” There is  
 #### emosens(第２世代)はこちらです / "emosens" (2nd generation) is here.  
 https://github.com/muooon/EmoSens  
 
@@ -74,6 +74,9 @@ while also addressing challenges in new areas such as multimodal learning with c
 ---
 #### 更新履歴 / History
 ---
+
+|★| 第２世代にて解明した高次momentで、v3.0 へ更新(250822) "shadow=False" です(Navi、Fact、Lynx)
+|★| Updated to v3.0 with higher moment approximation clarified by the 2nd generation (250822) "shadow=False" (Navi、Fact、Lynx)
 
 |★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v2.0 (250815) 更新、shadow-system の精密化(更新)  
 |★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v2.0 (250815), refinement of shadow-system (update)  
