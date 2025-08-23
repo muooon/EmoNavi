@@ -4,7 +4,7 @@ import math
 from typing import Callable, Union, Dict, Any, Tuple
 
 """
-EmoClan v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
+EmoClan v3.0 (250825) shadow-system v2.0 -effect NoN -moment v1.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
 memo : "optimizer = EmoClan(model.parameters(), lr=1e-3, use_shadow=True)"
 optimizer 指定の際に True にすることで shadow をオンにできる
@@ -90,7 +90,8 @@ class EmoClan(Optimizer):
         lr: float, 
         beta1: float, 
         beta2: float, 
-        wd_actual: float
+        wd_actual: float,
+        scalar
     ):
         """EmoLynx のコアな勾配更新ロジック"""
         # Stepweight decay: p = p * (1 - lr * wd)
@@ -105,7 +106,7 @@ class EmoClan(Optimizer):
         blended_grad = grad.mul(1. - beta1).add_(exp_avg, alpha=beta1)
         
         # 符号ベースの更新
-        p.add_(blended_grad.sign_(), alpha = -lr)
+        p.add_(blended_grad.sign_(), alpha = -lr * (1 - abs(scalar)))
 
         # exp_avg 更新
         exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
@@ -118,7 +119,8 @@ class EmoClan(Optimizer):
         lr: float, 
         betas: Tuple[float, float], 
         eps: float, 
-        weight_decay: float
+        weight_decay: float,
+        scalar
     ):
         """EmoNavi のコアな勾配更新ロジック"""
         beta1, beta2 = betas
@@ -134,7 +136,7 @@ class EmoClan(Optimizer):
         if weight_decay:
             p.mul_(1 - lr * weight_decay) 
 
-        p.addcdiv_(exp_avg, denom, value=-lr)
+        p.addcdiv_(exp_avg, denom, value=-lr * (1 - abs(scalar)))
 
     def _fact_update(
         self, 
@@ -144,7 +146,8 @@ class EmoClan(Optimizer):
         lr: float, 
         betas: Tuple[float, float], # beta2 は現状使われないが互換性のため残す (1D勾配で使用)
         eps: float, 
-        weight_decay: float
+        weight_decay: float,
+        scalar
     ):
         """EmoFact のコアな勾配更新ロジック (Adafactor ライク)"""
         beta1, beta2 = betas
@@ -175,7 +178,7 @@ class EmoClan(Optimizer):
         # decoupled_weight_decay は __init__ でグループにdefaultsとして渡されているが、
         # ここではfactorロジック自体がweight_decayを受け取る形式
         p.mul_(1 - weight_decay * lr) 
-        p.add_(update_term, alpha=-lr)
+        p.add_(update_term, alpha=-lr * (1 - abs(scalar)))
 
 
     @torch.no_grad()
@@ -248,11 +251,11 @@ class EmoClan(Optimizer):
                 # global_scalar > abs 0.3 の範囲は Fact
                 # global_scalar < abs 0.3 の範囲は Navi
                 if abs(current_global_scalar) > 0.6: # 序盤・過学習・発散時
-                    self._lynx_update(p, grad, param_state, lr, lynx_beta1, lynx_beta2, _wd_actual_lynx)
+                    self._lynx_update(p, grad, param_state, lr, lynx_beta1, lynx_beta2, _wd_actual_lynx, current_global_scalar)
                 elif abs(current_global_scalar) > 0.3: # 終盤・過学習・発散傾向時
-                    self._fact_update(p, grad, param_state, lr, navi_fact_betas, eps, wd)
+                    self._fact_update(p, grad, param_state, lr, navi_fact_betas, eps, wd, current_global_scalar)
                 else: # -0.3 <= current_global_scalar <= 0.3 の中盤･平時(安定期)
-                    self._navi_update(p, grad, param_state, lr, navi_fact_betas, eps, wd)
+                    self._navi_update(p, grad, param_state, lr, navi_fact_betas, eps, wd, current_global_scalar)
 
         # Early Stop判断
         # global_scalar_hist の評価
