@@ -87,7 +87,7 @@ class EmoNavi(Optimizer):
                 exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
                 denom = exp_avg_sq.sqrt().add_(group['eps'])
 
-                step_size = group['lr']
+                step_size = group['lr'] * (1 - abs(scalar))
                 if group['weight_decay']:
                     p.add_(p, alpha=-group['weight_decay'] * step_size)
                 p.addcdiv_(exp_avg, denom, value=-step_size * (1 - abs(scalar)))
