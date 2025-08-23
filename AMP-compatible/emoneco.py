@@ -4,7 +4,7 @@ import math
 from typing import Tuple, Callable, Union
 
 """
-EmoNeco v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
+EmoNeco v3.0 (250825) shadow-system v2.0 -effect NoN -moment v1.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
 memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=True)"
 optimizer 指定の際に True にすることで shadow をオンにできる
@@ -102,7 +102,7 @@ class EmoNeco(Optimizer):
 
                 # --- Start Neco Gradient Update Logic ---
                 
-                # neco初期化(exp_avg_sq)
+                # neco初期化(exp_avg)
                 if 'exp_avg' not in state:
                     state['exp_avg'] = torch.zeros_like(p)
                 exp_avg = state['exp_avg']
@@ -124,14 +124,15 @@ class EmoNeco(Optimizer):
                 # safe_norm 極値のブレンド勾配に対するスケーリング
                 if 0.2 < abs(scalar) <= 0.5:
                     safe_norm = grad_norm + eps
-                    modified_grad = softsign(blended_grad) * safe_norm
+                    modified_grad = softsign(blended_grad) * safe_norm * (1 - abs(scalar))
                     p.add_(-lr * modified_grad) 
                 else:
                     direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
                     mask = (direction == grad.sign())  # 過去の勾配と方向が一致している部分のみ更新
-                    p.add_(direction * mask, alpha = -lr)  # Cautious 更新
+                    scaled_direction = direction * mask * (1 - abs(scalar))
+                    p.add_(scaled_direction, alpha = -lr)  # Cautious 更新
 
-                # exp_avg = beta2 * exp_avg + (1 - beta2) * grad
+                # exp_avg = beta2 * exp_avg + (1 - beta2) * grad：勾配の履歴
                 exp_avg.mul_(beta2).add_(grad, alpha = 1. - beta2)
 
                 # --- End Neco Gradient Update Logic ---

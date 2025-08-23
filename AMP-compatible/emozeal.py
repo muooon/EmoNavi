@@ -3,7 +3,7 @@ from torch.optim import Optimizer
 import math
 
 """
-EmoZeal v2.0 (250815) shadow-system v2.0 scalar-switch v2.0
+EmoZeal v3.0 (250825) shadow-system v2.0 -effect NoN -moment v1.0 scalar-switch v2.0
 AMP対応完了(202507) p.data -> p 修正済み
 memo : "optimizer = EmoNeco(model.parameters(), lr=1e-3, use_shadow=True)"
 optimizer 指定の際に True にすることで shadow をオンにできる
@@ -101,17 +101,17 @@ class EmoZeal(Optimizer):
                     grad_norm = torch.norm(grad, dtype=torch.float32)
                     # > abs 0.6 Cautious (過適合や崩壊傾向を慎重に)
                     # > abs 0.1 SoftSign+NormEPS (揺れを滑らかに)
-                    # 削除：それ以外 SoftSign (ゆっくり滑らかに)
                     # p - lr * softsign(blended_grad) (from softsign)
                     # p - lr * direction * mask (from Cautious)
                     # safe_norm 極値のブレンド勾配に対するスケーリング
                     if abs(scalar) > 0.6:
                         direction = blended_grad.sign()    # 勾配方向の符号 Cautious 処理
                         mask = (direction == grad.sign())  # 過去の勾配と方向が一致する部分のみ更新
-                        p.add_(direction * mask, alpha = -lr)  # Cautious 更新
+                        scaled_direction = direction * mask * (1 - abs(scalar))
+                        p.add_(scaled_direction, alpha = -lr)  # Cautious 更新
                     elif abs(scalar) > 0.1:
                         safe_norm = grad_norm + eps
-                        modified_grad = softsign(blended_grad) * safe_norm
+                        modified_grad = softsign(blended_grad) * safe_norm * (1 - abs(scalar))
                         p.add_(-lr * modified_grad) 
                     
                     state.setdefault('exp_avg_r', torch.zeros_like(r_sq)).mul_(beta1).add_(torch.sqrt(r_sq), alpha=1 - beta1)
@@ -136,7 +136,7 @@ class EmoZeal(Optimizer):
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
                 p.add_(p, alpha=-group['weight_decay'] * group['lr'])
-                p.add_(update_term, alpha=-group['lr'])
+                p.add_(update_term, alpha=-group['lr'] * (1 - abs(scalar)))
 
                 # --- Early Stop ロジック (既存ロジックを維持) ---
                 hist = self.state.setdefault('scalar_hist', [])

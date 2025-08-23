@@ -87,10 +87,10 @@ class EmoNavi(Optimizer):
                 exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
                 denom = exp_avg_sq.sqrt().add_(group['eps'])
 
-                step_size = group['lr'] * (1 - abs(scalar))
+                step_size = group['lr']
                 if group['weight_decay']:
                     p.add_(p, alpha=-group['weight_decay'] * step_size)
-                p.addcdiv_(exp_avg, denom, value=-step_size)
+                p.addcdiv_(exp_avg, denom, value=-step_size * (1 - abs(scalar)))
 
         # 感情機構の発火が収まり"十分に安定"していることを外部伝達できる(自動停止ロジックではない)
                 # Early Stop用 scalar 記録(バッファ共通で管理/最大32件保持/動静評価)
