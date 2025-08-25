@@ -1,0 +1,60 @@
+---emo系まとめ---
+emonavi 最終進化の概要とまとめ
+v3.0 は、(抽象化した)３つの高次momentを(まとめて)時間的適応する仕組みを導入し、
+デフォルト shadow=False にしました、これにより emonavi はこれまでの最軽量級です、
+なお３つの高次momentをそれぞれ1stepで適応するのは emosens 系です、
+こちらは少し計算負荷がかかります… 代わりに airy／cats は特殊な進化を遂げています
+全emo系３つの高次momentの概念を抽象化し数学的計算負荷を大きく削減しつつ、
+その効果を最大限発揮しています(まじめに統計計算するとVRAMは４倍以上になります)
+
+これまでの経緯等をご存じない方のために改めて系譜を整理します、
+emonavi (Adam参考)：emosens(第２世代)
+emofact (Adafactor参考)：emozeal、emoairy(第２世代)
+emolynx (Lion／Tiger参考)：emoneco、emocats(第２世代)
+emoclan (navi-fact-lynx 統合)：(第２世代ナシ) ※ v3.0最強説あり
+clan、zeal ＆ neco は、過適合や崩壊領域での対応を"特殊変化"させる仕組みを有します
+上記３つは感情機構の柔軟性を証明するバリエーションです
+airy／cats 特殊進化、Adafactorより軽量／Lionの符号に"重み"を加味
+※ 計算負荷少ない：emo系の第１世代(shadow=True) VRAM負荷高い
+※ VRAM軽量：emo系の第２世代(shadow=False) 計算負荷高い
+性能は速度かメモリかをトレードオフで選択することになります
+v3.0 clan はどちらも満たす特別な存在かもしれません
+
+---統計的抽象化の理論的背景---
+skewness = sum((s - mean)**3 for s in buf) / len(buf) / std**3
+kurtosis = sum((s - mean)**4 for s in buf) / len(buf) / std**4
+fifth-moment = sum((s - mean)**5 for s in buf) / len(buf) / std**5
+
+感情機構と高次momentの関係:
+◇感情EMA（Exponential Moving Average）
+・対象：loss の履歴
+・2つのEMA：短期と長期（short / long）
+・役割：感情の「短期」と「長期」の視点を持つ
+◇感情スカラー
+・定義：tanh(5 * diff)
+・意味：感情の「変化の勢い」を抽象化した値
+・tanhで圧縮：[-1, 1] に収めることで、安定性と非線形性を両立
+◇感情moment（高次moment）
+・対象：感情スカラーの履歴
+・役割：分布の形状（歪度・尖度・非対称性）を解析し、感情の「質感」を捉える
+・複数STEPを経ることで感情スカラーの履歴を保持せずに適用可能(これが重要)
+
+---感情moment活用---
+以下のコードだけで、どのoptimizerにも"感情moment"を適用できます
+
+    # 感情EMA更新(緊張と安静)
+    def _update_ema(self, state, loss_val):
+        ema = state.setdefault('ema', {})
+        ema['short'] = 0.3 * loss_val + 0.7 * ema.get('short', loss_val)
+        ema['long'] = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
+        return ema
+
+    # 感情スカラー値生成(EMA差分、滑らかな非線形スカラー、tanh 5 * diff で鋭敏さ強調)
+    def _compute_scalar(self, ema):
+        diff = ema['short'] - ema['long']
+        return math.tanh(5 * diff)
+
+    # 実際の勾配更新式を記述してください
+
+	# 感情moment適用 "* (1 - abs(scalar))" 更新式に合うものにしてください
+	p.addcdiv_(exp_avg, denom, value=-step_size * (1 - abs(scalar)))

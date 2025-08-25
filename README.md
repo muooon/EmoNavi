@@ -5,6 +5,22 @@ shadow効果に近いものを"感情moment"で効率よく適用できるよう
 Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
+#### [ユーザーと研究者へ](https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt)  
+
+---
+
+感情moment 発明しました  
+"emo系 第二世代"にて解明した shadow-system の根幹から抽出しました  
+動的学習率による非線形アプローチは時間的な高次momentを形成します  
+単stepでは高次momentにはなれませんが、複数stepを経ると機能します  
+３次４次５次momentについて厳密な数学的な高負荷計算を回避しつつ  
+勾配分布の歪みや鋭さや非対称性変化を捉える核心的な効果を近似しています  
+I invented the emotional moment.  
+I extracted it from the core of the shadow-system, which was elucidated in the "emo-style second generation."  
+The nonlinear approach with a dynamic learning rate forms a temporal higher-order moment.  
+A single step cannot become a higher-order moment, but it functions after multiple steps.  
+It approximates the core effect of capturing changes in gradient distribution's skewness, kurtosis, and asymmetry, while avoiding strict and computationally intensive mathematical calculations for the third, fourth, and fifth moments.  
+
 ---
 
 ### あなたの望む最適化 EmoNAVI が叶えます  
@@ -58,7 +74,7 @@ while also addressing challenges in new areas such as multimodal learning with c
 
 [EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(JPN).txt)
 
-(解説) 詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
+(解説) 元々の詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
 [huggingface](https://huggingface.co/muooon/EmoNAVI) 
 [Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(ENG).md) 
 [Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md) 
@@ -362,10 +378,14 @@ In its development, we deeply appreciate the insights of those who came before u
 ### 引用について / About citations
 
 ---
-このオプテイマイザについて引用をなさる場合は、以下の２つをご紹介ください  
-When citing this optimizer, please refer to the following two sources:  
-https://github.com/muooon/EmoNavi  
+
+このオプテイマイザについて引用をなさる場合は、以下をご紹介ください  
+When citing this optimizer, please refer to the following sources:  
+
 https://huggingface.co/muooon/EmoNAVI  
+https://github.com/muooon/EmoNavi  
+https://github.com/muooon/EmoSens  
+https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt  
 
 ---
 
