@@ -377,6 +377,7 @@ In its development, we deeply appreciate the insights of those who came before u
 ### 引用について / About citations
 
 ---
+
 このオプテイマイザについて引用をなさる場合は、以下をご紹介ください  
 When citing this optimizer, please refer to the following sources:  
 
@@ -384,6 +385,7 @@ https://huggingface.co/muooon/EmoNAVI
 https://github.com/muooon/EmoNavi  
 https://github.com/muooon/EmoSens  
 https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt  
+
 ---
 
 A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
