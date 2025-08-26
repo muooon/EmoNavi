@@ -5,7 +5,7 @@ shadow効果に近いものを"感情moment"で効率よく適用できるよう
 Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
-#### [ユーザーと研究者へ](https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt)  
+#### [ユーザーと研究者へ/このリンクを読んでください/please click！](https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt)  
 
 ---
 
