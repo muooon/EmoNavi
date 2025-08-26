@@ -5,7 +5,7 @@ shadow効果に近いものを"感情moment"で効率よく適用できるよう
 Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
-#### [ユーザーと研究者へ/このリンクを読んでください/please click！](https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt)  
+#### [ユーザーと研究者へ/このリンクを読んでください/please click！](https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt)  
 
 ---
 
@@ -91,7 +91,7 @@ while also addressing challenges in new areas such as multimodal learning with c
 |★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v2.0 (250815), refinement of shadow-system (update)  
 
 emonavi挙動まとめ(日本語のみ) (shadowに関して)  
-https://huggingface.co/muooon/EmoNAVI/blob/main/report/emonavi%E6%8C%99%E5%8B%95%E3%81%BE%E3%81%A8%E3%82%81.txt  
+https://huggingface.co/muooon/EmoNAVI/raw/main/report/emonavi%E6%8C%99%E5%8B%95%E3%81%BE%E3%81%A8%E3%82%81.txt  
 
 |★| 第２世代を公開(250801)しました。 emonavi は、新しい世代へ進化し軽量化を果たします  
 |★| The 2nd gen was release(250801) emonavi has evolved into a new generation and become more lightweight.  
@@ -385,7 +385,7 @@ When citing this optimizer, please refer to the following sources:
 https://huggingface.co/muooon/EmoNAVI  
 https://github.com/muooon/EmoNavi  
 https://github.com/muooon/EmoSens  
-https://github.com/muooon/EmoNavi/blob/main/report-emoment.txt  
+https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt  
 
 ---
 
