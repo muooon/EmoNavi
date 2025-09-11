@@ -86,8 +86,10 @@ while also addressing challenges in new areas such as multimodal learning with c
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/raw/main/emonavi-Gemini-analysis(2)(JPN).txt)  
 
 ---
-#### 更新履歴 / History  
----
+
+<details>
+
+<summary> 更新履歴 / History </summary>  
 
 |★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v3.0 (250825) emosens(第２世代)で解明した"高次moment"(近似)のフィードバックを適用(更新) 全て "shadow=False" です  
 |★| EmoNAVI, FACT, LYNX, CLAN, ZEAL, NECO, updated to v3.0 (250825), Incorporates (updates) feedback on “higher moments” (approximations) clarified by emosens (2nd generation). All are “shadow=False”  
@@ -140,11 +142,15 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/report/emonavi%E6%8C%99%E5%8B%95%
 |☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
 |☆| (This is untested and is merely a possibility.)  
 
+</details>
+
 ---
 ---
 
-この EmoNAVI について以下でわかりやすく紹介します  
-Here’s a clear and simple introduction to what EmoNAVI is and how it works:  
+<details>
+
+<summary>この EmoNAVI について以下でわかりやすく紹介します  
+Here’s a clear and simple introduction to what EmoNAVI is and how it works:</summary>  
 
 ---
 ### EmoNAVIとは？ / What is EmoNAVI?  
@@ -353,6 +359,8 @@ because I adjust myself by reflecting on who I was.”
 
 That’s what it means to be autonomous.  
 Try it—see how it learns with you.  
+
+</details>
 
 ---
 ##### Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定  
