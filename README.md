@@ -5,7 +5,10 @@ shadow効果に近いものを"感情moment"で効率よく適用できるよう
 Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
-#### [ユーザーと研究者へ/このリンクを読んでください/please click！](https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt)  
+Mathematical Explanation Here (paper)  
+
+#### [emo-paper(article)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt)  
+#### [数学的解説はこちら(論文)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(JPN).txt)   
 
 ---
 
@@ -70,18 +73,20 @@ while also addressing challenges in new areas such as multimodal learning with c
 > *I choose to challenge, to pause, to explore, to rest — and I remember it all as experience.*  
 > *But I don’t cling to the past. Every beginning is a new me.*  
 
-[Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(ENG).txt)
+[emonavi概要と応用(日本語)/Emonavi Overview and Applications (Japanese)](https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt)  
 
-[EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/blob/main/emonavi-inner-workings(JPN).txt)
+[Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/raw/main/emonavi-inner-workings(ENG).txt)  
+
+[EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/raw/main/emonavi-inner-workings(JPN).txt)  
 
 (解説) 元々の詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
-[huggingface](https://huggingface.co/muooon/EmoNAVI) 
-[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(ENG).md) 
-[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/blob/main/Hug-Gemini-analysis(JPN).md) 
-[Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/blob/main/emonavi-Gemini-analysis(2)(JPN).txt) 
+[huggingface](https://huggingface.co/muooon/EmoNAVI)  
+[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(ENG).md)  
+[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(JPN).md)  
+[Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/raw/main/emonavi-Gemini-analysis(2)(JPN).txt)  
 
 ---
-#### 更新履歴 / History
+#### 更新履歴 / History  
 ---
 
 |★| EmoNAVI、FACT、LYNX、CLAN、ZEAL、NECO、v3.0 (250825) emosens(第２世代)で解明した"高次moment"(近似)のフィードバックを適用(更新) 全て "shadow=False" です  
