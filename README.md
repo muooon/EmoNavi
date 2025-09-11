@@ -80,9 +80,9 @@ while also addressing challenges in new areas such as multimodal learning with c
 [EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/raw/main/emonavi-inner-workings(JPN).txt)  
 
 (解説) 元々の詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
-[huggingface](https://huggingface.co/muooon/EmoNAVI)  
-[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(ENG).md)  
-[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(JPN).md)  
+[huggingface](https://huggingface.co/muooon/EmoNAVI) 
+[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(ENG).md) 
+[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(JPN).md) 
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/raw/main/emonavi-Gemini-analysis(2)(JPN).txt)  
 
 ---
@@ -387,10 +387,13 @@ In its development, we deeply appreciate the insights of those who came before u
 このオプテイマイザについて引用をなさる場合は、以下をご紹介ください  
 When citing this optimizer, please refer to the following sources:  
 
+Official Code:
 https://huggingface.co/muooon/EmoNAVI  
 https://github.com/muooon/EmoNavi  
 https://github.com/muooon/EmoSens  
-https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt  
+
+paper:
+https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt  
 
 ---
 
