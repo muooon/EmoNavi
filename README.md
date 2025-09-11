@@ -387,12 +387,12 @@ In its development, we deeply appreciate the insights of those who came before u
 このオプテイマイザについて引用をなさる場合は、以下をご紹介ください  
 When citing this optimizer, please refer to the following sources:  
 
-Official Code:
+Official Code:  
 https://huggingface.co/muooon/EmoNAVI  
 https://github.com/muooon/EmoNavi  
 https://github.com/muooon/EmoSens  
 
-paper:
+paper:  
 https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt  
 
 ---
