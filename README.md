@@ -149,7 +149,7 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/report/emonavi%E6%8C%99%E5%8B%95%
 
 <details>
 
-<summary>この EmoNAVI について以下でわかりやすく紹介します  
+<summary>この EmoNAVI について以下でわかりやすく紹介します<br>
 Here’s a clear and simple introduction to what EmoNAVI is and how it works:</summary>  
 
 ---
