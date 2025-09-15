@@ -19,6 +19,7 @@ emo系 v3.0 (スタンダードモデル) の特徴等
 | emonavi   | ◎      | △          | ◎      | 最初に誕生した｜正確です｜Adam系です       |  
 | emofact   | △      | ◎          | ◎      | ２番目に誕生した｜軽量です｜Adafactor系です |  
 | emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion系です         |  
+
 補足：(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
 
 [効率性] 無駄のない更新：過学習や収束の停滞に先回りをし、無駄な更新を排除しながら確実に精度を向上  
@@ -36,6 +37,7 @@ emo-series v3.0 (Standard-models) Features
 | emonavi   | ◎        | △          | ◎            | The first one born｜accurate｜Adam-based         |  
 | emofact   | △        | ◎          | ◎            | The second one born｜Lightweight｜Adafactor-based |  
 | emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-based |  
+
 EmoLYNX is as lightweight as Adafactor and as accurate as Adam (with sign, gradient, and higher-order moments).  
 
 [Efficiency] Waste-free updates: Prevents overfitting and stagnation in advance, and reliably improves accuracy while eliminating wasteful updates.  
