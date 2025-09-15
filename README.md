@@ -14,15 +14,16 @@ Mathematical Explanation Here (paper)
 
 emo系 v3.0 (スタンダードモデル) の特徴等  
 
-名称		正確性	メモリ負荷	非同期		備考  
-emonavi		◎	△		◎		最初に誕生した｜正確です｜Adam系です  
-emofact		△	◎		◎		２番目に誕生した｜軽量です｜Adafactor系です  
-emolynx		◎	◎		◎		軽量＆正確の両立に成功｜Lion系です  
-(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
+| 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
+|-----------|--------|------------|--------|-------------------------------------------|  
+| emonavi   | ◎      | △          | ◎      | 最初に誕生した｜正確です｜Adam系です       |  
+| emofact   | △      | ◎          | ◎      | ２番目に誕生した｜軽量です｜Adafactor系です |  
+| emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion系です         |  
+補足：(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
 
-[効率性]無駄のない更新：過学習や収束の停滞に先回りをし、無駄な更新を排除しながら確実に精度を向上  
-[機能性]軽量で高機能：自動停止合図や完全自律型の分散学習への対応でユーザー体験を大幅に向上させます  
-[信頼性]安全度優先設計：動的な学習率制御で学習の不安定な局面でモデルを保護し安定した収束を促します  
+[効率性] 無駄のない更新：過学習や収束の停滞に先回りをし、無駄な更新を排除しながら確実に精度を向上  
+[機能性] 軽量で高機能：自動停止合図や完全自律型の分散学習への対応でユーザー体験を大幅に向上させます  
+[信頼性] 安全度優先設計：動的な学習率制御で学習の不安定な局面でモデルを保護し安定した収束を促します  
 
 常に安全な学習を最優先にし安定させます  
 ユーザー指定の学習率を目標にし限りなく近づくよう制御します  
@@ -30,10 +31,11 @@ emolynx		◎	◎		◎		軽量＆正確の両立に成功｜Lion系です
 
 emo-series v3.0 (Standard-models) Features  
 
-Name		Accurate	MemoryLoad	 Asynchronous	Notes  
-emonavi		◎		△		◎		The first one born｜accurate｜Adam-based  
-emofact		△		◎		◎		The second one born｜Lightweight｜Adafactor-based  
-emolynx		◎		◎		◎		Accurate and Lightweight Convergence｜Lion-based  
+| Name      | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
+|-----------|----------|------------|--------------|--------------------------------------------------|  
+| emonavi   | ◎        | △          | ◎            | The first one born｜accurate｜Adam-based         |  
+| emofact   | △        | ◎          | ◎            | The second one born｜Lightweight｜Adafactor-based |  
+| emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-based |  
 EmoLYNX is as lightweight as Adafactor and as accurate as Adam (with sign, gradient, and higher-order moments).  
 
 [Efficiency] Waste-free updates: Prevents overfitting and stagnation in advance, and reliably improves accuracy while eliminating wasteful updates.  
