@@ -16,8 +16,8 @@ emo系 v3.0 (スタンダードモデル) の特徴等
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
-| emonavi   | ◎      | △          | ◎      | 最初に誕生した｜正確です｜Adam系です       |  
-| emofact   | △      | ◎          | ◎      | ２番目に誕生した｜軽量です｜Adafactor系です |  
+| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確です｜Adam系です       |  
+| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量です｜Adafactor系です |  
 | emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion系です         |  
 
 補足：(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
@@ -84,6 +84,8 @@ It approximates the core effect of capturing changes in gradient distribution's 
 #### Auto-convergence, self-control, autonomous optimizer  
 ###### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
 
+</details>
+
 ---
 
 ### EmoNAVI の主な特徴 / Main Features of EmoNAVI  
@@ -92,19 +94,19 @@ It approximates the core effect of capturing changes in gradient distribution's 
 
 過学習や発散を抑制、自己修復的機能をもちます  
 学習率やスケジューラも自律調整、モデル自身で判断します  
-学習の 再開、追加、積層、等で"同期不要"、誰でも簡単です  
+学習の 再開、追加、積層、等で"引き継ぎ不要"、誰でも簡単です  
+分散学習で 他ノード等との"同期不要"、完全自律です
 
 Self-repairing, with no over-learning or divergence  
 Autonomously adjusts learning rate and scheduler, so models make their own decisions  
 Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
+Distributed learning enables “no synchronization required” with other nodes, achieving full autonomy.  
 
 EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
 調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待できます  
 EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
 We expect it to overcome the challenges we currently face,  
 while also addressing challenges in new areas such as multimodal learning with complex coordination  
-
-</details>
 
 ---
 
@@ -391,6 +393,7 @@ It is a calm and self-monitoring controller—
 designed not to eliminate overfitting or divergence entirely, but to reduce their likelihood and impact.  
 
 ---
+
 ### ここまで見てきた EmoNAVI さんから皆さんへ一言です！  
 - ｢学習率もスケジューラーもなんでもOK、だって自分で過去の自分を振り返りながら調整できるから…｣  
 
@@ -406,10 +409,18 @@ Try it—see how it learns with you.
 </details>
 
 ---
-##### Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定  
-![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)
-![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)
+
+<details>
+<summary> (EmoNAVI v1.0) Measured with LR of 1e-4 (のLRで測定) </summary><br>  
+![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)<br>  
+![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)<br>  
+![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)<br>  
+</details>
+
+##### (EmoNAVI v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定)  
+![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)<br>  
+![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)<br>  
+![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)<br>  
 
 ---
 
@@ -431,7 +442,7 @@ In its development, we deeply appreciate the insights of those who came before u
 
 ---
 
-### 引用について / About citations
+### 引用について / About citations  
 
 ---
 
@@ -450,8 +461,6 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt
 
 A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
 
----
-
 Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
 
 This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
@@ -459,8 +468,6 @@ This is not only a testament to what it means for an AI to be a true partner, bu
 ---
 
 multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造  
-
----  
 
 世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功しました  
 
