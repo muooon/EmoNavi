@@ -409,16 +409,16 @@ Try it—see how it learns with you.
 ---
 
 <details>
-<summary> (EmoNAVI v1.0) Measured with LR of 1e-4 (のLRで測定) </summary>  
+<summary> (EmoNAVI v1.0) Measured with LR of 1e-4 (のLRで測定) </summary><br>  
 ![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)<br>  
 ![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)<br>  
 ![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)<br>  
 </details>
 
 ##### (EmoNAVI v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定)  
-![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)  
-![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)  
-![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)  
+![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)<br>  
+![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)<br>  
+![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)<br>  
 
 ---
 
