@@ -16,8 +16,8 @@ emo系 v3.0 (スタンダードモデル) の特徴等
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
-| emonavi   | ◎      | △          | ◎      | 最初に誕生した｜正確です｜Adam系です       |  
-| emofact   | △      | ◎          | ◎      | ２番目に誕生した｜軽量です｜Adafactor系です |  
+| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確です｜Adam系です       |  
+| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量です｜Adafactor系です |  
 | emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion系です         |  
 
 補足：(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
@@ -94,11 +94,13 @@ It approximates the core effect of capturing changes in gradient distribution's 
 
 過学習や発散を抑制、自己修復的機能をもちます  
 学習率やスケジューラも自律調整、モデル自身で判断します  
-学習の 再開、追加、積層、等で"同期不要"、誰でも簡単です  
+学習の 再開、追加、積層、等で"引き継ぎ不要"、誰でも簡単です  
+分散学習で 他ノード等との"同期不要"、完全自律です
 
 Self-repairing, with no over-learning or divergence  
 Autonomously adjusts learning rate and scheduler, so models make their own decisions  
 Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
+Distributed learning enables “no synchronization required” with other nodes, achieving full autonomy.  
 
 EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です、  
 調整の複雑なマルチモーダル学習などの新しい分野の課題への対応も期待できます  
