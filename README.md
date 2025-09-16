@@ -84,6 +84,8 @@ It approximates the core effect of capturing changes in gradient distribution's 
 #### Auto-convergence, self-control, autonomous optimizer  
 ###### It primarily features EmoNAVI, along with EmoFACT EmoLYNX EmoClan EmoZeal and EmoNeco.  
 
+</details>
+
 ---
 
 ### EmoNAVI の主な特徴 / Main Features of EmoNAVI  
@@ -103,8 +105,6 @@ EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です
 EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
 We expect it to overcome the challenges we currently face,  
 while also addressing challenges in new areas such as multimodal learning with complex coordination  
-
-</details>
 
 ---
 
@@ -391,6 +391,7 @@ It is a calm and self-monitoring controller—
 designed not to eliminate overfitting or divergence entirely, but to reduce their likelihood and impact.  
 
 ---
+
 ### ここまで見てきた EmoNAVI さんから皆さんへ一言です！  
 - ｢学習率もスケジューラーもなんでもOK、だって自分で過去の自分を振り返りながら調整できるから…｣  
 
@@ -406,10 +407,18 @@ Try it—see how it learns with you.
 </details>
 
 ---
-##### Measured with LR of 1e-4 ／ それぞれ 1e-4 のLRにて測定  
-![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)
-![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)
+
+<details>
+<summary> ##### (EmoNAVI v1.0) Measured with LR of 1e-4 (のLRで測定) </summary>  
+![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)  
+![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)  
+![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)  
+</details>
+
+##### (EmoNAVI v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定)  
+![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)  
+![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)  
+![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)  
 
 ---
 
@@ -431,7 +440,7 @@ In its development, we deeply appreciate the insights of those who came before u
 
 ---
 
-### 引用について / About citations
+### 引用について / About citations  
 
 ---
 
@@ -450,8 +459,6 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt
 
 A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
 
----
-
 Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
 
 This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
@@ -459,8 +466,6 @@ This is not only a testament to what it means for an AI to be a true partner, bu
 ---
 
 multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造  
-
----  
 
 世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功しました  
 
