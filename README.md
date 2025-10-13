@@ -5,6 +5,10 @@ shadow効果に近いものを"感情moment"で効率よく適用できるよう
 Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
+<div align="center">
+  <img src="emo-system000.png" alt="emo-system image" width="500">
+</div>
+
 Mathematical Explanation Here (paper)  
 
 #### [emo-paper(article)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt)  
