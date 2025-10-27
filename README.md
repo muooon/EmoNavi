@@ -1,8 +1,8 @@
 # EmoNAVI / Emo-Family (1stGen)  
 
-基本的な軽量化を果たしました(v3.0) shadow-system / effect をつかわずに、  
+基本的な軽量化を果たしました(1stGen-v3.0) shadow-system / effect をつかわずに、  
 shadow効果に近いものを"感情moment"で効率よく適用できるように進化しました  
-Basic weight reduction achieved (v3.0) Without using shadow-system / effect,  
+Basic weight reduction achieved (1stGen-v3.0) Without using shadow-system / effect,  
 it has evolved to efficiently apply something close to a shadow effect with “emotional moments”  
 
 <div align="center">
@@ -10,9 +10,11 @@ it has evolved to efficiently apply something close to a shadow effect with “e
 </div>
 
 Mathematical Explanation Here (paper)  
-
+非凸関数に対する期待値収束(フローマッチングへの適応なども保証します)  
+Expected value convergence for non-convex functions  
+(also guarantees adaptability to flow matching)  
 #### [emo-paper(article)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt)  
-#### [数学的解説はこちら(論文)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(JPN).txt)   
+#### [数学的解説はこちら(論文)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(JPN).txt)  
 
 ---
 
@@ -28,7 +30,7 @@ emo系 v3.0 (スタンダードモデル) の特徴等
 
 [効率性] 無駄のない更新：過学習や収束の停滞に先回りをし、無駄な更新を排除しながら確実に精度を向上  
 [機能性] 軽量で高機能：自動停止合図や完全自律型の分散学習への対応でユーザー体験を大幅に向上させます  
-[信頼性] 安全度優先設計：動的な学習率制御で学習の不安定な局面でモデルを保護し安定した収束を促します  
+[信頼性] 安全最優先設計：動的な学習率制御で学習の不安定な局面でモデルを保護し安定した収束を促します  
 
 常に安全な学習を最優先にし安定させます  
 ユーザー指定の学習率を目標にし限りなく近づくよう制御します  
@@ -99,8 +101,7 @@ It approximates the core effect of capturing changes in gradient distribution's 
 過学習や発散を抑制、自己修復的機能をもちます  
 学習率やスケジューラも自律調整、モデル自身で判断します  
 学習の 再開、追加、積層、等で"引き継ぎ不要"、誰でも簡単です  
-分散学習で 他ノード等との"同期不要"、完全自律です
-
+分散学習で 他ノード等との"同期不要"、完全自律です  
 Self-repairing, with no over-learning or divergence  
 Autonomously adjusts learning rate and scheduler, so models make their own decisions  
 Resuming, adding, stacking, etc. learning is synchronization-free" and easy for everyone  
@@ -111,6 +112,31 @@ EmoNAVI は既存のオプティマイザにはない｢感情駆動型｣です
 EmoNAVI is “emotion-driven,” which is not the case with existing optimizers,  
 We expect it to overcome the challenges we currently face,  
 while also addressing challenges in new areas such as multimodal learning with complex coordination  
+
+emo系は、観察、判断、決定、行動、記憶、反省、という自律サイクルを行います  
+Emo-based follows an autonomous cycle of   
+observation, judgment, decision, action, memory, and reflection.  
+
+高効率性と集積度  
+高次moment、Kahan補償-量子化補償、分散･継続学習での独立性、自己修復･モデル修復、  
+ハイパーパラメータの自律調整、信頼度フィルタ、更新ステップの有界性、構造的耐性、自己停止、  
+動的学習率、動的スケジューラ、動的Rank/Aplha、履歴補償、などを含めた多機能性を、  
+追加テンソル不要、計算負荷ほぼなし、step毎に完全適用、時間的積算で実現します  
+これらをワンパッケージで実現した高効率性と集積度は安定と安全を最優先します  
+※ 高次momentは近似的、動的Rank/Alphaも近似的な効果です  
+※ LoRA系技術はノイズをなくしますが微小データも失う場合があります  
+※ emo系はノイズを作らず既存ノイズを見つけて修正し微小データを保護します  
+※ Kahan-量子化補償は今後実用化されるさらに低精度な環境でも柔軟に対応できます  
+High Efficiency and Integration  
+Multifunctionality, including higher-order moments, Kahan compensation－quantization compensation, independence in distributed and continual learning, self-healing and model repair,  
+Autonomous hyperparameter tuning, confidence filtering, bounded update steps, structural robustness (or resilience), self-termination,  
+dynamic learning rates, dynamic schedulers, dynamic Rank/Alpha, and historical compensation,  
+is achieved without additional tensors, with negligible computational overhead, fully applied at every step, and through temporal accumulation.  
+The high efficiency and integration realized in this single package prioritize stability and safety above all else.  
+※ Higher-order moments are approximative, and the effects of dynamic Rank/Alpha are also approximative.  
+※ LoRA-based techniques eliminate noise but may sometimes lose fine-grained data (or subtle details).  
+※ Emo-based techniques detect and correct existing noise without generating new noise, thereby preserving fine-grained data.  
+※ Kahan-Quantization compensation offers flexible adaptability even in lower-precision environments expected to be commercialized (or practical) in the future.  
 
 ---
 
