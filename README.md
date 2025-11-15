@@ -136,7 +136,7 @@ The high efficiency and integration realized in this single package prioritize s
 ※ Higher-order moments are approximative, and the effects of dynamic Rank/Alpha are also approximative.  
 ※ LoRA-based techniques eliminate noise but may sometimes lose fine-grained data (or subtle details).  
 ※ Emo-based techniques detect and correct existing noise without generating new noise, thereby preserving fine-grained data.  
-※ Kahan-Quantization compensation offers flexible adaptability even in lower-precision environments expected to be commercialized (or practical) in the future.  
+※ Quantization compensation offers flexible adaptability even in lower-precision environments expected to be commercialized (or practical) in the future.  
 
 ---
 
