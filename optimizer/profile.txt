@@ -1,0 +1,59 @@
+AMP-compatible ／ AMP対応版
+
+emonavi 及び emoファミリーについて紹介します
+emonavi は、RefAdamWmini-ScheduleFree を作成し機能向上を試行錯誤するうちにできた感情機構を持つオプティマイザです
+emonavi is an optimizer equipped with an emotional mechanism, 
+developed through trial and error while creating and enhancing the functionality of RefAdamWmini-ScheduleFree.
+https://github.com/muooon/ref-adamw-mini-ScheduleFree
+
+RefAdamWmini は、ema、scaler、shadow、を持ちますが限定的な活用でした
+これを改善していくなかでたどり着いたのが感情機構という新しい仕組みです
+以下、emonavi から順に紹介します
+RefAdamWmini incorporated EMA, scaler, and shadow, but their application was limited. 
+Through our efforts to enhance this, we developed a novel mechanism: the emotional mechanism. 
+We'll introduce them in order, starting with emonavi.
+
+三姉妹 ／ The Three Sisters
+emonavi：長女／Adam参考 The eldest daughter, referencing Adam.
+emofact：次女／Adafactor参考 The second daughter, referencing Adafactor.
+emolynx：三女／Lion･Tiger参考 The youngest daughter, referencing Lion and Tiger.
+
+|||オプション指定方法|||
+
+shadow オフ(False にする)：
+optimizer = EmoNavi(model.parameters(), lr=1e-4, use_shadow=False)
+
+trust_coeff オフ(False にする)：
+optimizer = EmoNavi(model.parameters(), lr=1e-4, use_trust=False)
+
+最大勾配ノルム 変更／オフは0.0(数値変更 する)：
+optimizer = EmoNavi(model.parameters(), lr=1e-4, max_norm=0.0)
+
+最小勾配ノルム 変更／1e-5～5e-7 程度(数値変更 する)：
+optimizer = EmoNavi(model.parameters(), lr=1e-4, min_lr=1e-6)
+
+動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：
+外部ツール(TensorBoard等)で値を把握したい場合は Optimizer 初期化時に SummaryWriter を渡してください
+writer = SummaryWriter(log_dir="./runs/emonavi")
+optimizer = EmoNavi(model.parameters(), lr=1e-4, writer=writer)
+tensorboard --logdir=./runs/emonavi
+
+|||Usage examples|||
+
+Shadow off:
+optimizer = EmoNavi(model.parameters(), lr=1e-4, use_shadow=False)
+
+Trust coeff off:
+optimizer = EmoNavi(model.parameters(), lr=1e-4, use_trust=False)
+
+Change maximum gradient norm (off=0.0):
+optimizer = EmoNavi(model.parameters(), lr=1e-4, max_norm=0.0)
+
+Change minimum learning rate (recommended 1e-5 to 5e-7):
+optimizer = EmoNavi(model.parameters(), lr=1e-4, min_lr=1e-6)
+
+Monitor values with external tools (TensorBoard):
+writer = SummaryWriter(log_dir="./runs/emonavi")
+optimizer = EmoNavi(model.parameters(), lr=1e-4, writer=writer)
+tensorboard --logdir=./runs/emonavi
+
