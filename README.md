@@ -98,14 +98,14 @@ It approximates the core effect of capturing changes in gradient distribution's 
 デフォルト値は安定性優先です(破壊的更新を抑制) 誰でも安心して使えるようになりました(設定の失敗しづらいです)  
 この値を変化させると様々な効果を得られます(最終盤の仕上げのみ追加学習させるなど学習状況を柔軟に設定できます)  
 ※ 新機能の 感情フィードバック や trust_coeff は自動です、より安定した更新を効果的に行います  
-※ trust_coeff=True(デフォルト)です、無効化は False に設定してください
+※ use_trust=True(デフォルト)です、無効化は False に設定してください  
 ※ 高値の学習率はある程度まで許容しますが極度の高値は学習を破綻させるのでおやめください  
 【NewFeature】：We will explain three new features.  
 Gradient Norm Control max_norm=1.0 (default). Setting to 0.0 disables the feature (use 1.0 normally).  
 The default value prioritizes stability (suppresses disruptive updates). Now anyone can use it with confidence (less prone to configuration errors).  
 Adjusting this value yields various effects. (e.g., enabling additional learning only for endgame refinement, allowing flexible learning control)  
 ※ The new Emotion Feedback and trust_coeff features operate automatically, enabling more stable and effective updates  
-※ trust_coeff=True (default). To disable the feature, set it to False.
+※ use_trust=True (default). To disable the feature, set it to False.  
 ※ While moderately high learning rates are tolerated, extremely high values will cause learning failure and should be avoided  
 
 ---
