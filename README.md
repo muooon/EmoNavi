@@ -241,10 +241,13 @@ tensorboard --logdir=./runs/emonavi
 ![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/graph/emonavi-test02.png?raw=true)<br>  
 </details>
 
-##### (EmoNavi v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定)  
+<details>
+<summary> (EmoNavi v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定) </summary><br>  
 ![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)<br>  
 ![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)<br>  
 ![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)<br>  
+
+</details>
 
 ---
 
