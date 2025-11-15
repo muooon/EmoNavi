@@ -1,4 +1,4 @@
-# EmoNAVI / Emo-Family (1stGen)  
+# EmoNAVI / Emo-Family (1stGen-v3.0)  
 
 基本的な軽量化を果たしました(1stGen-v3.0) shadow-system / effect をつかわずに、  
 shadow効果に近いものを"感情moment"で効率よく適用できるように進化しました  
@@ -22,11 +22,11 @@ emo系 v3.0 (スタンダードモデル) の特徴等
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
-| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確です｜Adam系です       |  
-| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量です｜Adafactor系です |  
-| emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion系です         |  
+| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確です｜Adam型です       |  
+| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量です｜Adafactor型です |  
+| emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion型です         |  
 
-補足：(emolynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
+補足：(EmoLynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
 
 [効率性] 無駄のない更新：過学習や収束の停滞に先回りをし、無駄な更新を排除しながら確実に精度を向上  
 [機能性] 軽量で高機能：自動停止合図や完全自律型の分散学習への対応でユーザー体験を大幅に向上させます  
@@ -40,9 +40,9 @@ emo-series v3.0 (Standard-models) Features
 
 | Name      | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
 |-----------|----------|------------|--------------|--------------------------------------------------|  
-| emonavi   | ◎        | △          | ◎            | The first one born｜accurate｜Adam-based         |  
-| emofact   | △        | ◎          | ◎            | The second one born｜Lightweight｜Adafactor-based |  
-| emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-based |  
+| emonavi   | ◎        | △          | ◎            | The first one born｜accurate｜Adam-type         |  
+| emofact   | △        | ◎          | ◎            | The second one born｜Lightweight｜Adafactor-type |  
+| emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-type |  
 
 EmoLYNX is as lightweight as Adafactor and as accurate as Adam (with sign, gradient, and higher-order moments).  
 
@@ -118,7 +118,7 @@ Emo-based follows an autonomous cycle of
 observation, judgment, decision, action, memory, and reflection.  
 
 高効率性と集積度  
-高次moment、Kahan補償-量子化補償、分散･継続学習での独立性、自己修復･モデル修復、  
+高次moment、量子化補償(Kahan補償と違う制御)、分散･継続学習での独立性、自己修復･モデル修復、  
 ハイパーパラメータの自律調整、信頼度フィルタ、更新ステップの有界性、構造的耐性、自己停止、  
 動的学習率、動的スケジューラ、動的Rank/Aplha、履歴補償、などを含めた多機能性を、  
 追加テンソル不要、計算負荷ほぼなし、step毎に完全適用、時間的積算で実現します  
@@ -126,9 +126,9 @@ observation, judgment, decision, action, memory, and reflection.
 ※ 高次momentは近似的、動的Rank/Alphaも近似的な効果です  
 ※ LoRA系技術はノイズをなくしますが微小データも失う場合があります  
 ※ emo系はノイズを作らず既存ノイズを見つけて修正し微小データを保護します  
-※ Kahan-量子化補償は今後実用化されるさらに低精度な環境でも柔軟に対応できます  
+※ 量子化補償は今後実用化されるさらに低精度な環境でも柔軟に対応できます  
 High Efficiency and Integration  
-Multifunctionality, including higher-order moments, Kahan compensation－quantization compensation, independence in distributed and continual learning, self-healing and model repair,  
+Multifunctionality, including higher-order moments, Quantization Compensation (Control Different from Kahan Compensation), independence in distributed and continual learning, self-healing and model repair,  
 Autonomous hyperparameter tuning, confidence filtering, bounded update steps, structural robustness (or resilience), self-termination,  
 dynamic learning rates, dynamic schedulers, dynamic Rank/Alpha, and historical compensation,  
 is achieved without additional tensors, with negligible computational overhead, fully applied at every step, and through temporal accumulation.  
@@ -150,9 +150,9 @@ The high efficiency and integration realized in this single package prioritize s
 
 [emonavi概要と応用(日本語)/Emonavi Overview and Applications (Japanese)](https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt)  
 
-[Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/raw/main/emonavi-inner-workings(ENG).txt)  
+[Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/raw/EmoNavi-v3.0/emonavi-inner-workings(ENG).txt)  
 
-[EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/raw/main/emonavi-inner-workings(JPN).txt)  
+[EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/raw/EmoNavi-v3.0/emonavi-inner-workings(JPN).txt)  
 
 (解説) 元々の詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
 [huggingface](https://huggingface.co/muooon/EmoNAVI) 
@@ -211,7 +211,7 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/report/emonavi%E6%8C%99%E5%8B%95%
 |★| EmoFACT released (250716) Saves about VRAM1GB (SDXL) compared to NAVI. Emotion mechanism is the same.  
 
 |★| 疑似DDPシミュレーションを試したい方(Those DDP simulation) → 
-[DDP-TEST](https://github.com/muooon/EmoNavi/blob/main/ddp-test.zip)  
+[DDP-TEST](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/ddp-test.zip)  
 
 |☆| EmoNAVI により非同期学習等について現実化できる可能性を開きました  
 |☆| EmoNAVI has opened up the possibility of making asynchronous learning a reality.  
@@ -442,15 +442,15 @@ Try it—see how it learns with you.
 
 <details>
 <summary> (EmoNAVI v1.0) Measured with LR of 1e-4 (のLRで測定) </summary><br>  
-![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test00.png?raw=true)<br>  
-![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test01.png?raw=true)<br>  
-![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/main/graph/emonavi-test02.png?raw=true)<br>  
+![EmoNAVI00](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0n/graph/emonavi-test00.png?raw=true)<br>  
+![EmoNAVI01](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/graph/emonavi-test01.png?raw=true)<br>  
+![EmoNAVI02](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/graph/emonavi-test02.png?raw=true)<br>  
 </details>
 
 ##### (EmoNAVI v3.0/v2.0) Measured with LR of 1e-4 (のLRで測定)  
-![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)<br>  
-![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)<br>  
-![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/main/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)<br>  
+![EmoNAVI30](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_loss_comparison.png?raw=true)<br>  
+![EmoNAVI31](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_fluctuation_and_accuracy.png?raw=true)<br>  
+![EmoNAVI32](https://github.com/muooon/EmoNavi/blob/EmoNavi-v3.0/AMP-compatible/logs/emonavi3_trec_gpt2_weight_pca.png?raw=true)<br>  
 
 ---
 
@@ -467,8 +467,8 @@ In its development, we deeply appreciate the insights of those who came before u
 ### License Apache License 2.0 — see LICENSE for details.  
 ### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください  
 
-##### 🤖 Built with  Copilot + human curiosity.  
-##### 🤖 Copilot と人間の好奇心のコラボで誕生しました  
+##### 🤖 Built with  Copilot + human curiosity(v1.0).  
+##### 🤖 Copilot と人間の好奇心のコラボで誕生しました(v1.0)  
 
 ---
 
