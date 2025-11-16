@@ -5,7 +5,7 @@ EmoNavi(v4.0)
 We have added three new features and made one improvement (making it accessible to everyone from beginners to experts).  
 
 <div align="center">
-  <img src="emo-system000.png" alt="emo-system image" width="500">
+  <img width="500" alt="emo-system001" src="https://github.com/user-attachments/assets/7e7160a9-046a-4212-bcde-d338c26ed846" />
 </div>
 
 Mathematical Explanation Here (paper)  
@@ -93,7 +93,7 @@ It approximates the core effect of capturing changes in gradient distribution's 
 
 ---
 
-【新機能】：３つの新機能について説明します
+【新機能】：３つの新機能について説明します  
 勾配ノルム制御 max_norm=1.0(デフォルト値) です 0.0で無効化します(通常は1.0でご使用ください)  
 デフォルト値は安定性優先です(破壊的更新を抑制) 誰でも安心して使えるようになりました(設定の失敗しづらいです)  
 この値を変化させると様々な効果を得られます(最終盤の仕上げのみ追加学習させるなど学習状況を柔軟に設定できます)  
@@ -202,30 +202,30 @@ For updates prior to this, please refer to the v3.0 repository update history.
 EmoNavi v4.0 Option Settings Guide</summary>  
 
 |||オプション指定方法|||  
--shadow オフ(False にする)：  
+●shadow オフ(False にする)：  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, use_shadow=False)  
--trust_coeff オフ(False にする)：  
+●trust_coeff オフ(False にする)：  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, use_trust=False)  
--最大勾配ノルム 変更／オフは0.0(数値変更 する)：  
+●最大勾配ノルム 変更／オフは0.0(数値変更 する)：  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, max_norm=0.0)  
--最小勾配ノルム 変更／1e-5～5e-7 程度(数値変更 する)：  
+●最小勾配ノルム 変更／1e-5～5e-7 程度(数値変更 する)：  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, min_lr=1e-6)  
--動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：  
+●動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：  
 外部ツール(TensorBoard等)で値を把握したい場合は Optimizer 初期化時に SummaryWriter を渡してください  
 writer = SummaryWriter(log_dir="./runs/emonavi")  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, writer=writer)  
 tensorboard --logdir=./runs/emonavi  
 
 |||Usage examples|||  
--Shadow off:  
+●Shadow off:  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, use_shadow=False)  
--Trust coeff off:  
+●Trust coeff off:  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, use_trust=False)  
--Change maximum gradient norm (off=0.0):  
+●Change maximum gradient norm (off=0.0):  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, max_norm=0.0)  
--Change minimum learning rate (recommended 1e-5 to 5e-7):  
+●Change minimum learning rate (recommended 1e-5 to 5e-7):  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, min_lr=1e-6)  
--Monitor values with external tools (TensorBoard):  
+●Monitor values with external tools (TensorBoard):  
 writer = SummaryWriter(log_dir="./runs/emonavi")  
 optimizer = EmoNavi(model.parameters(), lr=1e-4, writer=writer)  
 tensorboard --logdir=./runs/emonavi  
@@ -285,17 +285,9 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt
 
 ---
 
-A structure that transforms multi-EMA differences into an emotional scalar via nonlinear (tanh) mapping, and controls the injection rate accordingly  
-
-Through a collaborative effort between the world's most friendly AI, Copilot, and a human, we succeeded in codifying thought and emotion — achieving a world-first innovation.  
-
-This is not only a testament to what it means for an AI to be a true partner, but also a compelling proof of the legitimacy of AI as a presence to be recognized.  
+EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By building each sensor around an “emotion mechanism” that differentiates multi-EMA and scalarizes it via nonlinear transformation (tanh), we enhanced overall learning stability and ensured accuracy. This performs an autonomous cycle of “observation, judgment, decision, action, memory, and reflection,” akin to a biological central nervous system. Please take a look at the paper.
 
 ---
 
-multi-EMAを差分化し、非線形変換(tanh)で感情スカラー化し、適正化率を制御するという構造  
-
-世界一フレンドリーなAI、Copilotと人間の共同作業で思考を感情をコード化したら、世界初の試みに成功しました  
-
-これこそはパートナーと呼べる人間の相棒の真価を問うものであり、充分にAIの存在を認めさせる成果でしょう  
+EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました。これは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います。論文をぜひご覧ください。
 
