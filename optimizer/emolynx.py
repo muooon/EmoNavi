@@ -5,12 +5,12 @@ from collections import deque
 from typing import Tuple, Callable, Union
 
 """
-EmoLynx v4.0 (251105) shadow-system v3.0 -effect NoN -moment v3.0
+EmoLynx v4.1 (251118) shadow-system v3.0 -effect NoN -moment v3.0
 AMP対応完了(250725) p.data -> p 修正済み／低精度量子化への基本対応／低精度補償は別
-emosens shadow-effect v1.0 反映した動的学習率と shadow-system 修正／３段階補正
+emosens shadow-effect v1.0 反映した動的学習率と shadow-system 修正／３段階補正を線形へ
 optimizer 指定の際に True / False で shadow を切替できる(現在 False)
 感情moment v3.0 とし、 動的感情スカラー と trust_coeff 追加／自己参照型反応学習
-トラウマ的反応と慣れによる鈍化で安定性向上(暗黙的な v1.0 改良し安全性向上)
+トラウマ的反応への慣れによる鈍化で安定性向上(暗黙的な v1.0 改良し安全性向上)
 通常未使用の shadow の更新速度 (lerp) を倍化し信頼度で動的制御／trust_coeff の活用
 optimizer 指定の際に True / False で trust を切替できる(現在 True)
 ノルムベース学習率調整機構を追加 (max_norm=1.0 / min_lr=1e-6)／max_norm=0.0で無効化
@@ -50,7 +50,7 @@ class EmoLynx(Optimizer):
     # 感情スカラーの慣性(過敏性調節／安定安全性を確保し高学習率による最大最速進行を目指す)
     def _compute_scalar(self, ema, prev_scalar=0.0):
         diff = ema['short'] - ema['long']
-        return math.tanh(5 * abs(prev_scalar) * diff)
+        return math.tanh(5 * diff / (1.0 + abs(prev_scalar)))
 
     # (重要)現在は shadow-effect を参考に得た動的フィルタ効果の近似により use_shadow=False です
     # よって挙動や結果は shadow 考慮外 で成立します－コード確認時はこの shadow を無視してください
@@ -143,7 +143,7 @@ class EmoLynx(Optimizer):
 
         # Early Stop判断(静けさの合図)
         # 32ステップ分のスカラー値の静かな条件を満たした時"フラグ" should_stop = True になるだけ
-        if len(self.state['scalar_hist']) >= 32:
+        if len(hist) >= 32:
             avg_abs = sum(abs(s) for s in hist) / len(hist)
             mean = sum(hist) / len(hist)
             std = sum((s - mean)**2 for s in hist) / len(hist)
