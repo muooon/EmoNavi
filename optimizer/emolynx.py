@@ -48,7 +48,7 @@ class EmoLynx(Optimizer):
 
     # 感情スカラー値生成(EMA差分、滑らかな非線形スカラー、tanh 5 * diff で鋭敏さ強調)
     # 感情スカラーの慣性(過敏性調節／安定安全性を確保し高学習率による最大最速進行を目指す)
-    def _compute_scalar(self, ema, prev_scalar=0.0):
+    def _compute_scalar(self, ema, prev_scalar):
         diff = ema['short'] - ema['long']
         return math.tanh(5 * diff / (1.0 + abs(prev_scalar)))
 
@@ -94,9 +94,9 @@ class EmoLynx(Optimizer):
 
                 # EMA更新・スカラー生成(EMA差分からスカラーを生成しスパイク比率を決定)
                 ema = self._update_ema(state, loss_val)
-                prev_scalar = self.state[p].get('scalar', 0.0)
+                prev_scalar = self.state.get('scalar', 0.0)
                 scalar = self._compute_scalar(ema, prev_scalar)
-                state['scalar'] = scalar # 更新して保存
+                self.state['scalar'] = scalar # 更新して保存
                 ratio = self._decide_ratio(scalar)
                 trust_coeff = 1.0 - abs(scalar) * abs(scalar) if self.use_trust else 1.0
 
