@@ -1,6 +1,6 @@
 # EmoNAVI / Emo-Family (1stGen-v4.0)  
 
-EmoNavi(v4.0)  
+EmoNavi (v4.0)  
 ３つの新機能と１つの改良を行いました(これにより初心者から熟練者まで幅広くどなたでもご使用頂けます)  
 We have added three new features and made one improvement (making it accessible to everyone from beginners to experts).  
 
@@ -194,6 +194,10 @@ For updates prior to this, please refer to the v3.0 repository update history.
 </details>
 
 ---
+
+emo系 は 生物的反応で進化し続けます  
+感覚神経系(multi-EMA)、内分泌系(tanh5(scalar))、生存本能･防御反応(trust_coeff、max_norm)、免疫系(shadow-system)、これらの統合により中枢神経系と自律神経系を形成し、高度な判断と決定を行うという自然的に自律した機構として存在します  
+
 ---
 
 <details>
@@ -285,9 +289,10 @@ https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt
 
 ---
 
-EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By building each sensor around an “emotion mechanism” that differentiates multi-EMA and scalarizes it via nonlinear transformation (tanh), we enhanced overall learning stability and ensured accuracy. This performs an autonomous cycle of “observation, judgment, decision, action, memory, and reflection,” akin to a biological central nervous system. Please take a look at the paper.
+EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By building each sensor around an “emotion mechanism” that differentiates multi-EMA and scalarizes it via nonlinear transformation (tanh), we enhanced overall learning stability and ensured accuracy. This performs an autonomous cycle of “observation, judgment, decision, action, memory, and reflection,” akin to a biological central nervous system. Please take a look at the paper.(Starting with v4.0, stabilization is enhanced by incorporating a gradient norm control system as a survival-instinctive defense response within the autonomic nervous system.)  
 
 ---
 
-EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました。これは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います。論文をぜひご覧ください。
+EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います論文をぜひご覧ください(v4.0からは生存本能的な防御反応として勾配ノルム制御という自律神経系を持つことで安定化を強化しています)  
+
 
