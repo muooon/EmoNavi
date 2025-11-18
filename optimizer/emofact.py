@@ -19,7 +19,7 @@ optimizer 指定の際に True / False で trust を切替できる(現在 True)
 class EmoFact(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01,
-                 use_shadow: bool = False, use_trust: bool = True, max_norm=0.0, 
+                 use_shadow: bool = False, use_trust: bool = True, max_norm=1.0, 
                  min_lr=1e-6, writer=None):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
