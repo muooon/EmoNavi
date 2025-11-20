@@ -1,11 +1,11 @@
 # EmoNAVI / Emo-Family (1stGen-v5.0)  
 
-EmoNavi (v5.0) コード整理と修正   
-v4.0で３つの新機能と１つの改良を行いました(これにより初心者から熟練者まで幅広くどなたでもご使用頂けます)  
+EmoNavi (v5.0) コード整理と修正  
+v3.0に３つの新機能と１つの改良を行いました(これにより初心者から熟練者まで幅広くどなたでもご使用頂けます)  
 We have added three new features and made one improvement (making it accessible to everyone from beginners to experts).  
 
-お詫び：v4.0 では短期修正をしご迷惑ご心配をかけましたことお詫びします：(バグ等は対応します)  
-Apology: We apologize for the inconvenience and concern caused by the short-term fixes in v4.0. (We will address bugs and other issues.)  
+お詫び：v4.0 では短期修正をしご迷惑ご心配をかけましたことお詫びします  
+Apology: We apologize for the inconvenience and concern caused by the short-term fixes in v4.0.  
 
 <div align="center">
   <img width="500" alt="emo-system001" src="https://github.com/user-attachments/assets/7e7160a9-046a-4212-bcde-d338c26ed846" />
@@ -40,11 +40,11 @@ emo系 v4.0 (スタンダードモデル) の特徴等
 
 emo-series v4.0 (Standard-models) Features  
 
-| Name      | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
-|-----------|----------|------------|--------------|--------------------------------------------------|  
-| emonavi   | ◎        | △          | ◎            | The 1st born｜accurate｜Adam-type         |  
-| emofact   | △        | ◎          | ◎            | The 2nd born｜Lightweight｜Adafactor-type |  
-| emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-type |  
+| Name    | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
+|---------|----------|------------|--------------|--------------------------------------------------|  
+| emonavi | ◎        | △          | ◎            | 1st born｜accurate｜Adam-type         |  
+| emofact | △        | ◎          | ◎            | 2nd born｜Lightweight｜Adafactor-type |  
+| emolynx | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence | Lion-type |  
 
 EmoLynx is as lightweight as Adafactor and as accurate as Adam (with sign, gradient, and higher-order moments).  
 
@@ -100,14 +100,14 @@ It approximates the core effect of capturing changes in gradient distribution's 
 勾配ノルム制御 max_norm=1.0(デフォルト値) です 0.0で無効化します(通常は1.0でご使用ください)  
 デフォルト値は安定性優先です(破壊的更新を抑制) 誰でも安心して使えるようになりました(設定の失敗しづらいです)  
 この値を変化させると様々な効果を得られます(最終盤の仕上げのみ追加学習させるなど学習状況を柔軟に設定できます)  
-※ 新機能の 感情フィードバック や trust_coeff は自動です、より安定した更新を効果的に行います  
+※ 新機能の 勾配ノルム制限による最低学習率の動的制御 や trust_coeff は自動です、より安定した更新を効果的に行います  
 ※ use_trust=True(デフォルト)です、無効化は False に設定してください  
 ※ 高値の学習率はある程度まで許容しますが極度の高値は学習を破綻させるのでおやめください  
 【NewFeature】：We will explain three new features.  
 Gradient Norm Control max_norm=1.0 (default). Setting to 0.0 disables the feature (use 1.0 normally).  
 The default value prioritizes stability (suppresses disruptive updates). Now anyone can use it with confidence (less prone to configuration errors).  
 Adjusting this value yields various effects. (e.g., enabling additional learning only for endgame refinement, allowing flexible learning control)  
-※ The new Emotion Feedback and trust_coeff features operate automatically, enabling more stable and effective updates  
+※ The new Dynamic Control of Minimum Learning Rate via Gradient Norm Constraints and trust_coeff features operate automatically, enabling more stable and effective updates  
 ※ use_trust=True (default). To disable the feature, set it to False.  
 ※ While moderately high learning rates are tolerated, extremely high values will cause learning failure and should be avoided  
 
@@ -195,8 +195,8 @@ The high efficiency and integration realized in this single package prioritize s
 
 <summary> 更新履歴 / History </summary>  
 
-|★| EmoNavi、Fact、Lynx、v5.0 (251120) 感情フィードバックを削除等のコード整理を実施し効率化をしました  
-|★| EmoNavi, Fact, Lynx, v5.0 (251120) We optimized efficiency by implementing code refactoring, such as removing emotional feedback.  
+|★| EmoNavi、Fact、Lynx、v5.0 (251120) 感情フィードバック削除等のコード整理を実施し効率化をしました、同時に 勾配ノルム制限による最低学習率の動的制御 を新機能で加えました  
+|★| EmoNavi, Fact, Lynx, v5.0 (251120) We optimized efficiency by implementing code refactoring, such as removing emotional feedback. We have also added a new feature for dynamic control of the minimum learning rate based on gradient norm constraints.    
 
 
 |★| EmoNavi、Fact、Lynx、v4.0 (251105) 【新機能】：感情フィードバック、明示的な信頼度(trust-coeff)、勾配ノルム制御 【改良】：shadow更新比率を改良しました  
