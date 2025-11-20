@@ -24,9 +24,9 @@ emo系 v4.0 (スタンダードモデル) の特徴等
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
-| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確です｜Adam型です       |  
-| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量です｜Adafactor型です |  
-| emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion型です         |  
+| emonavi   | ◎      | △          | ◎      | 最初に誕生｜正確｜Adam型       |  
+| emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量｜Adafactor型 |  
+| emolynx   | ◎      | ◎          | ◎      | 軽量＆正確の両立に成功｜Lion型         |  
 
 補足：(EmoLynx は、Adafactor並みに軽量で、Adam並みに正確です(符号＋勾配＋高次moment))  
 
@@ -198,10 +198,12 @@ For updates prior to this, please refer to the v3.0 repository update history.
 
 </details>
 
----
+---  
+
 emo系 は 生物的反応で進化し続けます 
 感覚神経系(multi-EMA)、内分泌系(tanh5(scalar))、生存本能･防御反応(trust_coeff、max_norm)、免疫系(shadow-system)、これらの統合により中枢神経系と自律神経系を形成し、高度な判断と決定を行うという自然的に自律した機構として存在します  
----
+
+---  
 
 <details>
 
