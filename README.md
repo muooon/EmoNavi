@@ -197,6 +197,7 @@ The high efficiency and integration realized in this single package prioritize s
 |★| EmoNavi、Fact、Lynx、v5.0 (251120) 感情フィードバックを削除等のコード整理を実施し効率化をしました  
 |★| EmoNavi, Fact, Lynx, v5.0 (251120) We optimized efficiency by implementing code refactoring, such as removing emotional feedback.  
 
+
 |★| EmoNavi、Fact、Lynx、v4.0 (251105) 【新機能】：感情フィードバック、明示的な信頼度(trust-coeff)、勾配ノルム制御 【改良】：shadow更新比率を改良しました  
 |★| EmoNavi, Fact, Lynx, v4.0 (251105) 【New Features】: Emotion Feedback, Explicit Trust Coefficient (trust-coeff), Gradient Norm Control 【Improvements】: Shadow-system update ratio 
 
