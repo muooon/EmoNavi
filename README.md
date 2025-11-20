@@ -111,11 +111,13 @@ Adjusting this value yields various effects. (e.g., enabling additional learning
 ※ use_trust=True (default). To disable the feature, set it to False.  
 ※ While moderately high learning rates are tolerated, extremely high values will cause learning failure and should be avoided  
 
----
+---  
 
 ### EmoNavi 主な特徴 / Main Features of EmoNavi  
 
 ---
+
+<details>
 
 過学習や発散を抑制、自己修復的機能をもちます  
 学習率やスケジューラも自律調整、モデル自身で判断します  
@@ -156,6 +158,8 @@ The high efficiency and integration realized in this single package prioritize s
 ※ LoRA-based techniques eliminate noise but may sometimes lose fine-grained data (or subtle details).  
 ※ Emo-based techniques detect and correct existing noise without generating new noise, thereby preserving fine-grained data.  
 ※ Quantization compensation offers flexible adaptability even in lower-precision environments expected to be commercialized (or practical) in the future.  
+
+</details>
 
 ---
 
