@@ -18,7 +18,7 @@ optimizer 指定の際に True / False で trust を切替できる(現在 True)
 勾配ノルム最小学習率に感情スカラーを乗算し動的下限値に変更(感情大更新小へ)
 """
 
-class EmoNavi50(Optimizer):
+class EmoNavi(Optimizer):
     # クラス定義＆初期化
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01,
                  use_shadow: bool = False, use_trust: bool = True, max_norm=1.0, 

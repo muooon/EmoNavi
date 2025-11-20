@@ -23,7 +23,7 @@ optimizer 指定の際に True / False で trust を切替できる(現在 True)
 def exists(val):
     return val is not None
 
-class EmoLynx50(Optimizer):
+class EmoLynx(Optimizer):
     # クラス定義＆初期化 lynx用ベータ･互換性の追加(lynx用beta1･beta2)
     def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, betas=(0.9, 0.99), 
                  eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False, use_shadow: bool = False, use_trust: bool = True, max_norm=1.0, 
