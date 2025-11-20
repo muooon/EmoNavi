@@ -42,8 +42,8 @@ emo-series v4.0 (Standard-models) Features
 
 | Name      | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
 |-----------|----------|------------|--------------|--------------------------------------------------|  
-| emonavi   | ◎        | △          | ◎            | The first one born｜accurate｜Adam-type         |  
-| emofact   | △        | ◎          | ◎            | The second one born｜Lightweight｜Adafactor-type |  
+| emonavi   | ◎        | △          | ◎            | The 1st born｜accurate｜Adam-type         |  
+| emofact   | △        | ◎          | ◎            | The 2nd born｜Lightweight｜Adafactor-type |  
 | emolynx   | ◎        | ◎          | ◎            | Accurate and Lightweight Convergence｜Lion-type |  
 
 EmoLynx is as lightweight as Adafactor and as accurate as Adam (with sign, gradient, and higher-order moments).  
@@ -163,6 +163,10 @@ The high efficiency and integration realized in this single package prioritize s
 
 ---
 
+<details>
+
+<summary> 旧説明 Old Explanation </summary>  
+
 > ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
 > ｢挑戦も留まることも冒険も休息も自ら選びそれをすべて経験として記憶する｣  
 > ｢でも過去の記憶は引きずらない、いつも始めるときは"新しいわたし"だから｣  
@@ -182,6 +186,8 @@ The high efficiency and integration realized in this single package prioritize s
 [Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(ENG).md) 
 [Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(JPN).md) 
 [Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/raw/main/emonavi-Gemini-analysis(2)(JPN).txt)  
+
+</details>
 
 ---
 
