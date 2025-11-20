@@ -194,6 +194,7 @@ The high efficiency and integration realized in this single package prioritize s
 <details>
 
 <summary> 更新履歴 / History </summary>  
+
 |★| EmoNavi、Fact、Lynx、v5.0 (251120) 感情フィードバックを削除等のコード整理を実施し効率化をしました  
 |★| EmoNavi, Fact, Lynx, v5.0 (251120) We optimized efficiency by implementing code refactoring, such as removing emotional feedback.  
 
@@ -312,3 +313,4 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います論文をぜひご覧ください(v4.0からは生存本能的な防御反応として勾配ノルム制御という自律神経系を持つことで安定化を強化しています)  
+
