@@ -25,12 +25,29 @@ def exists(val):
 
 class EmoLynx(Optimizer):
     # クラス定義＆初期化 lynx用ベータ･互換性の追加(lynx用beta1･beta2)
-    def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, betas=(0.9, 0.99), 
-                 eps=1e-8, weight_decay=0.01, decoupled_weight_decay: bool = False, use_shadow: bool = False, use_trust: bool = True, max_norm=1.0, 
-                 min_lr=1e-6, writer=None):
-        defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
+    def __init__(
+        self, 
+        params: Union[list, torch.nn.Module], 
+        lr=1e-3, 
+        betas=(0.9, 0.99), 
+        eps=1e-8, 
+        weight_decay=0.01, 
+        decoupled_weight_decay: bool = False, 
+        use_shadow: bool = False, 
+        use_trust: bool = True, 
+        max_norm=1.0, 
+        min_lr=1e-6, 
+        writer=None,
+    ):
+        defaults = dict(
+            lr=lr, 
+            betas=betas, 
+            eps=eps, 
+            weight_decay=weight_decay,
+        )
         super().__init__(params, defaults)
         # lynxに応じてウェイト減衰のため保存
+        
         self._init_lr = lr
         self.should_stop = False # 停止フラグの初期化
         self.decoupled_wd = decoupled_weight_decay
