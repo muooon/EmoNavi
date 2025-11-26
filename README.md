@@ -13,6 +13,8 @@ This version implements the first learning acceleration feature in the emo serie
 I believe it has evolved through other revisions and fixes.  
 (I hope it meets your expectations.)  
 
+以下、v3.1 動作状況 / v3.1 Operation Status
+![alt text](SS_2025-11-26_TensorBoard000.png)
 
 ### License Apache License 2.0 — see LICENSE for details.  
 ### ライセンス Apache License 2.0 — 詳細は LICENSE をご覧ください  
