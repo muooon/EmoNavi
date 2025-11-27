@@ -44,7 +44,7 @@ emo-series v3.1 (Standard-models) Features
 |---------|----------|------------|--------------|--------------------------------------------------|  
 | emonavi | ◎        | △          | ◎            | 1st born｜accurate｜Adam-type         |  
 | emofact | △        | ◎          | ◎            | 2nd born｜Lightweight｜Adafactor-type |  
-| emolynx | 〇        | 〇          | ◎            | Accurate and Lightweight | Lion-type |  
+| emolynx | 〇        | 〇          | ◎            | Accurate and Lightweight｜Lion-type |  
 
 EmoLynx is as lightweight as EmoFact and as accurate as EmoNavi.  
 
@@ -60,6 +60,15 @@ Fully autonomous, enabling flexible learning configurations through layering, re
 
 ### 学習の情報、そのすべては Loss値 に集約されている  
 #### Learning Information, Everything is consolidated into the Loss value.  
+
+##### Loss値はモデルのshadowである、  
+##### Loss値にすべてが集約されている、  
+##### 学習状況もモデル状況もLoss値が教えてくれる、  
+##### Lossを感じろ、 Lossこそオリジン(原点)だ、  
+###### The loss value is the model's shadow.  
+###### The loss value embodies everything.  
+###### The loss value tells you both the learning status and the model's condition.  
+###### Feel the loss. Loss is the origin.  
 
 <details>
  
@@ -291,6 +300,5 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
-
 
 
