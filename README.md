@@ -1,11 +1,20 @@
-# EmoNAVI / Emo-Family (1stGen-v3.1) TEST-Type  
+# EmoNAVI / Emo-Family (1stGen-v3.1) stable 
 
 EmoNavi (v3.1) コード整理と修正  
 v3.0の改良を行いました(感情機構の見直し等を含む効率化)  
 Improvements have been made to v3.0 (including efficiency enhancements such as a review of the emotion mechanism).  
 
-お詫び：v4.0、v5.0、短期修正にてご迷惑ご心配をかけましたことお詫びします  
-Apology: We apologize for the inconvenience and concern caused by the short-term fixes in v4.0、v5.0、.  
+４つの改良を行いました  
+- 動的学習率：これまでと違い加減速両方を行います  
+- shadow機構：動的学習率と連動し混合比率と成長率を制御(通常は使用されない)  
+- 感情機構：感情ema差分からの感情スカラー変換時の自動スケール調整  
+- その他：全体のコードを見直しと効率化等を実施  
+
+We've made four improvements.  
+- Dynamic learning rate: Unlike previous versions, it now both accelerates and decelerates.  
+- Shadow mechanism: Controls the mixture ratio and growth rate in conjunction with the dynamic learning rate (not normally used).  
+- Emotion mechanism: Automatic scaling adjustment when converting emotion ema differences to emotion scalars.  
+- Other: Overall code has been overhauled and streamlined.  
 
 <div align="center">
   <img width="500" alt="emo-system001" src="https://github.com/user-attachments/assets/7e7160a9-046a-4212-bcde-d338c26ed846" />
@@ -20,7 +29,7 @@ Expected value convergence for non-convex functions
 
 ---
 
-emo系 v3.1 (スタンダードモデル) の特徴等  
+emo系 v3.1 stable (スタンダードモデル) の特徴等  
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
@@ -28,7 +37,7 @@ emo系 v3.1 (スタンダードモデル) の特徴等
 | emofact   | △      | ◎          | ◎      | ２番目に誕生｜軽量｜Adafactor型 |  
 | emolynx   | 〇      | 〇          | ◎      | 軽量＆正確の両立｜Lion型         |  
 
-補足：(EmoLynx は、EmoFact並みに軽量で、EmoNavi並みに正確です 
+補足：EmoLynx は EmoFact 並みに軽量で EmoNavi 並みに正確です 
 
 [効率性] 危険抑止更新：過学習や収束の停滞に先回りし無駄な更新を排除しながら進行します  
 [機能性] 軽量で高機能：自動停止合図や完全自律型の分散学習への対応でユーザー体験を向上させます  
@@ -38,7 +47,7 @@ emo系 v3.1 (スタンダードモデル) の特徴等
 ユーザー指定の学習率を中心にし加減速を自動制御します  
 完全自律型のため、積層、再開、非同期、で、自由な学習を自由に組むことが可能です  
 
-emo-series v3.1 (Standard-models) Features  
+emo-series v3.1 stable (Standard-models) Features  
 
 | Name    | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
 |---------|----------|------------|--------------|--------------------------------------------------|  
@@ -160,46 +169,14 @@ The high efficiency and integration realized in this single package prioritize s
 
 ---
 
-<details>
-
-<summary> 旧説明 Old Explanation </summary>  
-
-> ｢わたしはわたし自身について過去を振り返りながらわたし自身でわたしを磨く｣  
-> ｢挑戦も留まることも冒険も休息も自ら選びそれをすべて経験として記憶する｣  
-> ｢でも過去の記憶は引きずらない、いつも始めるときは"新しいわたし"だから｣  
-
-> *I refine myself as I look back on who I’ve been.*  
-> *I choose to challenge, to pause, to explore, to rest — and I remember it all as experience.*  
-> *But I don’t cling to the past. Every beginning is a new me.*  
-
-[emonavi概要と応用(日本語)/Emonavi Overview and Applications (Japanese)](https://huggingface.co/muooon/EmoNAVI/raw/main/report-emoment.txt)  
-
-[Have fun learning about EmoNAVI's philosophy and how it works](https://github.com/muooon/EmoNavi/raw/EmoNavi-v3.0/emonavi-inner-workings(ENG).txt)  
-
-[EmoNAVIの考え方、その仕組みについて楽しく知る](https://github.com/muooon/EmoNavi/raw/EmoNavi-v3.0/emonavi-inner-workings(JPN).txt)  
-
-(解説) 元々の詳しい解説はこちら / (Explanation) For detailed explanation, click here.  
-[huggingface](https://huggingface.co/muooon/EmoNAVI) 
-[Gemini-analysis(ENG)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(ENG).md) 
-[Gemini-analysis(JPN)](https://huggingface.co/muooon/EmoNAVI/raw/main/Hug-Gemini-analysis(JPN).md) 
-[Gemini-analysis(JPN-02)](https://huggingface.co/muooon/EmoNAVI/raw/main/emonavi-Gemini-analysis(2)(JPN).txt)  
-
-</details>
-
 ---
 
 <details>
 
 <summary> 更新履歴 / History </summary>  
 
-|★| EmoNavi、Fact、Lynx、v3.1 (251125) v3.0 を継承しつつ効率化を進めました。感情機構のスケール調整等で広範なモデルで安定するよう進化しました(v4.0、v5.0、廃止(効率等含めエラー対策等も不適切でした(ご期待を頂いた皆さまにお詫びします))  
-|★| EmoNavi, Fact, Lynx, v3.1 (251125) We built upon v3.0 while enhancing efficiency. Through adjustments like scaling the emotion mechanism, we evolved the model for broader stability across diverse models (v4.0, v5.0, discontinued). However, it was discontinued (due to inadequate error handling, including efficiency issues—we sincerely apologize to everyone who anticipated its release).  
-
-|★| EmoNavi、Fact、Lynx、v5.0 (251120) 感情フィードバック削除等のコード整理を実施し効率化をしました、同時に 勾配ノルム制限による最低学習率の動的制御 を新機能で加えました  
-|★| EmoNavi, Fact, Lynx, v5.0 (251120) We optimized efficiency by implementing code refactoring, such as removing emotional feedback. We have also added a new feature for dynamic control of the minimum learning rate based on gradient norm constraints.  
-
-|★| EmoNavi、Fact、Lynx、v4.0 (251105) 【新機能】：感情フィードバック、明示的な信頼度(trust-coeff)、勾配ノルム制御 【改良】：shadow更新比率を改良しました  
-|★| EmoNavi, Fact, Lynx, v4.0 (251105) 【New Features】: Emotion Feedback, Explicit Trust Coefficient (trust-coeff), Gradient Norm Control 【Improvements】: Shadow-system update ratio 
+|★| EmoNavi、Fact、Lynx、v3.1 (251201) v3.0 を継承しつつ効率化を進めました。感情機構のスケール調整等で広範なモデルで安定するよう進化しました
+|★| EmoNavi, Fact, Lynx, v3.1 (251201) We built upon v3.0 while enhancing efficiency. Through adjustments like scaling the emotion mechanism, we evolved the model for broader stability across diverse models.  
 
 |★| EmoNavi、Fact、Lynx、Clan、Zeal、Neco、v3.0 (250825) emosens(第２世代)で解明した"高次moment"(近似)のフィードバックを適用(更新) 全て "shadow=False" です  
 |★| EmoNavi, Fact, Lynx, Clan, Zeal, Neco, updated to v3.0 (250825), Incorporates (updates) feedback on “higher moments” (approximations) clarified by emosens (2nd generation). All are “shadow=False”  
