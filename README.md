@@ -169,6 +169,11 @@ The high efficiency and integration realized in this single package prioritize s
 
 ---
 
+## 学習係数の変化 Change in learning coefficient  
+<img width="1000" height="700" alt="学習率グラフ001" src="https://github.com/user-attachments/assets/d730441b-3b0f-4ed2-9e8e-3b3d754d612d" />
+このように 動的学習率 として機能します ／ coeff値：1.0 付近は無介入のため更新式の純粋な値になります <br>   
+It functions as a dynamic learning rate. ／ coeff value: Around 1.0 represents the pure value of the update formula due to no intervention. <br> 
+
 ---
 
 <details>
@@ -277,6 +282,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
