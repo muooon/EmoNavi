@@ -1,5 +1,9 @@
 # EmoNAVI / Emo-Family (1stGen-v3.1) stable 
 
+### 最新版 v3.3 Dev にて試験公開中(完全自動学習率)  
+#### Currently in trial release with the latest v3.3 Dev (Fully Automatic Learning Rate)
+
+---
 EmoNavi (v3.1) コード整理と修正  
 v3.0の改良を行いました(感情機構の見直し等を含む効率化)  
 Improvements have been made to v3.0 (including efficiency enhancements such as a review of the emotion mechanism).  
@@ -282,6 +286,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
