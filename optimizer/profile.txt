@@ -1,0 +1,62 @@
+AMP-compatible ／ AMP対応版
+
+emonavi 及び emoファミリーについて紹介します
+emonavi は、RefAdamWmini-ScheduleFree を作成し機能向上を試行錯誤するうちにできた感情機構を持つオプティマイザです
+emonavi is an optimizer equipped with an emotional mechanism, 
+developed through trial and error while creating and enhancing the functionality of RefAdamWmini-ScheduleFree.
+https://github.com/muooon/ref-adamw-mini-ScheduleFree
+
+RefAdamWmini は、ema、scaler、shadow、を持ちますが限定的な活用でした
+これを改善していくなかでたどり着いたのが感情機構という新しい仕組みです
+以下、emonavi から順に紹介します
+RefAdamWmini incorporated EMA, scaler, and shadow, but their application was limited. 
+Through our efforts to enhance this, we developed a novel mechanism: the emotional mechanism. 
+We'll introduce them in order, starting with emonavi.
+
+三姉妹 ／ The Three Sisters
+emonavi：長女／Adam参考 The eldest daughter, referencing Adam.
+emofact：次女／Adafactor参考 The second daughter, referencing Adafactor.
+emolynx：三女／Lion･Tiger参考 The youngest daughter, referencing Lion and Tiger.
+
+---
+(v1.0)AMP対応完了(250725) p.data -> p 修正済み／低精度量子化への基本対応／低精度補償は別
+(v2.0)shadow-system 微調整／３段階補正を連続的に滑らかに／派生版では以下の切替も可能
+optimizer 指定の際に True / False で shadow を切替できる(現在 False)
+(v3.0)emosens shadow-effect v1.0 反映した動的学習率と shadow-system 切替をデフォルト化
+(v3.1)通常未使用の shadow 更新速度 (lerp) を倍化し信頼度で動的制御／coeff 活用(急変･微動)
+動的学習率や感情スカラー値など TensorBoard 連携可 (現在 writer=None)／外部設定必要
+全体の効率化や可読性を向上(emaやスカラーの多重処理を省く等、動的学習率のスケールや状態の見直し等、含む)
+(v3.3)トラウマ的反応や慣れによる鈍化で安定性向上(ema-medium 安定と急変を信頼度で感知)
+完全自動学習率／目標減少率制御方式を導入／感情機構との相乗効果で急変時も鎮静化し安定進行
+---
+
+EmoNavi Usage 使い方
+
+|||オプション指定方法||| tool側の引数設定に合わせてください
+●shadow オフ(False にする)：  
+use_shadow=False  
+●LR Max or Min (1e-3, 1e-8)：  
+lr_max=1e-3, lr_min=1e-8  
+●eps(0除算防止)：  
+eps=1e-8  
+●動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：  
+writer=writer  
+外部ツール(TensorBoard等)で値を把握したい場合は Optimizer 初期化時に SummaryWriter を渡してください  
+writer = SummaryWriter(log_dir="./runs/emonavi")  
+optimizer = EmoNavi(model.parameters(), writer=writer)  
+tensorboard --logdir=./runs/emonavi  
+
+|||Usage examples|||  
+●Shadow off:  
+use_shadow=False  
+●LR Max or Min (1e-3, 1e-8)：  
+lr_max=1e-3, lr_min=1e-8  
+●eps(Division by zero prevention)：  
+eps=1e-8  
+●Monitor values with external tools (TensorBoard):  
+writer=writer  
+writer = SummaryWriter(log_dir="./runs/emonavi")  
+optimizer = EmoNavi(model.parameters(), writer=writer)  
+tensorboard --logdir=./runs/emonavi  
+
+
