@@ -3,7 +3,7 @@
 ### EmoNavi 完成版 (v3.3) The Last Piece  
 
 EmoNavi (v3.3) 完全自動学習率  
-v3.1を進化させました(完全自動学習率を"省VRAM･省負荷"で) これで emo系 は完成です  
+v3.1を進化させました(完全自動学習率を"省VRAM･低負荷"で) これで emo系 は完成です  
 EmoNavi (v3.3) Fully Automatic Learning Rate  
 Evolved from v3.1 (with fully automatic learning rate, saving VRAM and reducing load)  
 This completes the emo series.  
@@ -283,5 +283,6 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
