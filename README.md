@@ -1,24 +1,31 @@
-# EmoNAVI / Emo-Family (1stGen-v3.3)  
+# EmoNAVI / Emo-Family (1stGen-v3.6)  
 
-### EmoNavi 完成版 (v3.3) The Last Piece  
+### EmoNavi 最終版 (v3.6) complete  
 
-EmoNavi (v3.3) 完全自動学習率  
-v3.1を進化させました(完全自動学習率を"省VRAM･低負荷"で) これで emo系 は完成です  
-EmoNavi (v3.3) Fully Automatic Learning Rate  
-Evolved from v3.1 (with fully automatic learning rate, saving VRAM and reducing load)  
-This completes the emo series.  
+EmoNavi (v3.6) emoDrive 機能(半自動学習率)  
+v3.1を進化させました(高学習率を自動適応"省VRAM･低負荷"で) これで emo系 は開発終了  
+EmoNavi (v3.6) emoDrive Function (Hybrid learning rate)  
+Evolved v3.1 (with automatic high learning rate adaptation for “VRAM-saving, low-load” performance). With this, development of the emo series is complete.  
 
 updateの内容  
-- 動的学習率：完全自動学習率を手軽に気軽に誰でも  
-- 感情機構：感情ema-medium で安定と急変を信頼度で感知  
+- 動的高値学習率：高速化と精緻化を同時に達成  
+- emoDrive：lossの高ぶりもノイズを低減するチャンスにします  
 
 Update Details  
-- Dynamic Learning Rate: Fully automatic learning rate made simple and accessible for anyone  
-- Emotion Mechanism: Detects stability and sudden changes in emotion using ema-medium with confidence levels  
+- Dynamic High-Value Learning Rate： Achieving Acceleration and Refinement Simultaneously   
+- emoDrive： We turn even the surge of loss into an opportunity to reduce noise.  
 
 <div align="center">
   <img width="500" alt="emo-system001" src="https://github.com/user-attachments/assets/7e7160a9-046a-4212-bcde-d338c26ed846" />
 </div>
+
+
+EmoNavi 完成です。以後は EmoSens にて新機能を探りますが、完全自動学習率も目標のひとつに据えつつ、より堅実な学習を最優先にし追求していきます、引き続きよろしくお願いします  
+EmoNavi is now complete. Moving forward, we will explore new features in EmoSens. While achieving a fully automated learning rate remains one of our goals, we will prioritize and pursue more robust learning above all else. We appreciate your continued support.  
+
+EmoNavi：1e-4、EmoFact：2e-4、EmoLynx：8e-5、あたりを初期LRの推奨値とします、あなたのタスクに合わせて増減してください  
+EmoNavi：1e-4, EmoFact：2e-4, EmoLynx：8e-5, These are recommended initial LR values. Adjust them up or down according to your task.  
+
 
 Mathematical Explanation Here (paper)  
 非凸関数に対する期待値収束(フローマッチングへの適応なども保証します)  
@@ -29,7 +36,7 @@ Expected value convergence for non-convex functions
 
 ---
 
-emo系 v3.3 test (スタンダードモデル) の特徴等  
+emo系 v3.6 test (スタンダードモデル) の特徴等  
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
@@ -47,7 +54,7 @@ emo系 v3.3 test (スタンダードモデル) の特徴等
 ユーザー指定の学習率を中心にし加減速を自動制御します  
 完全自律型のため、積層、再開、非同期、で、自由な学習を自由に組むことが可能です  
 
-emo-series v3.3 test (Standard-models) Features  
+emo-series v3.6 test (Standard-models) Features  
 
 | Name    | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
 |---------|----------|------------|--------------|--------------------------------------------------|  
@@ -180,8 +187,11 @@ It functions as a dynamic learning rate. ／ coeff value: Around 1.0 represents 
 
 <summary> 更新履歴 / History </summary>  
 
+|★| EmoNavi、Fact、Lynx、v3.6 (251220) v3.1 を継承し高値自動学習率を実現しました(追加テンソルなし)、emoDrive 機構により劇的な進化を遂げました、開発終了とします  
+|★| EmoNavi, Fact, Lynx, v3.6 (251220) Inherits v3.1 and achieves high-value automatic learning rate (no additional tensors), has undergone dramatic evolution through the emoDrive mechanism, development is now complete.  
+
 |★| EmoNavi、Fact、Lynx、v3.3 (251204) v3.1 を継承し完全自動学習率を実現しました(追加テンソルなし)、感情機構の調整等でさらに安定するよう進化しました  
-|★| EmoNavi, Fact, Lynx, v3.3 (251201) Inherits v3.1 and achieves fully automatic learning rate adjustment (without additional tensors), further evolving for greater stability through adjustments to the sentiment mechanism and other enhancements.  
+|★| EmoNavi, Fact, Lynx, v3.3 (251204) Inherits v3.1 and achieves fully automatic learning rate adjustment (without additional tensors), further evolving for greater stability through adjustments to the sentiment mechanism and other enhancements.  
 
 |★| EmoNavi、Fact、Lynx、v3.1 (251201) v3.0 を継承しつつ効率化を進めました。感情機構のスケール調整等で広範なモデルで安定するよう進化しました  
 |★| EmoNavi, Fact, Lynx, v3.1 (251201) We built upon v3.0 while enhancing efficiency. Through adjustments like scaling the emotion mechanism, we evolved the model for broader stability across diverse models.  
@@ -203,14 +213,12 @@ emo系 は 生物的反応で進化し続けます
 
 <details>
 
-<summary>EmoNavi v3.3 オプション指定方法<br>
-EmoNavi v3.3 Option Settings Guide</summary>  
+<summary>EmoNavi v3.6 オプション指定方法<br>
+EmoNavi v3.6 Option Settings Guide</summary>  
 
 |||オプション指定方法|||  
 ●shadow オフ(False にする)：  
 use_shadow=False  
-●LR Max or Min (1e-3, 1e-8)：  
-lr_max=1e-3, lr_min=1e-8  
 ●eps(0除算防止)：  
 eps=1e-8  
 ●動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：  
@@ -223,8 +231,6 @@ tensorboard --logdir=./runs/emonavi
 |||Usage examples|||  
 ●Shadow off:  
 use_shadow=False  
-●LR Max or Min (1e-3, 1e-8)：  
-lr_max=1e-3, lr_min=1e-8  
 ●eps(Division by zero prevention)：  
 eps=1e-8  
 ●Monitor values with external tools (TensorBoard):  
@@ -283,6 +289,5 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
-
 
 

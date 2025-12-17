@@ -5,7 +5,7 @@ from typing import Tuple, Callable, Union
 from collections import deque
 
 """
-EmoLynx v3.3 (251202) shadow-system v3.0 -effect NoN -moment v3.0
+EmoLynx v3.6.1 (251220) shadow-system v3.1 -moment v3.1 emoDrive ｖ3.6
 (v1.0)AMP対応完了(250725) p.data -> p 修正済み／低精度量子化への基本対応／低精度補償は別
 (v2.0)shadow-system 微調整／３段階補正を連続的に滑らかに／派生版では以下の切替も可能
 optimizer 指定の際に True / False で shadow を切替できる(現在 False)
@@ -13,8 +13,7 @@ optimizer 指定の際に True / False で shadow を切替できる(現在 Fals
 (v3.1)通常未使用の shadow 更新速度 (lerp) を倍化し信頼度で動的制御／coeff 活用(急変･微動)
 動的学習率や感情スカラー値など TensorBoard 連携可 (現在 writer=None)／外部設定必要
 全体の効率化や可読性を向上(emaやスカラーの多重処理を省く等、動的学習率のスケールや状態の見直し等、含む)
-(v3.3)トラウマ的反応や慣れによる鈍化で安定性向上(ema-medium 安定と急変を信頼度で感知)
-完全自動学習率／目標減少率制御方式を導入／感情機構との相乗効果で急変時も鎮静化し安定進行
+(v3.6)-Final- emoDrive v3.6 により信頼度に応じ学習率を大きく増減させることにした(emo系の完成版)
 """
 
 # Helper function (Lynx)
@@ -23,29 +22,16 @@ def exists(val):
 
 class EmoLynx(Optimizer):
     # クラス定義＆初期化 lynx用ベータ･互換性の追加(lynx用beta1･beta2)
-    def __init__(self, params: Union[list, torch.nn.Module], 
-                 lr=1e-3, 
-                 eps=1e-8,
-                 lr_max=1e-3, 
-                 lr_min=1e-8, 
-                 betas=(0.9, 0.999), 
-                 weight_decay=0.01, 
-                 use_shadow:bool=False, 
+    def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, eps=1e-8,
+                 betas=(0.9, 0.995), weight_decay=0.01, use_shadow: bool = False, 
                  writer=None): 
-                     
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
-        
         super().__init__(params, defaults)
+        # lynxに応じてウェイト減衰のため保存
         self._init_lr = lr
         self.should_stop = False # 停止フラグの初期化
         self.use_shadow = use_shadow # 🔸shadow 使用フラグを保存
         self.writer = writer # 動的学習率や感情スカラー等を渡す
-        self.eta = lr # 名目lrを初期値として利用(自己更新)
-        self.k = 0.2 # 学習率自己更新の応答速度係数(比例制御の強さ)
-        self.eps = 1e-8 # ゼロ割り防止の微小値(分母安定化)
-        self.lr_min = 1e-8 # 学習率の下限(極端な縮小の防止)
-        self.lr_max = 1e-3 # 学習率の上限(極端な拡大の防止)
-        self.prev_loss = None # Loss初期化
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
@@ -80,32 +66,30 @@ class EmoLynx(Optimizer):
         diff = (ema['long'] - ema['short']) / scale_base_l
         return math.tanh(1 * diff)
 
-    # 急変時は論文通りの抑制則/悪化時は減速/改善時は加速/微動時は無介入で収束を安定させる
-    def _decide_coeff(self, scalar):
-        if abs(scalar) > 0.625:
-            return 1.0 - abs(scalar)    # 急変｜強抑制
-        elif scalar > 0.125:
-            return 1.0 + scalar         # 改善｜加速
-        elif scalar < -0.125:
-            return 1.0 + scalar         # 悪化｜減速
+    # 論文通りの抑制則/急変時は強抑制/悪化時は微減速/平時は無介入で収束を安定させる
+    # 区分別けは現状では無意味ですが後々にカスタマイズしやすい形式として整理してあります
+    def _decide_coeff(self, scalar):  # B <= x <= A: 等も可能
+        if abs(scalar) > 0.75:
+            return 1.0 - abs(scalar)  # 緊急｜急制動｜tanh 0.97(0.03)
+        elif abs(scalar) > 0.50:
+            return 1.0 - abs(scalar)  # 急変｜強抑制｜tanh 0.55(0.45)
+        elif abs(scalar) > 0.25:
+            return 1.0 - abs(scalar)  # 悪化｜微減速｜tanh 0.26(0.74)
         else:
-            return 1.0                  # 微動｜無介入
+            return 1.0                # 平時｜無介入｜他(常に 1.0 を返す)
 
     # (重要)現在は shadow-effect を参考に得た動的フィルタ効果の近似により use_shadow=False です
     # しかし全機能は shadow なしで全て成立します／コード確認時はこの shadow を考慮外として無視してください
 
     # Shadow混合比 ３段階構成 タスクに応じ調整可、以下を参考に 開始値・範囲量･変化幅を調整
-    # 参考1：scalar>±0.6 を "return 開始値 + ((scalar) - 0.6(範囲)) / 範囲量 * 変化幅"
-    # 参考2：scalar>±0.1 を "return 開始値 + ((scalar) - 0.1(範囲)) / 範囲量 * 変化幅"
-    # return 開始値 + ((scalar) - 閾値) / 範囲量 * 変化幅 です(上記の値は感情スカラーを返すだけ)
+    # return 開始値 + ((scalar) - 閾値) / 範囲量 * 変化幅 も可能(特殊用途向け)
     def _decide_ratio(self, scalar):
         if not self.use_shadow:
-            return 0.0 # 🔸use_shadow = False のとき常に比率を 0 にする
-        if abs(scalar) > 0.75:
-            return 0.75 # + ((scalar) - 0.75) / 0.4 * 0.4 # これはスカラーそのまま返す参考例
-        elif abs(scalar) > 0.25:
-            return -0.1 # return<0 の場合は leap 専用(書き戻しはしないが履歴更新のみ)
-        return 0.0
+            return 0.0  # 🔸use_shadow = False のとき常に比率を 0 にする
+        if abs(scalar) > 0.625:
+            return 1.0 - abs(scalar)  # 急変｜強抑制｜tanh 0.73(0.27)
+        else:
+            return 0.0  # return<0 の場合は leap 専用(書き戻しはしないが履歴更新のみ)
 
     # 損失取得(損失値 loss_val を数値化、感情判定に使用、存在しないパラメータ(更新不要)はスキップ)
     @torch.no_grad()
@@ -122,23 +106,12 @@ class EmoLynx(Optimizer):
         scalar = self._compute_scalar(ema)
         coeff = self._decide_coeff(scalar)
         ratio = self._decide_ratio(scalar)
-
-        # 目標減少率制御 ＋ eta_eff
-        if self.prev_loss is None:
-            self.prev_loss = loss_val # 初回は初期化のみ
-            eta_eff = max(self.lr_min, min(self.lr_max, self.eta * coeff))
-        else:
-            delta = self.prev_loss - loss_val
-            target_delta = max(1e-8, 0.01 * max(loss_val, 1e-8)) # １%固定
-            # 学習率の自己更新(比例制御)
-            self.eta *= math.exp(self.k * (delta - target_delta) / (abs(target_delta) + self.eps))
-            # 感情スカラーで補正し最終ステップへ
-            eta_eff = max(self.lr_min, min(self.lr_max, self.eta * coeff))
+        trust = math.copysign((1.0 - abs(scalar)), scalar)
+        emoDpt = 8.0 * abs(trust)
 
         for group in self.param_groups:
-            step_size = eta_eff # 💡 group['lr'] は使わない
             # リンクス共通パラメータ抽出
-            wd, beta1, beta2 = group['weight_decay'], *group['betas']
+            lr, wd, beta1, beta2 = group['lr'], group['weight_decay'], *group['betas']
 
             # ウェイト減衰の処理を分離 (from lynx)
             _wd_actual = wd
@@ -148,26 +121,29 @@ class EmoLynx(Optimizer):
                 grad = p.grad # PG直接使用(計算に".data"不要)
                 state = self.state[p]
 
-                # 動的学習率補正により shadow 形成を信頼度で調整(coeffは正値(負にならない))
+                # 動的学習率補正により shadow 形成を信頼度で調整(trustは正値化(負にならない))
                 # shadow：必要時のみ(スパイクp部分に現在値を最大10%追従させる動的履歴更新)
-                # ratio <0：10%、0以外：10%×coeff、(0.25～0.75は10%、微動と急変は*coeff)
-                # 微動時 coeff：1.0 固定なので結果的に微動時も 10% 履歴更新になる
-                # 結果、微動時と安定時：10%、急変時：coeff、による履歴更新を行うことになる
-                if self.use_shadow:
+                # 混合比率：スカラーが閾値を超える場合にのみ計算される(信頼できる感情信号かどうかの選別)
+                # 急変時は感情機構による shadow 混合で強く抑制する(急制動による安定性の確保)
+                # 新 shadow-system は動的学習率と信頼度で協調し選択的スパース性も発揮する   
+                if self.use_shadow :
                     if 'shadow' not in state: # 🔸shadow = False (デフォルト)
                         state['shadow'] = p.clone()
                     if ratio > 0: # 書き戻しと履歴更新(急変時の強い抑制と弱めの履歴更新)
-                        p.mul_(1 - ratio).add_(state['shadow'], alpha=coeff)
-                    else: # 書き戻しせず履歴更新のみ：ratio<0：10%／0以外：10%×coeff
-                        leap_ratio = 0.1 if ratio < 0 else 0.1 * coeff
-                        state['shadow'].lerp_(p, leap_ratio)
+                        p.mul_(1-ratio).add_(state['shadow'], alpha=abs(trust))
+                    else: # 書き戻しせず履歴更新のみ：10%×trust
+                        leap_ratio = 0.1 * abs(trust)
+                        state['shadow'].lerp_(p, leap_ratio)          
 
-                # 上記 shadow の説明：スカラー生成：短期と長期EMAの差分から信号を得る(高ぶりの強さ)
-                # 混合比率：スカラーが閾値を超える場合にのみ計算される(信頼できる感情信号かどうかの選別)
-                # 急変時は感情機構による shadow 混合で強く抑制する(急制動による安定性の確保)
-                # 新しい shadow-system は動的学習率と協調することで選択的スパース性も発揮する
+                # emoDrive 作動域 (Turbo & Trust LR system)
+                if 0.25 < abs(scalar) < 0.5:
+                    emoDrive = emoDpt * (1.0 + 0.1 * trust)  # 加速／減速ゾーン補正
+                elif abs(scalar) > 0.75:
+                    emoDrive = coeff  # 緊急｜急制動｜tanh 0.97(0.03)
+                else:
+                    emoDrive = 1.0    # 無介入ゾーン
 
-                # --- Start Lynx Gradient Update Logic ---
+                # --- Start Gradient Update Logic ---
                 # lynx初期化(exp_avg_sq)
                 if 'exp_avg' not in state:
                     state['exp_avg'] = torch.zeros_like(p)
@@ -175,7 +151,7 @@ class EmoLynx(Optimizer):
 
                 # Stepweight decay (from lynx): p = p * (1 - lr * wd)
                 # decoupled_wd 考慮 _wd_actual 使用(EmoNaviのwdは最後に適用)
-                p.mul_(1 - step_size * _wd_actual)
+                p.mul_(1 - lr * _wd_actual)
                 beta1, beta2 = group['betas']
 
                 # 勾配ブレンド
@@ -183,18 +159,16 @@ class EmoLynx(Optimizer):
                 blended_grad = grad.mul(1 - beta1).add_(exp_avg, alpha=beta1)
 
                 # p: p = p - lr * sign(blended_grad)
-                p.add_(blended_grad.sign_(), alpha = -step_size)
+                p.add_(blended_grad.sign_(), alpha = -lr * emoDrive)
 
                 # exp_avg = beta2 * exp_avg + (1 - beta2) * grad
                 exp_avg.mul_(beta2).add_(grad, alpha = 1 - beta2)
-                # --- End Lynx Gradient Update Logic ---
-
-        self.prev_loss = loss_val
+                # --- End Gradient Update Logic ---
 
         # 感情機構の発火が収まり"十分に安定"していることを外部伝達できる(自動停止ロジックではない)
         # Early Stop用 scalar 記録(バッファ共通で管理/最大32件保持/動静評価)
         hist = self.state.setdefault('scalar_hist', deque(maxlen=32))
-        hist.append(early_scalar)
+        hist.append(scalar)
 
         # Early Stop判断(静けさの合図)
         # 32ステップ分のスカラー値の静かな条件を満たした時"フラグ" should_stop = True になるだけ
@@ -208,11 +182,12 @@ class EmoLynx(Optimizer):
         # TensorBoardへの記録（step関数の末尾に追加）
         if hasattr(self, 'writer') and self.writer is not None:
             self._step_count = getattr(self, "_step_count", 0) + 1
-            self.writer.add_scalar("emoLR", eta_eff, self._step_count)
-            self.writer.add_scalar("etaLR", self.eta, self._step_count)
-            self.writer.add_scalar("emoScalar", scalar, self._step_count)
+            self.writer.add_scalar("emoLR/base", step_size, self._step_count)
+            self.writer.add_scalar("emoLR/Turbo", step_size * emoDrive, self._step_count)
+            self.writer.add_scalar("emostate/emoDrive", emoDrive, self._step_count)
+            self.writer.add_scalar("emostate/scalar", scalar, self._step_count)
 
-        return loss
+        return
 
 """
  https://github.com/muooon/EmoNavi
