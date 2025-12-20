@@ -17,8 +17,13 @@ optimizer 指定の際に True / False で shadow を切替できる(現在 Fals
 
 class EmoNavi(Optimizer):
     # クラス定義＆初期化
-    def __init__(self, params, lr=1e-3, eps=1e-8, betas=(0.9, 0.995), 
-                 weight_decay=0.01, use_shadow:bool=False, writer=None):
+    def __init__(self, params, 
+                 lr=1e-3, 
+                 eps=1e-8, 
+                 betas=(0.9, 0.995), 
+                 weight_decay=0.01, 
+                 use_shadow:bool=False, 
+                 writer=None):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
         self._init_lr = lr

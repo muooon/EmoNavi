@@ -22,8 +22,12 @@ def exists(val):
 
 class EmoLynx(Optimizer):
     # クラス定義＆初期化 lynx用ベータ･互換性の追加(lynx用beta1･beta2)
-    def __init__(self, params: Union[list, torch.nn.Module], lr=1e-3, eps=1e-8,
-                 betas=(0.9, 0.995), weight_decay=0.01, use_shadow: bool = False, 
+    def __init__(self, params: Union[list, torch.nn.Module], 
+                 lr=1e-3, 
+                 eps=1e-8,
+                 betas=(0.9, 0.995), 
+                 weight_decay=0.01, 
+                 use_shadow: bool = False, 
                  writer=None): 
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)

@@ -4,7 +4,7 @@ import math
 from collections import deque
 
 """
-EmoNavi v3.6.1 (251220) shadow-system v3.1 -moment v3.1 emoDrive ｖ3.6
+EmoFact v3.6.1 (251220) shadow-system v3.1 -moment v3.1 emoDrive ｖ3.6
 (v1.0)AMP対応完了(250725) p.data -> p 修正済み／低精度量子化への基本対応／低精度補償は別
 (v2.0)shadow-system 微調整／３段階補正を連続的に滑らかに／派生版では以下の切替も可能
 optimizer 指定の際に True / False で shadow を切替できる(現在 False)
@@ -17,8 +17,13 @@ optimizer 指定の際に True / False で shadow を切替できる(現在 Fals
 
 class EmoFact(Optimizer):
     # クラス定義＆初期化
-    def __init__(self, params, lr=1e-3, eps=1e-8, betas=(0.9, 0.995), 
-                 weight_decay=0.01, use_shadow:bool=False, writer=None):
+    def __init__(self, params, 
+                 lr=1e-3, 
+                 eps=1e-8, 
+                 betas=(0.9, 0.995), 
+                 weight_decay=0.01, 
+                 use_shadow:bool=False, 
+                 writer=None):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
         self._init_lr = lr
@@ -147,7 +152,7 @@ class EmoFact(Optimizer):
                     denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']).add_(group['eps'])
 
                     # 最終的な更新項を計算
-                    #update_term = grad / denom
+                    #update_term = grad / denom # sign化で１次ベクトルとのバランス改善
                     update_term = torch.sign(grad / denom)
 
                 # 1次元(ベクトル)の勾配補正
@@ -156,7 +161,7 @@ class EmoFact(Optimizer):
                     exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p))
                     exp_avg_sq.mul_(beta1).addcmul_(grad, grad, value=(1 - beta2))
                     denom = exp_avg_sq.sqrt().add_(group['eps'])
-                    #update_term = grad / denom
+                    #update_term = grad / denom # sign化で２次momentとのバランス改善
                     update_term = torch.sign(grad / denom)
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
