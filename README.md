@@ -27,12 +27,12 @@ EmoNavi：1e-4、EmoFact：2e-4、EmoLynx：8e-5、あたりを初期LRの推奨
 EmoNavi：1e-4, EmoFact：2e-4, EmoLynx：8e-5, These are recommended initial LR values. Adjust them up or down according to your task.  
 
 
-Mathematical Explanation Here (paper)  
+Mathematical Explanation Here (paper) ｖ3.6  
 非凸関数に対する期待値収束(フローマッチングへの適応なども保証します)  
 Expected value convergence for non-convex functions  
 (also guarantees adaptability to flow matching)  
-#### [emo-paper(article)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(ENG).txt)  
-#### [数学的解説はこちら(論文)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-paper(JPN).txt)  
+#### [emo-paper(article)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-v36-paper(ENG).txt)  
+#### [数学的解説はこちら(論文)](https://huggingface.co/muooon/EmoNAVI/raw/main/emo-v36-paper(JPN).txt)  
 
 ---
 
@@ -289,5 +289,6 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
