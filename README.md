@@ -124,6 +124,19 @@ It approximates the core effect of capturing changes in gradient distribution's 
 
 ---
 
+emoDrive を直感的に見る表（±0.25〜±0.50）  
+  
+| scalar (+) | trust (+) | emoDrive (+) |   | scalar (-) | trust (-) | emoDrive (-) |
+|-----------:|----------:|-------------:|---|-----------:|----------:|-------------:|
+| 0.26 | 0.74 | 6.36 |   | -0.26 | -0.74 | 5.48 |
+| 0.30 | 0.70 | 5.99 |   | -0.30 | -0.70 | 5.04 |
+| 0.35 | 0.65 | 5.54 |   | -0.35 | -0.65 | 4.55 |
+| 0.40 | 0.60 | 5.09 |   | -0.40 | -0.60 | 4.03 |
+| 0.45 | 0.55 | 4.64 |   | -0.45 | -0.55 | 3.50 |
+| 0.49 | 0.51 | 4.29 |   | -0.49 | -0.51 | 3.16 |
+
+このように信頼値が高い(loss 評価が良い／0 に近い)ほど emoDrive の boost も大きくなります、マイナス側(loss 悪化時)も同様で 0 に近いほど boost は大きいです  
+
 ---  
 
 ### EmoNavi 主な特徴 / Main Features of EmoNavi  
@@ -176,10 +189,12 @@ The high efficiency and integration realized in this single package prioritize s
 
 ---
 
-## 学習係数の変化 Change in learning coefficient (v3.x)  
-<img width="1000" height="700" alt="学習率グラフ001" src="https://github.com/user-attachments/assets/d730441b-3b0f-4ed2-9e8e-3b3d754d612d" />
-このように 動的学習率 として機能します ／ coeff値：1.0 付近は無介入のため更新式の純粋な値になります <br>   
-It functions as a dynamic learning rate. ／ coeff value: Around 1.0 represents the pure value of the update formula due to no intervention. <br> 
+## 学習係数の変化 Change in learning coefficient (v3.6)  
+<img width="1000" height="700" alt="coeff-plot36" src="https://github.com/user-attachments/assets/acb56ae1-cf7c-4198-944b-e703380eccf8" />
+このように 動的学習率(抑制) として機能します ／ coeff値：1.0 付近は無介入のため更新式の純粋な値になります<br>   
+It functions as a dynamic learning rate (reduction). ／ coeff value: Around 1.0 represents the pure value of the update formula due to no intervention. <br> 
+v3.6 ではこのうち ±0.75 以上のみを緊急ブレーキとして活用します ／ それ以外を emoDrive と無介入に任せています<br>  
+In v3.6, only decelerations of ±0.75 or greater are utilized for emergency braking. ／ All others are handled by emoDrive and no intervention.<br>  
 
 ---
 
@@ -289,6 +304,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
