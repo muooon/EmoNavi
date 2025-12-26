@@ -24,7 +24,7 @@ EmoNavi 完成です。以後は EmoSens にて新機能を探りますが、完
 EmoNavi is now complete. Moving forward, we will explore new features in EmoSens. While achieving a fully automated learning rate remains one of our goals, we will prioritize and pursue more robust learning above all else. We appreciate your continued support.  
 
 EmoNavi：6e-5、EmoFact：1e-4、EmoLynx：8e-5、あたりを初期LRの推奨値とします、あなたのタスクに合わせて増減してください  
-EmoNavi：6e-4, EmoFact：1e-4, EmoLynx：8e-5, These are recommended initial LR values. Adjust them up or down according to your task.  
+EmoNavi：6e-5, EmoFact：1e-4, EmoLynx：8e-5, These are recommended initial LR values. Adjust them up or down according to your task.  
 
 
 Mathematical Explanation Here (paper) ｖ3.6  
@@ -305,6 +305,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
