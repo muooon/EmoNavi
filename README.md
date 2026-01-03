@@ -1,5 +1,7 @@
 # EmoNAVI / Emo-Family (1stGen-v3.6)  
 
+info：EmoSens v3.7 upgrade！ https://github.com/muooon/EmoSens/tree/dev  
+
 ### EmoNavi 最終版 (v3.6) complete  
 
 EmoNavi (v3.6) emoDrive 機能(半自動学習率)  
@@ -36,7 +38,7 @@ Expected value convergence for non-convex functions
 
 ---
 
-emo系 v3.6 test (スタンダードモデル) の特徴等  
+emo系 v3.6 complete (スタンダードモデル) の特徴等  
 
 | 名称      | 正確性 | メモリ負荷 | 非同期 | 備考                                      |  
 |-----------|--------|------------|--------|-------------------------------------------|  
@@ -54,7 +56,7 @@ emo系 v3.6 test (スタンダードモデル) の特徴等
 ユーザー指定の学習率を中心にし加減速を自動制御します  
 完全自律型のため、積層、再開、非同期、で、自由な学習を自由に組むことが可能です  
 
-emo-series v3.6 test (Standard-models) Features  
+emo-series v3.6 complete (Standard-models) Features  
 
 | Name    | Accurate | MemoryLoad | Asynchronous | Notes                                           |  
 |---------|----------|------------|--------------|--------------------------------------------------|  
@@ -90,13 +92,13 @@ Fully autonomous, enabling flexible learning configurations through layering, re
  
 <summary> emotional moment </summary>  
 
-"emo系 第二世代"にて解明した shadow-system の根幹から抽出しました  
+"emo系 第二世代 v1.x"にて解明した shadow-system の根幹から抽出しました  
 動的学習率による非線形アプローチは時間的な高次momentを形成します  
 単stepでは高次momentにはなれませんが、複数stepを経ると機能します  
 ３次４次５次momentについて厳密な数学的な高負荷計算を回避しつつ  
 勾配分布の歪みや鋭さや非対称性変化を捉える核心的な効果を近似しています  
 I invented the emotional moment.  
-I extracted it from the core of the shadow-system, which was elucidated in the "emo-style second generation."  
+I extracted it from the core of the shadow-system, which was elucidated in the "emo-style second generation v1.x."  
 The nonlinear approach with a dynamic learning rate forms a temporal higher-order moment.  
 A single step cannot become a higher-order moment, but it functions after multiple steps.  
 It approximates the core effect of capturing changes in gradient distribution's skewness, kurtosis, and asymmetry, while avoiding strict and computationally intensive mathematical calculations for the third, fourth, and fifth moments.  
@@ -305,6 +307,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
