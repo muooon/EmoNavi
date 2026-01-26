@@ -1,17 +1,21 @@
 # EmoNAVI / Emo-Family (1stGen-v3.6)  
 
-### EmoNavi 最終版 (v3.6) complete  
+### EmoNavi 開発終了版 (v3.6) complete  
 
 EmoNavi (v3.6) emoDrive 機能(半自動学習率)  
-v3.1を進化させました(高学習率を自動適応"省VRAM･低負荷"で) これで emo系 は開発終了  
+v3.1を進化させました(高学習率を自動適応"省VRAM･低負荷"で) これで emonavi世代 は開発終了  
 EmoNavi (v3.6) emoDrive Function (Hybrid learning rate)  
-Evolved v3.1 (with automatic high learning rate adaptation for “VRAM-saving, low-load” performance). With this, development of the emo series is complete.  
-
-updateの内容  
+Evolved v3.1 (with automatic high learning rate adaptation for “VRAM-saving, low-load” performance). With this, development of the emonavi generation series is complete.  
+<br>
+#### こちらの emosens世代 への移行を推奨します  
+##### We recommend transitioning to the emosens generation.  
+https://github.com/muooon/EmoSens  
+<br><br>
+(ｖ3.6版) update 内容  
 - 動的高値学習率：高速化と精緻化を同時に達成  
 - emoDrive：lossの高ぶりもノイズを低減するチャンスにします  
 
-Update Details  
+(ｖ3.6) Update Details  
 - Dynamic High-Value Learning Rate： Achieving Acceleration and Refinement Simultaneously   
 - emoDrive： We turn even the surge of loss into an opportunity to reduce noise.  
 
@@ -305,6 +309,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
