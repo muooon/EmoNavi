@@ -4,6 +4,8 @@ import math
 from collections import deque
 
 """
+EmoFact v3.6.3 (260130) shadow-system v3.1 -moment v3.1 emoDrive ｖ3.6
+コード全体を見直し効率化を進めた／開発終了のため新機能等はない
 EmoFact v3.6.1 (251220) shadow-system v3.1 -moment v3.1 emoDrive ｖ3.6
 (v1.0)AMP対応完了(250725) p.data -> p 修正済み／低精度量子化への基本対応／低精度補償は別
 (v2.0)shadow-system 微調整／３段階補正を連続的に滑らかに／派生版では以下の切替も可能
@@ -12,7 +14,7 @@ optimizer 指定の際に True / False で shadow を切替できる(現在 Fals
 (v3.1)通常未使用の shadow 更新速度 (lerp) を倍化し信頼度で動的制御／coeff 活用(急変･微動)
 動的学習率や感情スカラー値など TensorBoard 連携可 (現在 writer=None)／外部設定必要
 全体の効率化や可読性を向上(emaやスカラーの多重処理を省く等、動的学習率のスケールや状態の見直し等、含む)
-(v3.6)-Final- emoDrive v3.6 により信頼度に応じ学習率を大きく増減させることにした(emo系の完成版)
+(v3.6)-Final- emoDrive v3.6 により信頼度に応じ学習率を大きく増減させた(emonavi世代の完成版)
 """
 
 class EmoFact(Optimizer):
@@ -22,21 +24,19 @@ class EmoFact(Optimizer):
                  eps=1e-8, 
                  betas=(0.9, 0.995), 
                  weight_decay=0.01, 
-                 use_shadow:bool=False, 
-                 writer=None):
+                 use_shadow:bool=False):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
         self._init_lr = lr
         self.should_stop = False # 停止フラグの初期化
         self.use_shadow = use_shadow # 🔸shadow 使用フラグを保存
-        self.writer = writer # 動的学習率や感情スカラー等を渡す
 
     # 感情EMA更新(緊張と安静)
     def _update_ema(self, state, loss_val):
         ema = state.setdefault('ema', {})
-        ema['short'] = 0.3 * loss_val + 0.7 * ema.get('short', loss_val)
+        ema['short']  = 0.3  * loss_val + 0.7  * ema.get('short', loss_val)
         ema['medium'] = 0.05 * loss_val + 0.95 * ema.get('medium', loss_val)
-        ema['long'] = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
+        ema['long']   = 0.01 * loss_val + 0.99 * ema.get('long', loss_val)
         return ema
 
     # 感情スカラー値生成(EMA差分、滑らかな非線形スカラー、tanh(diff) は ±1.0 で有界性)
@@ -47,22 +47,23 @@ class EmoFact(Optimizer):
     def _compute_scalar(self, ema):
         scale_base_l = max(ema['long'], 1e-5)
         scale_base_m = max(ema['medium'], 1e-5)
-        diff_l = (ema['long'] - ema['short']) / scale_base_l
-        diff_m = (ema['long'] - ema['short']) / scale_base_m
+        diff_base = ema['long'] - ema['short']
+        diff_l = diff_base / scale_base_l
+        diff_m = diff_base / scale_base_m
         # longが十分静かなら、常にlongを優先
         if abs(diff_l) < 0.05:
             return math.tanh(diff_l)
         # longが静かでない時のみ、mediumの静けさを条件付きで採用
         if abs(diff_m) * scale_base_m < abs(diff_l) * scale_base_l:
-            return math.tanh(1 * diff_m)
+            return math.tanh(diff_m)
         else:
-            return math.tanh(1 * diff_l)
+            return math.tanh(diff_l)
 
     # アーリーストップ専用(静けさ判定の感情スカラ生成)
     def _early_scalar(self, ema):
         scale_base_l = max(ema['long'], 1e-5)
         diff = (ema['long'] - ema['short']) / scale_base_l
-        return math.tanh(1 * diff)
+        return math.tanh(diff)
 
     # 論文通りの抑制則/急変時は強抑制/悪化時は微減速/平時は無介入で収束を安定させる
     # 区分別けは現状では無意味ですが後々にカスタマイズしやすい形式として整理してあります
@@ -151,9 +152,8 @@ class EmoFact(Optimizer):
                     # 再構築した近似勾配の平方根の積で正規化
                     denom = torch.sqrt(state['exp_avg_r'] * state['exp_avg_c']).add_(group['eps'])
 
-                    # 最終的な更新項を計算
-                    #update_term = grad / denom # sign化で１次ベクトルとのバランス改善
-                    update_term = torch.sign(grad / denom)
+                    # 更新項を計算
+                    update_term = (grad / denom)
 
                 # 1次元(ベクトル)の勾配補正
                 else:
@@ -161,13 +161,13 @@ class EmoFact(Optimizer):
                     exp_avg_sq = state.setdefault('exp_avg_sq', torch.zeros_like(p))
                     exp_avg_sq.mul_(beta1).addcmul_(grad, grad, value=(1 - beta2))
                     denom = exp_avg_sq.sqrt().add_(group['eps'])
-                    #update_term = grad / denom # sign化で２次momentとのバランス改善
-                    update_term = torch.sign(grad / denom)
+                    # update_term
+                    update_term = (grad / denom)
 
                 # 最終的なパラメータ更新 (decoupled weight decayも適用)
                 step_size = group['lr']
                 p.add_(p, alpha=-group['weight_decay'] * step_size)
-                p.add_(update_term, alpha=-step_size * emoDrive)
+                p.add_(update_term.sign_(), alpha=-step_size * emoDrive)
                 # --- End Gradient Update Logic ---
 
         # 感情機構の発火が収まり"十分に安定"していることを外部伝達できる(自動停止ロジックではない)
@@ -182,15 +182,9 @@ class EmoFact(Optimizer):
             mean = sum(hist) / len(hist)
             var = sum((s - mean)**2 for s in hist) / len(hist)
             if avg_abs < 0.05 and var < 0.005:
-                self.should_stop = True # 💡 外部からこれを見て判断可
-
-        # TensorBoardへの記録（step関数の末尾に追加）
-        if hasattr(self, 'writer') and self.writer is not None:
-            self._step_count = getattr(self, "_step_count", 0) + 1
-            self.writer.add_scalar("emoLR/base", step_size, self._step_count)
-            self.writer.add_scalar("emoLR/Turbo", step_size * emoDrive, self._step_count)
-            self.writer.add_scalar("emostate/emoDrive", emoDrive, self._step_count)
-            self.writer.add_scalar("emostate/scalar", scalar, self._step_count)
+                self.should_stop = True  # 💡 外部からこれを見て判断可
+            else:
+                self.should_stop = False # 💡 誤判定などの取り消し
 
         return
 
