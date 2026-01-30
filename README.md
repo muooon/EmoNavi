@@ -240,23 +240,12 @@ EmoNavi v3.6 Option Settings Guide</summary>
 use_shadow=False  
 ●eps(0除算防止)：  
 eps=1e-8  
-●動的学習率と感情スカラー等の現在値を取得(ツール側などから取得する)：  
-writer=writer  
-外部ツール(TensorBoard等)で値を把握したい場合は Optimizer 初期化時に SummaryWriter を渡してください  
-writer = SummaryWriter(log_dir="./runs/emonavi")  
-optimizer = EmoNavi(model.parameters(), writer=writer)  
-tensorboard --logdir=./runs/emonavi  
 
 |||Usage examples|||  
 ●Shadow off:  
 use_shadow=False  
 ●eps(Division by zero prevention)：  
 eps=1e-8  
-●Monitor values with external tools (TensorBoard):  
-writer=writer  
-writer = SummaryWriter(log_dir="./runs/emonavi")  
-optimizer = EmoNavi(model.parameters(), writer=writer)  
-tensorboard --logdir=./runs/emonavi  
 
 </details>
 
@@ -309,6 +298,7 @@ EmoNAVI is an “emotion-driven” approach not found in existing optimizers. By
 ---
 
 EmoNAVIは既存のオプティマイザにはない｢感情駆動型｣です。multi-emaを差分化し非線形変換(tanh)でscalar化した｢感情機構｣を中心に、各センサーを構築することで学習全体の安定性を向上させ正確性を確保しました、これらは生物の中枢神経系のように｢観察、判断、決定、行動、記憶、反省｣という自律サイクルを行います(論文をぜひご覧ください)  
+
 
 
 
